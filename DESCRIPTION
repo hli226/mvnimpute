@@ -1,11 +1,10 @@
 Package: mvnimpute
 Type: Package
 Title: Concurrently multiply impute the missing and censored data
-Version: 0.0.1
+Version: 0.0.0.9000
 Depends: R (>= 4.0.0)
-Author: Hesen Li
-Maintainer: Hesen Li <hli226@uic.edut>
-Description: This package implements multiple imputation for missing and censored data under joint multivariate norma model assuption
+Authors@R: person("Hesen", "Li", email = "hli226@uic.edu", role = c("aut", "cre"))
+Description: This package implements multiple imputation for missing and censored data under joint multivariate norma model assuption.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -13,7 +12,9 @@ RoxygenNote: 7.1.1
 Imports: 
     ggplot2,
     truncnorm,
-    MASS
+    MASS,
+    mvtnorm,
+    reshape2
 Suggests:
     dplyr,
     testthat

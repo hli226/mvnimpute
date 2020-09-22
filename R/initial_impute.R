@@ -1,9 +1,11 @@
+#' Initial data fill-in fucntion
+#'
 #' Fill in data with missing and censored values for multiple imputation
 #'
 #' @param dat dataset with missing and censored values
-#'
 #' @param method method to be used for initial filled-in values
 #'
+#' @return a complete dataset with missing values filled in
 #' @export
 fill.dat <- function(dat, method = "normal")
 {

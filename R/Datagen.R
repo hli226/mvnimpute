@@ -1,14 +1,6 @@
-#' @importFrom mvtnorm rmvnorm
-#' @importFrom stats quantile
-#' @importFrom stats rexp
-#' @importFrom stats na.omit
-#' @importFrom stats var
-#' @importFrom stats rnorm
-NULL
-#'
 #' Data generation function
 #'
-#' Users can specify the total number of variables in total, the number of variables that have missing values and the number of variables that have censored values
+#' Function to generate multivariate data. Users can specify the total number of variables in total, the number of variables that have missing values and the number of variables that have censored values
 #'
 #' @param n Number of observations to be generated
 #' @param p Number of variables to be generated
@@ -16,8 +8,22 @@ NULL
 #' @param sig Specified variance-covariance matrix
 #' @param miss.num Number of variables having missing values
 #' @param censor.num NUmber of variables having censored values
+#'
+#' @examples
+#' n <- 1000
+#' p <- 3
+#' m.vec <- c(3, 2, 1)
+#' V <- diag(p)
+#' miss.num <- 1
+#' censor.num <- 1
+#' dat <- dat.gen(n, m.vec, V, p, miss.num, censor.num)
+#'
+#' @return A list containing the full data, the complete data with missing and censoring information applied,
+#'   the missing and censoring index, positions of the variables including the missing or censored values, or
+#'   the fully observed variable, and the two limits of the censored values
+#'
 #' @export
-dat.gen <- function(
+multi.dat.gen <- function(
   n, # number of data to be generated
   m.vec, # mean vec should have length p
   sig, # variance-covariance matrix have dimension p * p

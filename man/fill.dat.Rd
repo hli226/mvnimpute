@@ -2,7 +2,7 @@
 % Please edit documentation in R/initial_impute.R
 \name{fill.dat}
 \alias{fill.dat}
-\title{Fill in data with missing and censored values for multiple imputation}
+\title{Initial data fill-in fucntion}
 \usage{
 fill.dat(dat, method = "normal")
 }
@@ -10,6 +10,9 @@ fill.dat(dat, method = "normal")
 \item{dat}{dataset with missing and censored values}
 
 \item{method}{method to be used for initial filled-in values}
+}
+\value{
+a complete dataset with missing values filled in
 }
 \description{
 Fill in data with missing and censored values for multiple imputation
