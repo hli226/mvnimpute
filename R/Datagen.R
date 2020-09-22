@@ -1,3 +1,11 @@
+#' @importFrom mvtnorm rmvnorm
+#' @importFrom stats quantile
+#' @importFrom stats rexp
+#' @importFrom stats na.omit
+#' @importFrom stats var
+#' @importFrom stats rnorm
+NULL
+#'
 #' Data generation function
 #'
 #' Users can specify the total number of variables in total, the number of variables that have missing values and the number of variables that have censored values
@@ -22,7 +30,7 @@ dat.gen <- function(
   if (dim(sig)[1] != dim(sig)[2]) stop("Covariance matrix should be a sqaure matrix!")
 
   # use rmvnorm function from the mvtnorm package to generate multivariate normal data
-  dat <- mvtnorm::rmvnorm(n, m.vec, sig)
+  dat <- rmvnorm(n, m.vec, sig)
 
   # full data without applying missing and censoring information
   full <- dat
