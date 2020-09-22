@@ -16,7 +16,7 @@
 #' V <- diag(p)
 #' miss.num <- 1
 #' censor.num <- 1
-#' dat <- dat.gen(n, m.vec, V, p, miss.num, censor.num)
+#' dat <- multi.dat.gen(n, m.vec, V, p, miss.num, censor.num)
 #'
 #' @return A list containing the full data, the complete data with missing and censoring information applied,
 #'   the missing and censoring index, positions of the variables including the missing or censored values, or

@@ -1,6 +1,6 @@
 Package: mvnimpute
 Type: Package
-Title: Concurrently multiply impute the missing and censored data
+Title: Concurrently multiply impute the missing and censored values
 Version: 0.0.0.9000
 Depends: R (>= 4.0.0)
 Authors@R: person("Hesen", "Li", email = "hli226@uic.edu", role = c("aut", "cre"))
@@ -14,7 +14,8 @@ Imports:
     truncnorm,
     MASS,
     mvtnorm,
-    reshape2
+    reshape2,
+    LaplacesDemon
 Suggests:
     dplyr,
     testthat

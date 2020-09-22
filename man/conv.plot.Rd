@@ -7,8 +7,8 @@
 conv.plot(
   dat,
   iter,
-  xlab = "Iteration Number",
-  ylab = "Simulated values",
+  x.lab = "Iteration Number",
+  y.lab = "Simulated values",
   title = NULL
 )
 }
@@ -17,9 +17,9 @@ conv.plot(
 
 \item{iter}{Iteration number of the simulation}
 
-\item{xlab}{Label of the x axis in the convergence plot, default is set to be "Iteration number"}
+\item{x.lab}{Label of the x axis in the convergence plot, default is set to be "Iteration number"}
 
-\item{ylab}{Label of the y axis in the convergence plot, default is set to be "Simulated values"}
+\item{y.lab}{Label of the y axis in the convergence plot, default is set to be "Simulated values"}
 
 \item{title}{Title in the convergence plot}
 }

@@ -1,17 +1,11 @@
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 geom_line
-#' @importFrom ggplot2 ggtitle
-#' @importFrom ggplot2 aes
-#' @importFrom reshape2 melt
-NULL
 #' Convergence plot function
 #'
 #' Function to generate convergence plots
 #'
 #' @param dat The dataset containing the values to be plotted
 #' @param iter Iteration number of the simulation
-#' @param xlab Label of the x axis in the convergence plot, default is set to be "Iteration number"
-#' @param ylab Label of the y axis in the convergence plot, default is set to be "Simulated values"
+#' @param x.lab Label of the x axis in the convergence plot, default is set to be "Iteration number"
+#' @param y.lab Label of the y axis in the convergence plot, default is set to be "Simulated values"
 #' @param title Title in the convergence plot
 #'
 #' @return Convergence plot of your desired variable
@@ -19,8 +13,8 @@ NULL
 #' @export
 conv.plot <- function(dat,
                       iter,
-                      xlab = "Iteration Number",
-                      ylab = "Simulated values",
+                      x.lab = "Iteration Number",
+                      y.lab = "Simulated values",
                       title = NULL) {
   value <- NULL
 
@@ -43,8 +37,8 @@ conv.plot <- function(dat,
              group = var,
              color = var)) +
     geom_line() +
-    xlab(xlab) +
-    ylab(ylab) +
+    xlab(x.lab) +
+    ylab(y.lab) +
     ggtitle(title)
 
 }
