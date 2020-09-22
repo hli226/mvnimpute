@@ -19,6 +19,7 @@ NULL
 #' @importFrom stats cov
 #' @importFrom stats rnorm
 #' @importFrom stats complete.cases
+#' @importFrom stats density
 #' @importFrom graphics plot
 #' @importFrom graphics abline
 #' @importFrom LaplacesDemon rinvwishart

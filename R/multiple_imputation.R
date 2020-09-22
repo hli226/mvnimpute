@@ -125,7 +125,7 @@ sim.func <- function(
       }
     }
     # renames
-    rownames(sig.iter) <- colnames(sig.iter) <- colnames(dat)
+    rownames(sig.iter) <- colnames(sig.iter) <- colnames(iter.dat) <- colnames(dat)
 
     impute[[i]] <- round(iter.dat, 4)                 # store the imputed dataset for i-th iteration
     Mu.iter[i + 1, ] <- mu.iter                           # store the simulated means from Gibbs Sampler
