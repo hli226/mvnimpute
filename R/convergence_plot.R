@@ -1,11 +1,11 @@
 #' Convergence plot function
 #'
-#' Function to generate convergence plots
+#' This function generates the convergence plots for the parameter values
 #'
 #' @param dat The dataset containing the values to be plotted
 #' @param iter Iteration number of the simulation
-#' @param x.lab Label of the x axis in the convergence plot, default is set to be "Iteration number"
-#' @param y.lab Label of the y axis in the convergence plot, default is set to be "Simulated values"
+#' @param x.lab Label of the x axis in the generated plot, default is set to be "Iteration number"
+#' @param y.lab Label of the y axis in the generated plot, default is set to be "Simulated values"
 #' @param title Title in the convergence plot
 #'
 #' @return Convergence plot of your desired variable

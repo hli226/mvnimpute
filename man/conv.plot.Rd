@@ -17,9 +17,9 @@ conv.plot(
 
 \item{iter}{Iteration number of the simulation}
 
-\item{x.lab}{Label of the x axis in the convergence plot, default is set to be "Iteration number"}
+\item{x.lab}{Label of the x axis in the generated plot, default is set to be "Iteration number"}
 
-\item{y.lab}{Label of the y axis in the convergence plot, default is set to be "Simulated values"}
+\item{y.lab}{Label of the y axis in the generated plot, default is set to be "Simulated values"}
 
 \item{title}{Title in the convergence plot}
 }
@@ -27,5 +27,5 @@ conv.plot(
 Convergence plot of your desired variable
 }
 \description{
-Function to generate convergence plots
+This function generates the convergence plots for the parameter values
 }

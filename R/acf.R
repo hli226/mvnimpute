@@ -7,6 +7,7 @@
 #' @param plot  logical variable to specify whether the plot is generated, default is set to FALSE
 #' @param title title of the generate autocorrelation plot
 #' @param details logical variable to specify whether the autocorrelation values are returned, default is set to TRUE
+#'
 #' @export
 calcu.acf <- function(dat, lag, plot = FALSE, title = NULL, details = TRUE) {
 
