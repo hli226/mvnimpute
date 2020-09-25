@@ -1,40 +1,45 @@
 #' Multiple imputation function
 #'
-#' Function to do multiple imputations
+#' This function implements the multiple imputation of the missing and censored values
 #'
-#' @param iter Number of iterations
-#' @param prior.param A list containing the parameter values of the prior distribution
-#' @param ini.vals A list containing the initial values
+#' @param iter Iteration number
+#' @param prior.param List of prior parameter values
+#' @param ini.vals List of initial values
 #' @param dat Dataset to do multiple imputation
-#' @param missing.indx A matrix containing the missing indices
-#' @param censoring.indx A matrix containing the censoring indices
-#' @param censoring.val A matrix containing the censoring information
-#' @param censoring.type Categorical variable specifying whether the data is right censored, left censored, or interval censored
+#' @param miss.indx Matrix of missing data index
+#' @param miss.pos Position of variables with missing values in the original dataset
+#' @param censor.indx Matrix of censoring data index
+#' @param censor.pos Position of variables with censored values in the orignal dataset
+#' @param censor.val List containing cutoff values for the censored variables
+#' @param censor.type Logical variable specifying the censoring type
 #'
 #' @export
 sim.func <- function(
-  iter,                       # number of iterations to run
-  prior.param,                # list of prior parameters
-  ini.vals,                   # list of initial values
-  dat,                        # dataset to do imputation (with missing values)
-  censoring.val,              # matrix of censoring values
-  missing.indx = NULL,        # matrix of missing index
-  censoring.indx = NULL,      # matrix of censoring index
-  censoring.type = "left"     # specify the type of censoring, default is set to interval censoring
+  iter,                     # number of iterations to run
+  prior.param,              # list of prior parameters
+  ini.vals,                 # list of initial values
+  dat,                      # dataset to do imputation (with missing values)
+  miss.indx,                # matrix of  missing index
+  miss.pos,
+  censor.indx,              # matrix of censoring index
+  censor.pos,
+  censor.val,
+  censor.type = "interval"
 )
 {
-  n <- nrow(dat); p <- ncol(dat)
+
+  fill.dat. <- fill.dat(dat, miss.pos, censor.pos)
+
+  n <- nrow(fill.dat.); p <- ncol(fill.dat.)
   # fill the missing values
-  iter.dat <- fill.dat(dat)
 
   # prior parameters
   ### prior specification
   mu.0 <- prior.param[[1]]
-  V <- prior.param[[2]]
+  V.0 <- prior.param[[2]]
 
   kappa.0 <- prior.param[[3]]
   nu.0 <- prior.param[[4]]; Lambda.0 <- prior.param[[5]]
-  rownames(V) <- colnames(V) <- NULL
 
   # initial values
   mu.iter <- mu.ini <- ini.vals[[1]]
@@ -42,12 +47,13 @@ sim.func <- function(
 
   # vector and list to store results
   impute <- list()
-  Mu.iter <- matrix(nrow = iter + 1, ncol = ncol(dat))
-  Sig.iter <- matrix(nrow = iter + 1, ncol = ncol(dat))
+  Mu.iter <- matrix(nrow = iter + 1, ncol = ncol(fill.dat.))
+  Sig.iter <- matrix(nrow = iter + 1, ncol = ncol(fill.dat.))
   Covmat <- list()
   Mu.iter[1, ] <- mu.ini
   Sig.iter[1, ] <- diag(sig.ini)
   Covmat[[1]] <- sig.ini
+  cond. <- list()
 
   colnames(Mu.iter) <- colnames(Sig.iter) <- colnames(dat)
 
@@ -55,11 +61,7 @@ sim.func <- function(
   kappa.n <- kappa.0 + n
   nu.n <- nu.0 + n
 
-  # simulation starting time
-  start <- Sys.time()
-
-  # # setting seed
-  # set.seed(seed)
+  iter.dat <- fill.dat.
 
   for (i in 1:iter) { ## iteration number
 
@@ -87,64 +89,105 @@ sim.func <- function(
 
     for (j in 1:n) {       # row: observations
 
-      for (k in 1:p) {     # column: variables
+      if (!is.null(miss.indx)) {
 
-        if (!is.null(missing.indx)) {
+        for (k in 1:ncol(miss.indx)) {     # col: variables
 
-          if (missing.indx[j, k] == 1) {  # impute missing data
+          if (miss.indx[j, k] == 1) {  # impute missing data
             ### decimal places of the imputed values should be the same as the observed values
             miss.dat <- rnorm(1,
-                              mean = mu.iter[k] +
-                                t(cond.param[k, 2:p]) %*% (iter.dat[j, -k] - mu.iter[-k]),
-                              sd = sqrt(cond.param[k, p+1]))
+                              mean = mu.iter[miss.pos][k] +
+                                t(cond.param[miss.pos[k], 2:p]) %*%
+                                (iter.dat[j, -miss.pos[k]] - mu.iter[-miss.pos[k]]),
+                              sd = sqrt(cond.param[miss.pos[k], p + 1]))
 
             # replace the data entry with the imputed data
-            iter.dat[j, k] <- miss.dat
+            iter.dat[j, miss.pos[k]] <- miss.dat
           }
         }
+      }
 
-        if (!is.null(censoring.indx)) {
+      if (!is.null(censor.indx)) {
 
-          if (censoring.type == "left") {
+        ## interval censoring
 
-            if (censoring.indx[j, k] == 1) { # impute censored data
+        for (l in 1:ncol(censor.indx)) {
+
+          if (censor.type == "interval") {
+            if (censor.indx[j, l] == 1) { # impute censored data
 
               censor.dat <- rtruncnorm(1,
-                                       a = -Inf,
-                                       b = censoring.val[j, k],
-                                       mean = mu.iter[k] +
-                                         t(cond.param[k, 2:p]) %*% (iter.dat[j, -k] - mu.iter[-k]),
-                                       sd = sqrt(cond.param[k, p+1]))
-              # replace the data entry with the imputed data
+                                       a = censor.val[[1]][j, l],
+                                       b = censor.val[[2]][j, l],
+                                       mean = mu.iter[censor.pos][l] +
+                                         t(cond.param[censor.pos[l], 2:p]) %*%
+                                         (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
+                                       sd = sqrt(cond.param[censor.pos[l], p + 1]))
 
-              iter.dat[j, k] <- censor.dat
-              # what are the indices of censoring data
+              # replace the data entry with the imputed data
+              iter.dat[j, censor.pos[l]] <- censor.dat
             }
           }
+          # left censoring
+
+          else if (censor.type == "left") {
+
+          if (censor.indx[j, l] == 1) { # impute censored data
+
+            censor.dat <- rtruncnorm(1,
+                                     a = -Inf,
+                                     b = censor.val[j, l],
+                                     mean = mu.iter[censor.pos][l] +
+                                       t(cond.param[censor.pos[l], 2:p]) %*%
+                                       (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
+                                     sd = sqrt(cond.param[censor.pos[l], p + 1]))
+
+            # replace the data entry with the imputed data
+            iter.dat[j, censor.pos[l]] <- censor.dat
+
+          }
+
+          }
+          ## right censoring
+          # if (censor.type == "right") {
+          # if (censor.indx[j, l] == 1) { # impute censored data
+          #   censor.dat <- rtruncnorm(1,
+          #                            a = censor.val[j, l],
+          #                            b = Inf,
+          #                            mean = mu.iter[censor.pos][l] +
+          #                              t(cond.param[censor.pos[l], 2:p]) %*%
+          #                              (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
+          #                            sd = sqrt(cond.param[censor.pos[l], p + 1]))
+          #
+          #   # replace the data entry with the imputed data
+          #   iter.dat[j, censor.pos[l]] <- censor.dat
+          #  }
+          # }
         }
       }
     }
     # renames
-    rownames(sig.iter) <- colnames(sig.iter) <- colnames(iter.dat) <- colnames(dat)
+    rownames(sig.iter) <- colnames(sig.iter) <- colnames(dat)
 
     impute[[i]] <- round(iter.dat, 4)                 # store the imputed dataset for i-th iteration
     Mu.iter[i + 1, ] <- mu.iter                           # store the simulated means from Gibbs Sampler
     Sig.iter[i + 1, ] <- diag(sig.iter)                   # store the simulated variances from Gibbs sampler
     Covmat[[i + 1]] <- sig.iter
+    cond.[[i]] <- cond.param
 
     message(paste(i, "-th iteration!", sep = ""))    # print out the running status
-  }
-  # simulation ending time
-  end <- Sys.time()
 
-  # simulation running time
-  dur <- paste("The program takes ", end - start, " to run.", sep = "")
+  }
+
 
   return(list(
     simulated.mu = Mu.iter,         # simulated mean vector: a vector
     simulated.sig = Sig.iter, # simulated variance vector: a vector
     simulated.cov = Covmat,        # simulate covariance matrix: a list
-    imputed.dat = impute,           # simulated data: a list
-    running.time = dur              # running time
+    imputed.dat = impute        # simulated data: a list
   ))
+
+  # return(cond.)
+
 }
+

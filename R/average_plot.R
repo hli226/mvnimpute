@@ -15,7 +15,9 @@ avg.plot <- function(dat,
                      x.lab = "Iteration number",
                      y.lab = "Average of simulated value",
                      title = NULL,
-                     details = TRUE) {
+                     details = FALSE) {
+
+  value <- NULL
 
   # compute the cumulative averages of the parameter values to the current simulation
   avg.param <- matrix(nrow = iter + 1, ncol = ncol(dat))
@@ -50,6 +52,6 @@ avg.plot <- function(dat,
     ylab(y.lab) +
     ggtitle(title))
 
-  return(long.dat)
+  if (details) return(avg.param)
 
 }

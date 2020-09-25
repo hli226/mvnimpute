@@ -4,10 +4,14 @@
 \alias{fill.dat}
 \title{Initial data fill-in fucntion}
 \usage{
-fill.dat(dat, method = "normal")
+fill.dat(dat, miss.pos, censor.pos, method = "normal")
 }
 \arguments{
 \item{dat}{dataset with missing and censored values}
+
+\item{miss.pos}{Position of variables with missing values in the original dataset}
+
+\item{censor.pos}{Position of variables with censored values in the original dataset}
 
 \item{method}{method to be used for initial filled-in values}
 }

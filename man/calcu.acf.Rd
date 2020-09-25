@@ -4,7 +4,7 @@
 \alias{calcu.acf}
 \title{Autocorrelation function}
 \usage{
-calcu.acf(dat, lag, plot = FALSE, title = NULL, details = TRUE)
+calcu.acf(dat, lag, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
 \item{dat}{dataset to calculate the autocorrelation}

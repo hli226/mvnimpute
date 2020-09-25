@@ -16,14 +16,14 @@
 #' V <- diag(p)
 #' miss.num <- 1
 #' censor.num <- 1
-#' dat <- multi.dat.gen(n, m.vec, V, p, miss.num, censor.num)
+#' dat <- dat.gen(n, m.vec, V, p, miss.num, censor.num)
 #'
 #' @return A list containing the full data, the complete data with missing and censoring information applied,
 #'   the missing and censoring index, positions of the variables including the missing or censored values, or
 #'   the fully observed variable, and the two limits of the censored values
 #'
 #' @export
-multi.dat.gen <- function(
+dat.gen <- function(
   n, # number of data to be generated
   m.vec, # mean vec should have length p
   sig, # variance-covariance matrix have dimension p * p
@@ -31,6 +31,8 @@ multi.dat.gen <- function(
   miss.num, # number of variables subject to missing
   censor.num # number of censoring subject
 ){
+
+  `%notin%` <- Negate(`%in%`)
 
   if (length(m.vec) != p) stop("Your desired dimensions do not match!")
   if (dim(sig)[1] != dim(sig)[2]) stop("Covariance matrix should be a sqaure matrix!")
@@ -50,8 +52,8 @@ multi.dat.gen <- function(
   if (miss.num != 0 & censor.num != 0)
   {
     miss.pos <- sample(var.num, miss.num, replace = FALSE)
-    censor.pos <- sample(var.num[-miss.pos], censor.num, replace = FALSE)
-    full.pos <- var.num[-c(miss.pos, censor.pos)]
+    censor.pos <- sample(var.num[var.num %notin% miss.pos], censor.num, replace = FALSE)
+    full.pos <- var.num[var.num %notin% c(miss.pos, censor.pos)]
 
     # fully observed data that missing and censoring data will depend on
     # the first of the fully observed variables
@@ -70,11 +72,11 @@ multi.dat.gen <- function(
       miss.point[i] <- sort(fully.obs)[miss.prob * length(fully.obs)]
 
       # MAR missing mechanism
-      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 0, 1)
+      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 1, 0)
 
-      # set the value where missingness happens to NA
+      # set the value where missingness happens to be NA
       miss.p <- miss.pos[i];  miss.in <- miss.indx[, i]
-      dat[, miss.p][miss.in == 0] <- NA
+      dat[, miss.p][miss.in == 1] <- NA
     }
 
     ### censoring data
@@ -82,7 +84,7 @@ multi.dat.gen <- function(
 
     censor.ll <- matrix(NA, nrow = n, ncol = censor.num) # lower limit of the censoring interval
     censor.ul <- matrix(NA, nrow = n, ncol = censor.num) # upper limit of the censoring interval
-    censor.indx <- matrix(NA, nrow = n, ncol = censor.num) # censoring indeces
+    censor.indx <- matrix(NA, nrow = n, ncol = censor.num) # censoring indices
     up <- quantile(fully.obs, prob = 0.45)
     down <- quantile(fully.obs, prob = 0.65)
 
@@ -97,15 +99,15 @@ multi.dat.gen <- function(
       censor.ll[, i] <- pmin(t1, t2)
       censor.ul[, i] <- pmax(t1, t2)
 
-      # generating censorting indeces
+      # generating censoring indices
 
       censor.dat <- dat[, censor.p]
-      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 0, 1)
+      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
 
       # set the value where data is censoring to NaN
 
       censor.p <- censor.pos[i]; censor.in <- censor.indx[, i]
-      dat[, censor.p][censor.in == 0] <- NaN
+      dat[, censor.p][censor.in == 1] <- NaN
     }
 
     # rename the columns
@@ -135,7 +137,7 @@ multi.dat.gen <- function(
   if (miss.num != 0 & censor.num == 0)
   {
     miss.pos <- sample(var.num, miss.num, replace = FALSE)
-    full.pos <- var.num[-miss.pos]
+    full.pos <- var.num[var.num %notin% miss.pos]
 
     # fully observed data that missing data will depend on
     # the first of the fully observed variables
@@ -149,16 +151,16 @@ multi.dat.gen <- function(
     for (i in 1:miss.num) {
 
       # randomly generate missing probability
-      miss.prob <- sample(seq(0.1, 0.3, by = 0.001), 1, replace =TRUE)
+      miss.prob <- sample(seq(0.1, 0.3, by = 0.001), 1, replace = TRUE)
       miss.point[i] <- sort(fully.obs)[miss.prob * length(fully.obs)]
 
       # MAR missing mechanism
-      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 0, 1)
+      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 1, 0)
 
       miss.p <- miss.pos[i];  miss.in <- miss.indx[, i]
 
       # set the value where data is missing to NA
-      dat[, miss.p][miss.in == 0] <- NA
+      dat[, miss.p][miss.in == 1] <- NA
     }
 
     # rename the columns
@@ -184,7 +186,7 @@ multi.dat.gen <- function(
   if (miss.num == 0 & censor.num != 0)
   {
     censor.pos <- sample(var.num, censor.num, replace = FALSE)
-    full.pos <- var.num[-censor.pos]
+    full.pos <- var.num[var.num %notin% censor.pos]
     fully.obs <- as.matrix(dat[, full.pos], nrow = n, byrow = FALSE)[, 1] # fully observed data that censoring data will depen
 
     ### censoring data
@@ -205,10 +207,10 @@ multi.dat.gen <- function(
 
       censor.dat <- dat[, censor.p]
 
-      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 0, 1)
+      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
 
       censor.p <- censor.pos[i]; censor.in <- censor.indx[, i]
-      dat[, censor.p][censor.in == 0] <- NaN
+      dat[, censor.p][censor.in == 1] <- NaN
     }
 
     # rename the columns

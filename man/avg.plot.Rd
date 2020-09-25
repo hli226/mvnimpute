@@ -10,7 +10,7 @@ avg.plot(
   x.lab = "Iteration number",
   y.lab = "Average of simulated value",
   title = NULL,
-  details = TRUE
+  details = FALSE
 )
 }
 \arguments{

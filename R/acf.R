@@ -9,7 +9,7 @@
 #' @param details logical variable to specify whether the autocorrelation values are returned, default is set to TRUE
 #'
 #' @export
-calcu.acf <- function(dat, lag, plot = FALSE, title = NULL, details = TRUE) {
+calcu.acf <- function(dat, lag, plot = TRUE, title = NULL, details = FALSE) {
 
   auto.cor <- matrix(NA, nrow = lag + 1, ncol = ncol(dat))
 
@@ -21,7 +21,7 @@ calcu.acf <- function(dat, lag, plot = FALSE, title = NULL, details = TRUE) {
   rownames(auto.cor) <- paste("lag ", 0:lag, sep = "")
   colnames(auto.cor) <- colnames(dat)
 
-  if (plot == TRUE) {
+  if (plot) {
     for (i in 1:ncol(auto.cor)) {
       plot(auto.cor[, i], type = "h", ylim = c(-0.5, 1.0),
            xlab = "lag", ylab = "acf",
@@ -32,5 +32,5 @@ calcu.acf <- function(dat, lag, plot = FALSE, title = NULL, details = TRUE) {
     }
   }
 
-  if (details == TRUE) return(auto.cor)
+  if (details) return(auto.cor)
 }
