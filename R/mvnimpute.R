@@ -32,5 +32,4 @@ NULL
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
-#' @import utils
 NULL
