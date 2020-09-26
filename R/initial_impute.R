@@ -9,7 +9,7 @@
 #'
 #' @return a complete dataset with missing values filled in
 #' @export
-fill.dat <- function(dat, miss.pos, censor.pos, method = "normal")
+initial.impute <- function(dat, miss.pos, censor.pos, method = "normal")
 {
 
   fill.dat <- dat

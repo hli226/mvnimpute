@@ -14,7 +14,7 @@
 #' @param censor.type Logical variable specifying the censoring type
 #'
 #' @export
-sim.func <- function(
+multiple.impute <- function(
   iter,                     # number of iterations to run
   prior.param,              # list of prior parameters
   ini.vals,                 # list of initial values
@@ -28,7 +28,7 @@ sim.func <- function(
 )
 {
 
-  fill.dat. <- fill.dat(dat, miss.pos, censor.pos)
+  fill.dat. <- initial.impute(dat, miss.pos, censor.pos)
 
   n <- nrow(fill.dat.); p <- ncol(fill.dat.)
   # fill the missing values
@@ -149,20 +149,20 @@ sim.func <- function(
 
           }
           ## right censoring
-          # if (censor.type == "right") {
-          # if (censor.indx[j, l] == 1) { # impute censored data
-          #   censor.dat <- rtruncnorm(1,
-          #                            a = censor.val[j, l],
-          #                            b = Inf,
-          #                            mean = mu.iter[censor.pos][l] +
-          #                              t(cond.param[censor.pos[l], 2:p]) %*%
-          #                              (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
-          #                            sd = sqrt(cond.param[censor.pos[l], p + 1]))
-          #
-          #   # replace the data entry with the imputed data
-          #   iter.dat[j, censor.pos[l]] <- censor.dat
-          #  }
-          # }
+          if (censor.type == "right") {
+          if (censor.indx[j, l] == 1) { # impute censored data
+            censor.dat <- rtruncnorm(1,
+                                     a = censor.val[j, l],
+                                     b = Inf,
+                                     mean = mu.iter[censor.pos][l] +
+                                       t(cond.param[censor.pos[l], 2:p]) %*%
+                                       (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
+                                     sd = sqrt(cond.param[censor.pos[l], p + 1]))
+
+            # replace the data entry with the imputed data
+            iter.dat[j, censor.pos[l]] <- censor.dat
+           }
+          }
         }
       }
     }
