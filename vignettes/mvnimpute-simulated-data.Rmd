@@ -1,5 +1,5 @@
 ---
-title: "mvnimpute-imputed-data"
+title: "mvnimpute-simulated-data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{mvnimpute-imputed-data}
@@ -14,19 +14,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE, message = FALSE}
 library(mvnimpute)
+library(clusterGeneration)
 ```
 
 # Simulated data generation
 
-We generate a 18-dimensional multivariate normal data with 8 subject to missing and 5 as interval censored, with sample size 2000. The mean vector contains 18 values as random draws from the normal distribution with mean 5 and standard deviation 1.5. The covariance matrix is genearted using the *genPositiveDefMat* function from the **clusterGeneration** package.
+We generate a 18-dimensional multivariate normal data with 8 subject to missing and 5 as interval censored, with sample size 2000. The mean vector contains 18 values as random draws from the normal distribution with mean 5 and standard deviation 1.5. The covariance matrix is generated using the *genPositiveDefMat* function from the **clusterGeneration** package.
 
 ```{r}
 # setup parameters
 n <- 2000; p <- 18; miss.num <- 8; censor.num <- 5
 m.vec <- rnorm(p, mean = 5, sd = 1.5)
-V <- clusterGeneration::genPositiveDefMat("eigen", dim = p)
+V <- genPositiveDefMat("eigen", dim = p)
 
 # generate the data
 sim.dat <- dat.gen(n, m.vec, V$Sigma, p, miss.num, censor.num)
