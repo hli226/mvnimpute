@@ -7,10 +7,13 @@
 marg.plot(dat, title = NULL)
 }
 \arguments{
-\item{dat}{Dataset containing each variable}
+\item{dat}{Dataset containing all the variables}
 
 \item{title}{Titles of the generated plots}
 }
+\value{
+Marginal density plots for each variable in the dataset
+}
 \description{
-This function draws the marginal density plots for each variable
+Draws the marginal density plots for each variable
 }

@@ -4,19 +4,25 @@
 \alias{calcu.acf}
 \title{Autocorrelation function}
 \usage{
-calcu.acf(dat, lag, plot = TRUE, title = NULL, details = FALSE)
+calcu.acf(dat, lag = 50, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
-\item{dat}{dataset to calculate the autocorrelation}
+\item{dat}{dataset containing the variables of which autocorrelations are calculated.}
 
-\item{lag}{lag of autocorrelation to calulate}
+\item{lag}{lag at which the autocorrelation is calueated, default is set as 50.}
 
-\item{plot}{logical variable to specify whether the plot is generated, default is set to FALSE}
+\item{plot}{logical variable to specify whether the plot is generated, default is set to FALSE.}
 
-\item{title}{title of the generate autocorrelation plot}
+\item{title}{title of the generated autocorrelation plots.}
 
-\item{details}{logical variable to specify whether the autocorrelation values are returned, default is set to TRUE}
+\item{details}{logical variable to specify whether the autocorrelation values are returned, default is set to TRUE.}
+}
+\value{
+A matrix containing the calculated autocorrelations of all the variables in the dataset. If \code{plot} = TRUE, the autocorrelation plots of all the variables will be drawn.
 }
 \description{
-This function calculates the autocorrelations of all the variables in the dataset
+Calculates the autocorrelations
+}
+\details{
+This function calculates the autocorrelation values of all the variables on a column by column base. The default value of \code{lag} is set as 50, the maixmum number of lag should not exceed the number of row of the dataset, which reflects the corresponding number of iteration of running the multiple imputation.
 }

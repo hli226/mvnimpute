@@ -2,7 +2,7 @@
 % Please edit documentation in R/initial_impute.R
 \name{initial.impute}
 \alias{initial.impute}
-\title{Initial data fill-in fucntion}
+\title{Initial missing data fill-in fucntion}
 \usage{
 initial.impute(dat, miss.pos, censor.pos, method = "normal")
 }
@@ -19,5 +19,9 @@ initial.impute(dat, miss.pos, censor.pos, method = "normal")
 a complete dataset with missing values filled in
 }
 \description{
-Fill in data with missing and censored values for multiple imputation
+Fills in data with missing and censored values for multiple imputation
+}
+\details{
+The missing values will initially be filled in by some single imputation methods. Currently, it only supports generating
+random values from the normal distribution with the mean and variance as the complete-case mean and variance, respectively.
 }

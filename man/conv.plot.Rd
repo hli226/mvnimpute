@@ -7,25 +7,28 @@
 conv.plot(
   dat,
   iter,
-  x.lab = "Iteration Number",
+  x.lab = "Iteration number",
   y.lab = "Simulated values",
   title = NULL
 )
 }
 \arguments{
-\item{dat}{The dataset containing the values to be plotted}
+\item{dat}{dataset containing the simulated values.}
 
-\item{iter}{Iteration number of the simulation}
+\item{iter}{number of iterations for running multiple imputation.}
 
-\item{x.lab}{Label of the x axis in the generated plot, default is set to be "Iteration number"}
+\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
 
-\item{y.lab}{Label of the y axis in the generated plot, default is set to be "Simulated values"}
+\item{y.lab}{label of the y axis in the generated plot, default is set to "Simulated values".}
 
-\item{title}{Title in the convergence plot}
+\item{title}{title in the convergence plot.}
 }
 \value{
-Convergence plot of your desired variable
+The plot of simulated values across iterations.
 }
 \description{
-This function generates the convergence plots for the parameter values
+Generates the convergence plots for the parameter values
+}
+\details{
+The function generates the trace plot of simulated values across iterations.
 }

@@ -8,24 +8,30 @@ avg.plot(
   dat,
   iter,
   x.lab = "Iteration number",
-  y.lab = "Average of simulated value",
+  y.lab = "Average of simulated values",
   title = NULL,
   details = FALSE
 )
 }
 \arguments{
-\item{dat}{Dataset containing the simulated values}
+\item{dat}{dataset containing the simulated values.}
 
-\item{iter}{Iteration number of the simulation}
+\item{iter}{number of iterations for running multiple imputation.}
 
-\item{x.lab}{Label of the x axis in the generated plot, default is set to be "Iteration number"}
+\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
 
-\item{y.lab}{Label of the y axis in the generated plot, default is set to be "Average of simulated values"}
+\item{y.lab}{label of the y axis in the generated plot, default is set to "Average of simulated values".}
 
-\item{title}{Title of the generated plot}
+\item{title}{title of the generated plot.}
 
-\item{details}{Logical variable to specify whether the average simulate values are returned, default is set to TRUE}
+\item{details}{logical variable to specify whether the average simulate values are returned, default is set to TRUE.}
+}
+\value{
+The plot of averaged values across iterations. If \code{details} = TRUE. A matrix containing the averaged values of all the variables across iterations.
 }
 \description{
-This function generates average simulated values of the parameter values
+Generates average simulated values of the parameter values
+}
+\details{
+This function calculates the averaged simulated values across simulations.
 }

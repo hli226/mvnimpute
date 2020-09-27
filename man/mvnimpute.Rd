@@ -5,7 +5,8 @@
 \alias{mvnimpute}
 \title{mvnimpute: Implementation of multiple imputation involving the missing and censored values}
 \description{
-The mvnimpute package implements multiple imputation involving the missing and censored values
+The mvnimpute package implements multiple imputation for concurrently handling missing and censored values based on the joint normal
+model assumption.
 }
 \author{
 Hesen Li

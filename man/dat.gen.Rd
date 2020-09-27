@@ -7,17 +7,17 @@
 dat.gen(n, m.vec, sig, p, miss.num, censor.num)
 }
 \arguments{
-\item{n}{Number of observations to be generated}
+\item{n}{number of observations to be generated.}
 
-\item{m.vec}{Specified mean vector}
+\item{m.vec}{specified mean vector.}
 
-\item{sig}{Specified variance-covariance matrix}
+\item{sig}{specified covariance matrix.}
 
-\item{p}{Number of variables to be generated}
+\item{p}{number of variables to be generated.}
 
-\item{miss.num}{Number of variables having missing values}
+\item{miss.num}{number of variables having missing values.}
 
-\item{censor.num}{NUmber of variables having censored values}
+\item{censor.num}{number of variables having censored values.}
 }
 \value{
 A list containing the full data, the complete data with missing and censoring information applied,
@@ -25,7 +25,14 @@ A list containing the full data, the complete data with missing and censoring in
   the fully observed variable, and the two limits of the censored values
 }
 \description{
-Function to generate multivariate data. Users can specify the total number of variables in total, the number of variables that have missing values and the number of variables that have censored values
+Generates multivariate normal data.
+}
+\details{
+The function generates the multivariate normal data that can be used to verify the correctness of the multiple imputation
+algorithm. Users have to specify the mean vector, variance covariance matrix, sample size and dimension of the generated data, and
+the desired number of variables subject to missing and censoring, respectively. Currently, it only supports generation of the data with
+a certain type of MAR missing mechanism and interval censoring mechanism, in which case there should be one variable that is fully
+observed in the dataset.
 }
 \examples{
 n <- 1000
