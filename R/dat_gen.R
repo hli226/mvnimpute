@@ -1,4 +1,4 @@
-#' Data generation function
+#' Data generating function
 #'
 #' Generates multivariate normal data.
 #'
@@ -11,7 +11,7 @@
 #'
 #' @details The function generates the multivariate normal data that can be used to verify the correctness of the multiple imputation
 #' algorithm. Users have to specify the mean vector, variance covariance matrix, sample size and dimension of the generated data, and
-#' the desired number of variables subject to missing and censoring, respectively. Currently, it only supports generation of the data with
+#' the desired number of variables subject to missing and censoring, respectively. Currently, it only supports generating the data with
 #' a certain type of MAR missing mechanism and interval censoring mechanism, in which case there should be one variable that is fully
 #' observed in the dataset.
 #'
