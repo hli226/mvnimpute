@@ -1,17 +1,34 @@
 #' Multiple imputation function
 #'
-#' This function implements the multiple imputation of the missing and censored values
+#' Implements the multiple imputation of the missing and censored values
 #'
-#' @param iter Iteration number
-#' @param prior.param List of prior parameter values
-#' @param ini.vals List of initial values
-#' @param dat Dataset to do multiple imputation
-#' @param miss.indx Matrix of missing data index
-#' @param miss.pos Position of variables with missing values in the original dataset
-#' @param censor.indx Matrix of censoring data index
-#' @param censor.pos Position of variables with censored values in the orignal dataset
-#' @param censor.val List containing cutoff values for the censored variables
-#' @param censor.type Logical variable specifying the censoring type
+#' @param iter number of iterations
+#' @param prior.param list of prior parameter values
+#' @param ini.vals list of initial values
+#' @param dat dataset to do multiple imputation
+#' @param miss.indx matrix of missing index
+#' @param miss.pos vector containing the positions of variables with missing values in the original dataset
+#' @param censor.indx matrix of censoring index
+#' @param censor.pos vector containing the position of variables with censored values in the original dataset
+#' @param censor.val list containing cutoff values for the censored variables
+#' @param censor.type discrete variable specifying the censoring type, it takes "left" for left-censoring, "right" for right-censoring,
+#' and "interval" for interval-censoring
+#'
+#' @details This function implements the multiple imputation algorithm that concurrently handles missing and censored values. This
+#' function requires matrices that contain the respective indices for missing or censored values, and vectors that specify the
+#' positions of the variables having the missing or censored values in the original dataset. \code{Censor.val} includes the cutoff
+#' values for the censored values, it should be a matrix which has the same dimension as the censoring index matrix if the data
+#' is right- or left-censored, while it should be a list of length 2 if the data is interval-censored. The first element of the
+#' list should contain the lower bounds of the censored values, and the upper bounds should be in the second element. \code{prior.param}
+#' is a list containing the specified parameters of the prior distributions, and \code{ini.vals} is a list containing the chosen
+#' inital values for the parameters.
+#'
+#' @return A list of length 4 containing the simulated mean and variance vectors, covariance matrix and the imputed dataset from
+#' each iteration.
+#'
+#' @references
+#' Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.
+#' \emph{Journal of the American Statistical Association}, \bold{82(398)}, 528-540.
 #'
 #' @export
 multiple.impute <- function(
@@ -73,7 +90,7 @@ multiple.impute <- function(
     # update mu vector from normal distribution condition on Sigma
     mu.iter <- rmvnorm(1, mean = mu.n, sig.iter/kappa.n)
 
-    # posterior parameters for variance-covariance matrix
+    # posterior parameters for covariance matrix
     S <- apply(iter.dat, 1, "-", mu.iter) %*%
       t(apply(iter.dat, 1, "-", mu.iter))
 
@@ -169,7 +186,7 @@ multiple.impute <- function(
     # renames
     rownames(sig.iter) <- colnames(sig.iter) <- colnames(dat)
 
-    impute[[i]] <- round(iter.dat, 4)                 # store the imputed dataset for i-th iteration
+    impute[[i]] <- round(iter.dat, 4)                     # store the imputed dataset for i-th iteration
     Mu.iter[i + 1, ] <- mu.iter                           # store the simulated means from Gibbs Sampler
     Sig.iter[i + 1, ] <- diag(sig.iter)                   # store the simulated variances from Gibbs sampler
     Covmat[[i + 1]] <- sig.iter
@@ -182,12 +199,10 @@ multiple.impute <- function(
 
   return(list(
     simulated.mu = Mu.iter,         # simulated mean vector: a vector
-    simulated.sig = Sig.iter, # simulated variance vector: a vector
-    simulated.cov = Covmat,        # simulate covariance matrix: a list
-    imputed.dat = impute        # simulated data: a list
+    simulated.sig = Sig.iter,       # simulated variance vector: a vector
+    simulated.cov = Covmat,         # simulate covariance matrix: a list
+    imputed.dat = impute            # simulated data: a list
   ))
-
-  # return(cond.)
 
 }
 

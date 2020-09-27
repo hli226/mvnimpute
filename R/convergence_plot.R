@@ -1,19 +1,21 @@
 #' Convergence plot function
 #'
-#' This function generates the convergence plots for the parameter values
+#' Generates the convergence plots for the parameter values
 #'
-#' @param dat The dataset containing the values to be plotted
-#' @param iter Iteration number of the simulation
-#' @param x.lab Label of the x axis in the generated plot, default is set to be "Iteration number"
-#' @param y.lab Label of the y axis in the generated plot, default is set to be "Simulated values"
-#' @param title Title in the convergence plot
+#' @param dat dataset containing the simulated values.
+#' @param iter number of iterations for running multiple imputation.
+#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
+#' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values".
+#' @param title title in the convergence plot.
 #'
-#' @return Convergence plot of your desired variable
+#' @details The function generates the trace plot of simulated values across iterations.
+#'
+#' @return The plot of simulated values across iterations.
 #'
 #' @export
 conv.plot <- function(dat,
                       iter,
-                      x.lab = "Iteration Number",
+                      x.lab = "Iteration number",
                       y.lab = "Simulated values",
                       title = NULL) {
   value <- NULL
@@ -24,7 +26,6 @@ conv.plot <- function(dat,
   colnames(wide.dat) <- c(colnames(dat), "iter")
 
   # make sure the id column should be factor variable
-  # wide.mean$iter <- as.factor(wide.mean$iter)
 
   long.dat <- melt(wide.dat, id.vars = "iter",
                     measure.vars = colnames(wide.dat)[colnames(wide.dat) != "iter"],

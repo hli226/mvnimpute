@@ -1,19 +1,23 @@
 #' Average values plot function
 #'
-#' This function generates average simulated values of the parameter values
+#' Generates average simulated values of the parameter values
 #'
-#' @param dat Dataset containing the simulated values
-#' @param iter Iteration number of the simulation
-#' @param x.lab Label of the x axis in the generated plot, default is set to be "Iteration number"
-#' @param y.lab Label of the y axis in the generated plot, default is set to be "Average of simulated values"
-#' @param title Title of the generated plot
-#' @param details Logical variable to specify whether the average simulate values are returned, default is set to TRUE
+#' @param dat dataset containing the simulated values.
+#' @param iter number of iterations for running multiple imputation.
+#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
+#' @param y.lab label of the y axis in the generated plot, default is set to "Average of simulated values".
+#' @param title title of the generated plot.
+#' @param details logical variable to specify whether the average simulate values are returned, default is set to TRUE.
+#'
+#' @details This function calculates the averaged simulated values across simulations.
+#'
+#' @return The plot of averaged values across iterations. If \code{details} = TRUE. A matrix containing the averaged values of all the variables across iterations.
 #'
 #' @export
 avg.plot <- function(dat,
                      iter,
                      x.lab = "Iteration number",
-                     y.lab = "Average of simulated value",
+                     y.lab = "Average of simulated values",
                      title = NULL,
                      details = FALSE) {
 

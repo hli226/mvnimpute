@@ -1,13 +1,19 @@
 #' Data generation function
 #'
-#' Function to generate multivariate data. Users can specify the total number of variables in total, the number of variables that have missing values and the number of variables that have censored values
+#' Generates multivariate normal data.
 #'
-#' @param n Number of observations to be generated
-#' @param p Number of variables to be generated
-#' @param m.vec Specified mean vector
-#' @param sig Specified variance-covariance matrix
-#' @param miss.num Number of variables having missing values
-#' @param censor.num NUmber of variables having censored values
+#' @param n number of observations to be generated.
+#' @param p number of variables to be generated.
+#' @param m.vec specified mean vector.
+#' @param sig specified covariance matrix.
+#' @param miss.num number of variables having missing values.
+#' @param censor.num number of variables having censored values.
+#'
+#' @details The function generates the multivariate normal data that can be used to verify the correctness of the multiple imputation
+#' algorithm. Users have to specify the mean vector, variance covariance matrix, sample size and dimension of the generated data, and
+#' the desired number of variables subject to missing and censoring, respectively. Currently, it only supports generation of the data with
+#' a certain type of MAR missing mechanism and interval censoring mechanism, in which case there should be one variable that is fully
+#' observed in the dataset.
 #'
 #' @examples
 #' n <- 1000
@@ -24,12 +30,12 @@
 #'
 #' @export
 dat.gen <- function(
-  n, # number of data to be generated
-  m.vec, # mean vec should have length p
-  sig, # variance-covariance matrix have dimension p * p
-  p, # number of in the variables of the data
-  miss.num, # number of variables subject to missing
-  censor.num # number of censoring subject
+  n,          # number of data to be generated
+  m.vec,      # mean vector should have length p
+  sig,        # variance-covariance matrix have dimension p * p
+  p,          # number of in the variables of the data
+  miss.num,   # number of variables subject to missing
+  censor.num  # number of censoring subject
 ){
 
   `%notin%` <- Negate(`%in%`)

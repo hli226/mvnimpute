@@ -1,6 +1,12 @@
-#' Function to calculate complete case and avaliable case parameters
+#' CC and AC parameters calculation function
 #'
-#' @param dat dataset to compute the complete case and available case parameters
+#' Calculates the complete-case and avaliable-case parameters
+#'
+#' @param dat dataset containing the variables with missing and censored values.
+#'
+#' @return a list of length 5 containing the avaliable-case mean and variance for each variable, the complete-case covariance matrix,
+#' the complete-case mean and variance for each variable.
+#'
 #' @export
 calcu.param <- function(dat) {
 

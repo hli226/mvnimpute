@@ -1,15 +1,19 @@
 #' Autocorrelation function
 #'
-#' This function calculates the autocorrelations of all the variables in the dataset
+#' Calculates the autocorrelations
 #'
-#' @param dat dataset to calculate the autocorrelation
-#' @param lag lag of autocorrelation to calulate
-#' @param plot  logical variable to specify whether the plot is generated, default is set to FALSE
-#' @param title title of the generate autocorrelation plot
-#' @param details logical variable to specify whether the autocorrelation values are returned, default is set to TRUE
+#' @param dat dataset containing the variables of which autocorrelations are calculated.
+#' @param lag lag at which the autocorrelation is calueated, default is set as 50.
+#' @param plot  logical variable to specify whether the plot is generated, default is set to FALSE.
+#' @param title title of the generated autocorrelation plots.
+#' @param details logical variable to specify whether the autocorrelation values are returned, default is set to TRUE.
+#'
+#' @details This function calculates the autocorrelation values of all the variables on a column by column base. The default value of \code{lag} is set as 50, the maixmum number of lag should not exceed the number of row of the dataset, which reflects the corresponding number of iteration of running the multiple imputation.
+#'
+#' @return A matrix containing the calculated autocorrelations of all the variables in the dataset. If \code{plot} = TRUE, the autocorrelation plots of all the variables will be drawn.
 #'
 #' @export
-calcu.acf <- function(dat, lag, plot = TRUE, title = NULL, details = FALSE) {
+calcu.acf <- function(dat, lag = 50, plot = TRUE, title = NULL, details = FALSE) {
 
   auto.cor <- matrix(NA, nrow = lag + 1, ncol = ncol(dat))
 
