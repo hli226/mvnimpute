@@ -20,5 +20,6 @@ Suggests:
     dplyr,
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    clusterGeneration
 VignetteBuilder: knitr
