@@ -45,18 +45,19 @@ multiple.impute <- function(
 )
 {
 
-  fill.dat. <- initial.impute(dat, miss.pos, censor.pos)
+  iter.dat <- dat
 
-  n <- nrow(fill.dat.); p <- ncol(fill.dat.)
+  # fill.dat. <- initial.impute(dat, miss.pos, censor.pos)
+
+  n <- nrow(iter.dat); p <- ncol(iter.dat)
   # fill the missing values
 
   # prior parameters
   ### prior specification
   mu.0 <- prior.param[[1]]
-  V.0 <- prior.param[[2]]
-
+  Lambda.0 <- prior.param[[2]]
   kappa.0 <- prior.param[[3]]
-  nu.0 <- prior.param[[4]]; Lambda.0 <- prior.param[[5]]
+  nu.0 <- prior.param[[4]]
 
   # initial values
   mu.iter <- mu.ini <- ini.vals[[1]]
@@ -64,8 +65,8 @@ multiple.impute <- function(
 
   # vector and list to store results
   impute <- list()
-  Mu.iter <- matrix(nrow = iter + 1, ncol = ncol(fill.dat.))
-  Sig.iter <- matrix(nrow = iter + 1, ncol = ncol(fill.dat.))
+  Mu.iter <- matrix(nrow = iter + 1, ncol = ncol(iter.dat))
+  Sig.iter <- matrix(nrow = iter + 1, ncol = ncol(iter.dat))
   Covmat <- list()
   Mu.iter[1, ] <- mu.ini
   Sig.iter[1, ] <- diag(sig.ini)
@@ -77,8 +78,6 @@ multiple.impute <- function(
   # posterior parameters that do not depend on the data
   kappa.n <- kappa.0 + n
   nu.n <- nu.0 + n
-
-  iter.dat <- fill.dat.
 
   for (i in 1:iter) { ## iteration number
 
@@ -104,85 +103,143 @@ multiple.impute <- function(
 
     ##### I-step
 
-    for (j in 1:n) {       # row: observations
+    # for (j in 1:n) {       # row: observations
 
-      if (!is.null(miss.indx)) {
+    if (!is.null(miss.indx)) {
 
-        for (k in 1:ncol(miss.indx)) {     # col: variables
+      for (j in 1:length(miss.pos)) {     # col: variables
 
-          if (miss.indx[j, k] == 1) {  # impute missing data
+        miss.p <- miss.pos[j]; miss.in <- miss.indx[, j]
+        x <- iter.dat[, miss.p][miss.in == 1]
+        x_ <- iter.dat[, -miss.p][miss.in == 1, ]
+        mu.x <- mu.iter[miss.p]
+
+        if (length(x) == 1) {
+          x[] <- rnorm(1,
+                        mean = mu.x +
+                          t(cond.param[miss.p, 2:p]) %*%
+                          (x_ - mu.iter[-miss.p]),
+                        sd = sqrt(cond.param[miss.p, p + 1]))
+        } else {
+
+          for (k in 1:length(x)) {  # impute missing data
             ### decimal places of the imputed values should be the same as the observed values
-            miss.dat <- rnorm(1,
-                              mean = mu.iter[miss.pos][k] +
-                                t(cond.param[miss.pos[k], 2:p]) %*%
-                                (iter.dat[j, -miss.pos[k]] - mu.iter[-miss.pos[k]]),
-                              sd = sqrt(cond.param[miss.pos[k], p + 1]))
+            x[k] <- rnorm(1,
+                          mean = mu.x +
+                            t(cond.param[miss.p, 2:p]) %*%
+                            (x_[k, ] - mu.iter[-miss.p]),
+                          sd = sqrt(cond.param[miss.p, p + 1]))
 
             # replace the data entry with the imputed data
-            iter.dat[j, miss.pos[k]] <- miss.dat
           }
         }
-      }
 
-      if (!is.null(censor.indx)) {
-
-        ## interval censoring
-
-        for (l in 1:ncol(censor.indx)) {
-
-          if (censor.type == "interval") {
-            if (censor.indx[j, l] == 1) { # impute censored data
-
-              censor.dat <- rtruncnorm(1,
-                                       a = censor.val[[1]][j, l],
-                                       b = censor.val[[2]][j, l],
-                                       mean = mu.iter[censor.pos][l] +
-                                         t(cond.param[censor.pos[l], 2:p]) %*%
-                                         (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
-                                       sd = sqrt(cond.param[censor.pos[l], p + 1]))
-
-              # replace the data entry with the imputed data
-              iter.dat[j, censor.pos[l]] <- censor.dat
-            }
-          }
-          # left censoring
-
-          else if (censor.type == "left") {
-
-          if (censor.indx[j, l] == 1) { # impute censored data
-
-            censor.dat <- rtruncnorm(1,
-                                     a = -Inf,
-                                     b = censor.val[j, l],
-                                     mean = mu.iter[censor.pos][l] +
-                                       t(cond.param[censor.pos[l], 2:p]) %*%
-                                       (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
-                                     sd = sqrt(cond.param[censor.pos[l], p + 1]))
-
-            # replace the data entry with the imputed data
-            iter.dat[j, censor.pos[l]] <- censor.dat
-
-          }
-
-          }
-          ## right censoring
-          if (censor.type == "right") {
-          if (censor.indx[j, l] == 1) { # impute censored data
-            censor.dat <- rtruncnorm(1,
-                                     a = censor.val[j, l],
-                                     b = Inf,
-                                     mean = mu.iter[censor.pos][l] +
-                                       t(cond.param[censor.pos[l], 2:p]) %*%
-                                       (iter.dat[j, -censor.pos[l]] - mu.iter[-censor.pos[l]]),
-                                     sd = sqrt(cond.param[censor.pos[l], p + 1]))
-
-            # replace the data entry with the imputed data
-            iter.dat[j, censor.pos[l]] <- censor.dat
-           }
-          }
-        }
+        iter.dat[, miss.p][miss.in == 1] <- x
       }
     }
+
+    if (!is.null(censor.indx)) {
+
+      if (censor.type == "interval") {
+
+        for (j in 1:length(censor.pos)) {
+
+          censor.p <- censor.pos[j]; censor.in <- censor.indx[, j]
+          t. <- iter.dat[, censor.p][censor.in == 1]
+          t_ <- iter.dat[, -censor.p][censor.in == 1, ]
+          mu.t <- mu.iter[censor.p]
+
+          ll <- censor.val[[1]][, j][censor.in == 1]
+          ul <- censor.val[[2]][, j][censor.in == 1]
+
+          if (length(t.) == 1) {
+
+            t. <- rtruncnorm(1,
+                             a = ll[k],
+                             b = ul[k],
+                             mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                               (t_ - mu.iter[-censor.p]),
+                             sd = sqrt(cond.param[censor.p, p + 1]))
+          } else {
+
+            for (k in 1:length(t.)){
+              t.[k] <- rtruncnorm(1,
+                                  a = ll[k],
+                                  b = ul[k],
+                                  mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                                    (t_[k, ] - mu.iter[-censor.p]),
+                                  sd = sqrt(cond.param[censor.p, p + 1]))
+            }
+          }
+        }
+      }
+      else if (censor.type == "right") {
+
+        for (j in 1:length(censor.pos)) {
+
+          censor.p <- censor.pos[j]; censor.in <- censor.indx[, j]
+          t. <- iter.dat[, censor.p][censor.in == 1]
+          t_ <- iter.dat[, -censor.p][censor.in == 1, ]
+          mu.t <- mu.iter[censor.p]
+
+          censor.v <- censor.val[, j][censor.in == 1]
+
+          if (length(t.) == 1) {
+
+            t. <- rtruncnorm(1,
+                             a = censor.v[k],
+                             b = Inf,
+                             mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                               (t_ - mu.iter[-censor.p]),
+                             sd = sqrt(cond.param[censor.p, p + 1]))
+          } else {
+
+            for (k in 1:length(t.)){
+              t.[k] <- rtruncnorm(1,
+                                  a = censor.v[k],
+                                  b = Inf,
+                                  mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                                    (t_[k, ] - mu.iter[-censor.p]),
+                                  sd = sqrt(cond.param[censor.p, p + 1]))
+            }
+          }
+        }
+      }
+      else if (censor.type == "left") {
+
+        for (j in 1:length(censor.pos)) {
+
+          censor.p <- censor.pos[j]; censor.in <- censor.indx[, j]
+          t. <- iter.dat[, censor.p][censor.in == 1]
+          t_ <- iter.dat[, -censor.p][censor.in == 1, ]
+          mu.t <- mu.iter[censor.p]
+
+          censor.v <- censor.val[, j][censor.in == 1]
+
+          if (length(t.) == 1) {
+
+            t. <- rtruncnorm(1,
+                             a = -Inf,
+                             b = censor.v[k],
+                             mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                               (t_ - mu.iter[-censor.p]),
+                             sd = sqrt(cond.param[censor.p, p + 1]))
+          } else {
+
+            for (k in 1:length(t.)){
+              t.[k] <- rtruncnorm(1,
+                                  a = -Inf,
+                                  b = censor.v[k],
+                                  mean = mu.t + t(cond.param[censor.p, 2:p]) %*%
+                                    (t_[k, ] - mu.iter[-censor.p]),
+                                  sd = sqrt(cond.param[censor.p, p + 1]))
+            }
+          }
+        }
+      }
+      iter.dat[, censor.p][censor.in == 1] <- t.
+    }
+
     # renames
     rownames(sig.iter) <- colnames(sig.iter) <- colnames(dat)
 
@@ -195,14 +252,12 @@ multiple.impute <- function(
     message(paste(i, "-th iteration!", sep = ""))    # print out the running status
 
   }
-
-
   return(list(
     simulated.mu = Mu.iter,         # simulated mean vector: a vector
     simulated.sig = Sig.iter,       # simulated variance vector: a vector
     simulated.cov = Covmat,         # simulate covariance matrix: a list
     imputed.dat = impute            # simulated data: a list
   ))
-
 }
+
 

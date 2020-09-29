@@ -4,16 +4,18 @@
 \alias{initial.impute}
 \title{Initial missing data fill-in fucntion}
 \usage{
-initial.impute(dat, miss.pos, censor.pos, method = "normal")
+initial.impute(dat, miss.indx, miss.pos, censor.indx, censor.pos)
 }
 \arguments{
 \item{dat}{dataset with missing and censored values}
 
-\item{miss.pos}{Position of variables with missing values in the original dataset}
+\item{miss.indx}{matrix containing the missing index}
 
-\item{censor.pos}{Position of variables with censored values in the original dataset}
+\item{miss.pos}{position of variables with missing values in the original dataset}
 
-\item{method}{method to be used for initial filled-in values}
+\item{censor.indx}{matrix containing the censoring index}
+
+\item{censor.pos}{position of variables with censored values in the original dataset}
 }
 \value{
 a complete dataset with missing values filled in
