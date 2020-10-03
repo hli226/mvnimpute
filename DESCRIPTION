@@ -4,7 +4,7 @@ Title: Concurrently multiply impute the missing and censored values
 Version: 0.0.0.9000
 Depends: R (>= 4.0.0)
 Authors@R: person("Hesen", "Li", email = "hli226@uic.edu", role = c("aut", "cre"))
-Description: This package implements multiple imputation for missing and censored data under joint multivariate norma model assuption.
+Description: This package implements multiple imputation for missing and censored data under joint multivariate normal model assuption.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

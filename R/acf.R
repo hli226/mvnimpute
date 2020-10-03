@@ -31,8 +31,6 @@ calcu.acf <- function(dat, lag = 50, plot = TRUE, title = NULL, details = FALSE)
            xlab = "lag", ylab = "acf",
            main = title[i])
       abline(h = 0)
-      abline(h = 0.1, lty = 2, col = "blue")
-      abline(h = -0.1, lty = 2, col = "blue")
     }
   }
 

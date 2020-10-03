@@ -115,7 +115,7 @@ multiple.impute <- function(
         mu.x <- mu.iter[miss.p]
 
         if (length(x) == 1) {
-          x[] <- rnorm(1,
+          x <- rnorm(1,
                         mean = mu.x +
                           t(cond.param[miss.p, 2:p]) %*%
                           (x_ - mu.iter[-miss.p]),
