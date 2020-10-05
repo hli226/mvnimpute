@@ -20,14 +20,14 @@ initial.impute <- function(dat, # input dataset, it should be data with missing 
 {
   miss.dat <- dat
 
-  dat <- miss.dat[complete.cases(miss.dat), ]
+  # dat <- miss.dat[complete.cases(miss.dat), ]
 
   # fill-in missing data
 
   for (i in 1:length(miss.pos)) {
 
     miss <- miss.pos[i]; miss.in <- miss.indx[, i]
-    x <- miss.dat[, miss.pos == miss][miss.in == 1]
+    x <- miss.dat[, miss][miss.in == 1]
     miss.mean <- calcu.param(miss.dat)$CC.mean[miss]
     miss.var <- calcu.param(miss.dat)$CC.var[miss]
 
@@ -38,7 +38,7 @@ initial.impute <- function(dat, # input dataset, it should be data with missing 
 
     message(paste("Impute missing data column ", i, sep = ""))
 
-    miss.dat[, miss.pos == miss][miss.in == 1] <- x
+    miss.dat[, miss][miss.in == 1] <- x
 
   }
 
@@ -48,7 +48,7 @@ initial.impute <- function(dat, # input dataset, it should be data with missing 
   for (i in 1:length(censor.pos)) {
 
     censor <- censor.pos[i]; censor.in <- censor.indx[, i]
-    t. <- miss.dat[, censor.pos == censor][censor.in == 1]
+    t. <- miss.dat[, censor][censor.in == 1]
     censor.mean <- calcu.param(miss.dat)$CC.mean[censor]
     censor.var <- calcu.param(miss.dat)$CC.var[censor]
     # censor.l <- censor.val[[1]][censor.in == 1]; censor.u <- censor.val[[2]][censor.in == 1]
@@ -67,7 +67,7 @@ initial.impute <- function(dat, # input dataset, it should be data with missing 
 
     message(paste("Impute censored data column ", i, sep = ""))
 
-    miss.dat[, censor.pos == censor][censor.in == 1] <- t.
+    miss.dat[, censor][censor.in == 1] <- t.
 
   }
 
