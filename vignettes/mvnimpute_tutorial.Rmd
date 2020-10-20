@@ -1,0 +1,303 @@
+---
+title: "mvnimpute_tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mvnimpute_tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE}
+# include the package
+library(mvnimpute)
+library(tidyverse)
+`%notin%` <- Negate(`%in%`)
+set.seed(223)
+```
+
+To use this package, one needs to pre-process the dataset for some necessary information that is required. This tutorial will present the step-by-step instructions of using this package by an artificial example.
+
+### Data
+
+Here we generate a 10-dimensional multivariate normal data using the **data.gen** in this package, with 4 subject to missing (MAR) and 4 to interval censoring. In the summary, `NA` denotes the missing data and `NaN` the censored data. Column names indicate the types of the variables, missing, censored or observed, and the position of the variable in the original dataset.
+
+```{r}
+p <- 10; m <- 4; n <- 4
+mu.vec <- rnorm(p, 5, 0.5)
+sample.size <- 2000
+V <- clusterGeneration::genPositiveDefMat("eigen", dim = p)
+
+dat <- dat.gen(
+  sample.size,
+  mu.vec,
+  V$Sigma,
+  p,
+  m,
+  n
+)
+
+# take a look at the output of the output list
+
+str(dat)
+
+# take a look at the first 5 rows of the data
+head(dat$comp.dat, 5)
+```
+
+Currently, the **dat.gen** function only supports generating data with interval censored values. The result is a list of 10 including:
+
+* `full.dat`: The full complete data before the missing and censoring information applied.
+* `comp.dat`: The incomplete data after the missing and censoring information applied.
+* `miss.indx`: The matrix containing the missing index for the missing data. 1 for missing values, 0 for observed values.
+* `miss.pos`: The vector indicating the position of the missing variables in the original dataset.
+* `miss.point`: The vector containing the cutoff values for the missing data. For the observed data that is $\le$ the cutoff value, the corresponding missing variables are set to be missing.
+* `censor.indx`: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
+* `censor.pos`: The vector indicating the position of the censored variables in the original dataset.
+* `C1`: The vector containing the lower limits of the censored values.
+* `C2`: The vector containing the upper limits of the censored values.
+* `full.pos`: The vector indicating the position of the fully observed variables.
+
+### Missing and censoring information
+
+```{r}
+miss.pos <- dat$miss.pos
+censor.pos <- dat$censor.pos
+miss.indx <- as.data.frame(dat$miss.indx)
+censor.indx <- as.data.frame(dat$censor.indx)
+censor.val <- list()
+censor.val[[1]] <- dat$C1
+censor.val[[2]] <- dat$C2
+colnames(miss.indx) <- colnames(dat$comp.dat)[grepl("miss", colnames(dat$comp.dat))]
+colnames(censor.indx) <- colnames(censor.val[[1]]) <- colnames(censor.val[[2]]) <- colnames(dat$comp.dat)[grepl("censor", colnames(dat$comp.dat))]
+miss.no <- apply(miss.indx, 2, sum)
+censor.no <- apply(censor.indx, 2, sum)
+
+miss.dat <- data.frame(obs.no = sample.size - miss.no, 
+                       miss.no = miss.no,
+                       miss.pct = miss.no / sample.size)
+
+censor.dat <- data.frame(obs.no = sample.size - censor.no,
+                         censor.no = censor.no,
+                         censor.pct = censor.no / sample.size)
+
+## miss variables
+miss.dat
+
+## censor variables
+censor.dat
+```
+
+`miss.indx` and `miss.pos` includes the missing index and positions of missing variables
+
+```{r}
+# missing indicators
+head(miss.indx)
+
+# positons of missing variables
+miss.pos 
+```
+
+`censor.indx`, `censor.pos` and `censor.val` include the censoring index, positions of censored variables, and lower and upper limits of censoring. Specifically, `censor.val` is a list of 2, first element is the lower limits , and second is the upper limits
+
+```{r}
+# censoring indicatora
+head(censor.indx)
+
+# positions of censored variables
+censor.pos
+
+# lower limits
+head(censor.val[[1]])
+
+# upper limits
+head(censor.val[[2]])
+```
+
+### Summary plot
+
+```{r}
+plot.dat <- as.data.frame(dat$comp.dat)
+
+missing.vals <- miss.indx %>%
+  gather(key = "key", value = "val") %>%
+  mutate(isna = (val == 1)) %>%
+  group_by(key) %>%
+  mutate(total = n()) %>%
+  group_by(key, total, isna) %>%
+  summarise(num.isna = n()) %>%
+  mutate(pct = num.isna / total * 100)
+
+censoring.vals <- censor.indx %>%
+  gather(key = "key", value = "val") %>%
+  mutate(iscensor = (val == 1)) %>%
+  group_by(key) %>%
+  mutate(total = n()) %>%
+  group_by(key, total, iscensor) %>%
+  summarise(num.iscensor = n()) %>%
+  mutate(pct = num.iscensor / total * 100)
+
+censoring.vals <- censoring.vals[order(censoring.vals[, 1]),]
+
+censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
+censoring.vals <- censoring.vals[, -3]
+colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
+
+missing.vals <- data.frame(missing.vals, type = ifelse(missing.vals$isna == TRUE, "0", "1"))
+missing.vals <- missing.vals[, -3]
+colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
+
+no.miss.censor <- colnames(dat$comp.dat)[colnames(dat$comp.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
+
+no.miss.censor.mat <- data.frame(
+  rbind(c(no.miss.censor[1], sample.size, sample.size, 100, 1),
+        c(no.miss.censor[2], sample.size, sample.size, 100, 1))
+)
+colnames(no.miss.censor.mat) <- c("key", "total", "num", "pct", "type")
+
+complete.dat <- rbind(missing.vals,
+                      censoring.vals,
+no.miss.censor.mat)
+# complete.dat <- rbind(missing.vals,
+#                       censoring.vals)
+
+complete.dat <- complete.dat[order(as.numeric(complete.dat$pct)), ]
+
+complete.dat %>%
+  ggplot() +
+  geom_bar(aes(x = key, 
+               y = as.numeric(pct),
+               fill = type), stat = "identity") + 
+  scale_fill_manual(name = "",
+                    values = c("tomato3", "steelblue", "lightgreen"),
+                    labels = c("Missing", "Observed", "Censored")) +
+  coord_flip() + 
+  labs(
+    x = "Variable",
+    y = "Percentage"
+  ) +
+  ggtitle("Percentage of missing/censored values in each variable")
+```
+
+The plot above shows the percentage of missing, censored, and observed values across each variable.
+
+### Multiple imputation
+
+First of all, as the incomplete data includes unobserved data, we need to fill up those values by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances.
+
+```{r, message = FALSE}
+fil.dat <- initial.impute(dat$comp.dat, miss.indx, miss.pos, censor.indx, censor.pos)
+
+# take a glance at the first few rows
+head(fil.dat)
+```
+
+In the current algorithm, we use conjugate priors for the normal distribution for performing multiple imputation. We have to specify the prior parameter values and the start values to initiate the iterative process.
+
+```{r}
+# calculate the CC and AC parameter values
+params <- calcu.param(dat$comp.dat)
+
+# setup prior parameters and initial values for multiple imputation
+prior.param <- list(
+  params$AC.mean,
+  params$AC.var,
+  100,
+  p * (p + 1) / 2
+)
+
+initial.vals <- list(
+  params$CC.mean,
+  params$CC.cov
+)
+
+```
+
+We run 500 iterations.
+
+```{r, message = FALSE}
+# multiple imputation
+iter <- 500
+sim.dat <- multiple.impute(
+  iter = iter,           # number of iterations
+  prior.param = prior.param,    # prior specifications
+  ini.vals = initial.vals,   # staring values
+  dat = fil.dat,        # complete data with missing and censored values filled in 
+  miss.indx = miss.indx,      # missing index matrix
+  miss.pos = miss.pos,       # missing variables position vector
+  censor.indx = censor.indx,    # censoring index matrix
+  censor.pos = censor.pos,     # censoring variables position vector
+  censor.val = censor.val,     # censoring cutoff values list or matrix
+  censor.type = "interval"      # censoring types
+)
+```
+
+In the case when the censored values are interval censored. The `censor.val` should be a *list* of length two, of which the first element includes the lower limits, the second element includes the upper limits. If the censoring is either left or right censoring. `censor.val` will be a matrix containing the censoring times instead. `censor.type` specifies the typing of censoring, it takes "right" for right censoring, "left" for left censoring, and "interval" for interval censoring. "interval" is default.
+
+### Diagnostic plots
+
+#### Convergence plots
+
+Mean and Variance convergence plots:
+
+```{r}
+par(mfrow = c(1, 2))
+conv.plot(sim.dat$simulated.mu, iter, title = "Simulated means vs. iteration")
+conv.plot(sim.dat$simulated.sig, iter, title = "Simulated variances vs. iteration")
+```
+
+Averaged mean and variance plots:
+
+```{r}
+par(mfrow = c(1, 2))
+avg.plot(sim.dat$simulated.mu, iter, title = "Averaged simulated means vs. iteration")
+avg.plot(sim.dat$simulated.sig, iter, title = "Averaged simulated variances vs. iteration")
+```
+
+#### Autocorrelation plots
+
+```{r}
+calcu.acf(sim.dat$simulated.mu, 100, plot = TRUE, title = paste(colnames(dat$comp.dat), " mean", sep = ""))
+calcu.acf(sim.dat$simulated.sig, 100, plot = TRUE, title = paste(colnames(dat$comp.dat), " variance", sep = ""))
+```
+
+### Parameters table
+
+Mean and variance biases:
+
+```{r, echo = FALSE}
+full.dat.mean <- apply(dat$full.dat, 2, mean)
+CC.mean <- params$CC.mean
+
+Gibbs <- seq(0.8 * iter, iter, by = 0.02 * iter)
+simulate.mean <- apply(sim.dat$simulated.mu[Gibbs, ], 2, mean)
+
+compare.mean <- data.frame(rbind(full.dat.mean, CC.mean, simulate.mean, mu.vec))
+rownames(compare.mean) <- c("full.mean", "CC.mean", "simulated.mean","true.mean")
+bias.mean <- sweep(compare.mean, 2, mu.vec)
+
+full.dat.var <- apply(dat$full.dat, 2, var)
+CC.var <- params$CC.var
+
+simulate.var <- apply(sim.dat$simulated.sig[Gibbs, ], 2, mean)
+
+compare.var <- data.frame(rbind(full.dat.var, CC.var, simulate.var, diag(V$Sigma)))
+rownames(compare.var) <- c("full.variance", "CC.variance", "simulated.variance","true.variance")
+bias.variance <- sweep(compare.var, 2, diag(V$Sigma))
+```
+
+### Marginal plots
+
+Compare the marginal distributions of the original data with the imputed data from the last iteration:
+
+```{r}
+for (i in 1:ncol(dat$comp.dat)) {
+  plot(density(na.omit(dat$comp.dat[, i])), main = colnames(dat$comp.dat)[i])
+  lines(density(c(sim.dat$imputed.dat[[iter]][, i])), col = 2, lty = 2)
+}
