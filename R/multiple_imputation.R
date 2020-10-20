@@ -36,12 +36,12 @@ multiple.impute <- function(
   prior.param,              # list of prior parameters
   ini.vals,                 # list of initial values
   dat,                      # dataset to do imputation (with missing values)
-  miss.indx,                # matrix of  missing index
-  miss.pos,
-  censor.indx,              # matrix of censoring index
-  censor.pos,
-  censor.val,
-  censor.type = "interval"
+  miss.indx = NULL,                # matrix of  missing index
+  miss.pos = NULL,
+  censor.indx = NULL,              # matrix of censoring index
+  censor.pos = NULL,
+  censor.val = NULL,
+  censor.type = NULL
 )
 {
 

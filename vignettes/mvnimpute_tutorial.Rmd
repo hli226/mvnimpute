@@ -250,7 +250,7 @@ For doing multiple imputation, the **multiple.impute** function requires several
 * `censor.indx`: matrix including the censoring index.
 * `censor.pos`: vector indicating the positions of censored variables in the original dataset.
 * `censor.val`: matrix (left/right censoring) or list of length two (interval censoring) including the censoring values.
-* `censor.type`: typical of censoring, it takes "left", "right", or "interval". Default is "interval".
+* `censor.type`: typical of censoring, it takes "left", "right", or "interval".
 
 ```{r, message = FALSE}
 # multiple imputation

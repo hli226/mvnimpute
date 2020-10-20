@@ -14,8 +14,8 @@
 #' @return a complete dataset with missing values filled in
 #' @export
 initial.impute <- function(dat, # input dataset, it should be data with missing info
-                           miss.indx, miss.pos,
-                           censor.indx, censor.pos
+                           miss.indx = NULL, miss.pos = NULL,
+                           censor.indx = NULL, censor.pos = NULL
 )
 {
   miss.dat <- dat
