@@ -290,6 +290,9 @@ simulate.var <- apply(sim.dat$simulated.sig[Gibbs, ], 2, mean)
 compare.var <- data.frame(rbind(full.dat.var, CC.var, simulate.var, diag(V$Sigma)))
 rownames(compare.var) <- c("full.variance", "CC.variance", "simulated.variance","true.variance")
 bias.variance <- sweep(compare.var, 2, diag(V$Sigma))
+
+bias.mean
+bias.variance
 ```
 
 ### Marginal plots

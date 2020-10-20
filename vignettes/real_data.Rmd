@@ -1,0 +1,368 @@
+---
+title: "real_data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{real_data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mvnimpute)
+library(tidyverse)
+`%notin%` <- Negate(`%in%`)
+```
+
+
+```{r}
+nhanes <- nhanes.dat$data
+# selet PCB and metal data
+
+select.dat <- nhanes %>%
+  dplyr::select(starts_with(c("LBC", "URXU")), -ends_with("LA"), -c("URXUCR")) %>%
+  as.matrix()
+
+# censoring curoffs
+
+LOD.11 <- c(
+  LBD028LC = 2.0, LBD066LC = 1.0, LBD074LC = 1.0, LBD099LC = 0.7, LBD105LC = 0.8,
+  LBD114LC = 0.7, LBD118LC = 0.8, LBD138LC = 0.7, LBD146LC = 0.7, LBD153LC = 0.8,
+  LBD156LC = 0.7, LBD157LC = 0.7, LBD167LC = 0.7, LBD170LC = 0.7, LBD178LC = 0.7,
+  LBD180LC = 0.8, LBD183LC = 0.7, LBD187LC = 0.7, LBD189LC = 0.7, LBD194LC = 0.7,
+  LBD196LC = 0.7, LBD199LC = 0.7, LBD206LC = 4.5, LBD209LC = 0.7,
+  URXUBA = 0.1000, URXUCD = 0.0560, URXUCO = 0.0480, URXUCS = 0.1200, URXUMO = 0.9900,
+  URXUMN = 0.0800, URXUPB = 0.0800, URXUSB = 0.0410, URXUSN = 0.2200, URXUSR = 2.5000,
+  URXUTL = 0.0200, URXUTU = 0.0260, URXUUR = 0.0033
+)
+
+LOD.13 <- c(
+  LBD028LC = 0.78, LBD066LC = 0.71, LBD074LC = 0.78, LBD099LC = 0.71, LBD105LC = 0.71,
+  LBD114LC = 0.71, LBD118LC = 0.71, LBD138LC = 0.71, LBD146LC = 0.71, LBD153LC = 0.71,
+  LBD156LC = 0.71, LBD157LC = 0.71, LBD167LC = 0.71, LBD170LC = 0.71, LBD178LC = 0.71,
+  LBD180LC = 0.71, LBD183LC = 0.71, LBD187LC = 0.71, LBD189LC = 0.71, LBD194LC = 0.71,
+  LBD196LC = 0.71, LBD199LC = 0.71, LBD206LC = 0.71, LBD209LC = 0.71,
+  URXUBA = 0.060, URXUCD = 0.036, URXUCO = 0.023, URXUCS = 0.000, URXUMO = 0.800,
+  URXUMN = 0.130, URXUPB = 0.030, URXUSB = 0.022, URXUSN = 0.090, URXUSR = 2.340,
+  URXUTL = 0.018, URXUTU = 0.018, URXUUR = 0.002)
+
+LOD.15 <- c(
+  LBD028LC = 2.4, LBD066LC = 1.8, LBD074LC = 1.7, LBD099LC = 0.7, LBD105LC = 0.8,
+  LBD114LC = 0.7, LBD118LC = 1.1, LBD138LC = 0.7, LBD146LC = 0.7, LBD153LC = 0.7,
+  LBD156LC = 0.7, LBD157LC = 0.7, LBD167LC = 0.7, LBD170LC = 0.7, LBD178LC = 0.7,
+  LBD180LC = 0.7, LBD183LC = 0.7, LBD187LC = 0.7, LBD189LC = 0.7, LBD194LC = 0.7,
+  LBD196LC = 0.7, LBD199LC = 0.7, LBD206LC = 1.4, LBD209LC = 0.7,
+  URXUBA = 0.060, URXUCD = 0.036, URXUCO = 0.023, URXUCS = 0.086, URXUMO = 0.800,
+  URXUMN = 0.130, URXUPB = 0.030, URXUSB = 0.022, URXUSN = 0.090, URXUSR = 2.340,
+  URXUTL = 0.018, URXUTU = 0.018, URXUUR = 0.002)
+
+names(LOD.11) <- names(LOD.13) <- names(LOD.15) <- colnames(select.dat)
+
+year.vec <- unlist(nhanes[, 2])
+
+censor.vals <- matrix(nrow = nrow(nhanes), ncol = length(LOD.11) + 1)
+censor.vals[, 1] <- year.vec
+for (i in 1:(ncol(censor.vals) - 1)) {
+  for (j in 1:nrow(censor.vals)) {
+    censor.vals[j, i + 1] <- ifelse(censor.vals[j, 1] == 7, LOD.11[i],
+                                    ifelse(censor.vals[j, 1] == 8, LOD.13[i], LOD.15[i]))
+  }
+}
+
+censor.val <- censor.vals[, -1]
+censor.val[, 1:24] <- log(censor.val[, 1:24])
+censor.val[, 25:37] <- log(censor.val[, 25:37])
+colnames(censor.val) <- colnames(select.dat)
+## create missing and censoring index matrices
+
+# miss.indx <- ifelse(is.na(select.dat), 1, 0)
+# miss.pos <- which(apply(miss.indx, 2, sum) != 0)
+
+censor.indx <- nhanes %>%
+  select(starts_with(c("LBD", "URDU")), -ends_with("MISS")) %>%
+  as.matrix()
+colnames(censor.indx) <- colnames(select.dat)
+censor.indx <- ifelse(is.na(censor.indx), 0, censor.indx)
+censor.pos <- which(apply(censor.indx, 2, sum) != 0)
+
+# ## make sure that the dimension of missing and censoring index matrices match the lengths of missing and censoring vectors
+# miss.indx <- miss.indx[, miss.pos]
+# censor.indx <- censor.indx[, censor.pos]
+# censor.val <- censor.val[, censor.pos]
+transform.dat <- select.dat
+transform.dat[, 1:24] <- log(select.dat[, 1:24])
+transform.dat[, 25:37] <- log(select.dat[, 25:37])
+
+#### select random columns from the data
+n <- 1:24
+random.select <- colnames(select.dat)[n]
+# random.select <- sample(colnames(select.dat), 10)
+random.dat <- transform.dat[, random.select]
+# colnames(random.dat)
+
+# miss.select <- miss.indx[, random.select]
+# miss.pos.select <- which(apply(miss.select, 2, sum) != 0)
+censor.select <- censor.indx[, random.select]
+censor.pos.select <-  which(apply(censor.select, 2, sum) != 0)
+
+# dim(random.dat)
+
+## make sure that the dimension of missing and censoring index matrices match the lengths of missing and censoring vectors
+# miss.select <- miss.select[, miss.pos.select]
+censor.select <- censor.select[, censor.pos.select]
+censor.val.select <- censor.val[, names(censor.pos.select)]
+
+#####################################################################################
+#### remove unit nonresponse 
+
+unit <- numeric(ncol(random.dat))   ### identifier for unit non-response
+for (i in 1:nrow(random.dat)) {
+  unit[i] <- ifelse(sum(is.na(random.dat[i, ])) == (ncol(random.dat)), 1, 0)
+}
+
+unit.nonrespond <- which(unit == 1)
+
+random.dat <- random.dat[-unit.nonrespond, ]
+# miss.select <- miss.select[-unit.nonrespond, ]
+censor.select <- censor.select[-unit.nonrespond, ]
+censor.val.select <- censor.val[-unit.nonrespond, ]
+year.vec <- year.vec[-unit.nonrespond]
+
+# miss.pos.select <- which(apply(miss.select, 2, sum) != 0)
+censor.pos.select <- which(apply(censor.select, 2, sum) != 0)
+
+# miss.select <- miss.select[, miss.pos.select]
+censor.select <- censor.select[, censor.pos.select]
+
+censor.val.select <- censor.val.select[, names(censor.pos.select)]
+#####################################################################################
+
+summary(random.dat)
+
+######### create missing values
+
+for (i in 1:ncol(random.dat)) {
+  
+  pr <- runif(1, 0.7, 1)
+  cutoff <- sort(random.dat[, "LBC138"])
+  
+  if (colnames(random.dat)[i] != "LBC138" ) {
+    random.dat[cutoff > cutoff[ceiling(length(cutoff) * pr)], i] <- NA
+  }
+  
+}
+
+summary(random.dat)
+
+## create new missing and censoring index
+
+missing.indx <- ifelse(is.na(random.dat), 1, 0)
+censoring.indx <- censor.select
+
+missing.pos <- which(apply(missing.indx, 2, sum) != 0)
+missing.indx <- missing.indx[, missing.pos]
+
+censoring.pos <- censor.pos.select
+censoring.val <- censor.val.select
+
+miss.no <- apply(missing.indx, 2, sum)
+miss.no2 <- c(miss.no, rep(0, length(colnames(random.dat)[colnames(random.dat) %notin% names(miss.no)]))) 
+names(miss.no2) <- c(names(miss.no), colnames(random.dat)[colnames(random.dat) %notin% names(miss.no)])
+
+censor.no <- apply(censoring.indx, 2, sum)
+censor.no2 <- c(censor.no, rep(0, length(colnames(random.dat)[colnames(random.dat) %notin% names(censor.no)]))) 
+names(censor.no2) <- c(names(censor.no), colnames(random.dat)[colnames(random.dat) %notin% names(censor.no)])
+
+miss.no <- miss.no[order(names(miss.no))]
+censor.no2 <- censor.no2[order(names(censor.no2))]
+
+no <- nrow(random.dat)
+
+not.no <- miss.no2 + censor.no2
+
+obs.no <- no - not.no
+
+PCB.dat <- data.frame(obs.no = obs.no,
+                      obs.pct = round(obs.no / no * 100, 3),
+                      miss.no = miss.no2,
+                      miss.pct = round(miss.no2 / no * 100, 3),
+                      censor.no = censor.no2,
+                      censor.pct = round(censor.no2 / no * 100, 3)
+)
+PCB.dat
+```
+
+### Summary plot
+
+Plot of missing and censoring percentages:
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+miss.val <- as.data.frame(missing.indx) %>%
+  gather(key = "key", value = "val") %>%
+  mutate(isna = (val == 1)) %>%
+  group_by(key) %>%
+  mutate(total = n()) %>%
+  group_by(total, key, isna) %>%
+  summarise(num.isna = n()) %>%
+  mutate(miss.pct = num.isna / total * 100) %>%
+  filter(isna == TRUE)
+
+censor.val <- as.data.frame(censoring.indx) %>%
+  gather(key = "key", value = "val") %>%
+  mutate(iscensor = (val == 1)) %>%
+  group_by(key) %>%
+  mutate(total = n()) %>%
+  group_by(total, key, iscensor) %>%
+  summarise(num.iscensor = n()) %>%
+  mutate(censor.pct = num.iscensor / total * 100) %>%
+  filter(iscensor == TRUE)
+
+miss.val <- miss.val[,-3]
+censor.val <- censor.val[, -3]
+
+x.dat <- merge(miss.val, censor.val, by = "key", all = TRUE)
+x.dat$total.x <- x.dat$total.y <- 6056
+x.dat$num.isna <- ifelse(is.na(x.dat$num.isna), 0, x.dat$num.isna)
+x.dat$miss.pct <- ifelse(is.na(x.dat$miss.pct), 0, x.dat$miss.pct)
+x.dat$num.iscensor <- ifelse(is.na(x.dat$num.iscensor), 0, x.dat$num.iscensor)
+x.dat$censor.pct <- ifelse(is.na(x.dat$censor.pct), 0, x.dat$censor.pct)
+
+complete.var <- colnames(random.dat)[colnames(random.dat) %notin% x.dat$key]
+complete.vars <- data.frame(key = complete.var, matrix(0, nrow = length(complete.var), ncol = ncol(x.dat) - 1))
+colnames(complete.vars) <- colnames(x.dat)
+complete.vars$total.x <- complete.vars$total.y <- rep(x.dat$total.x[1], nrow(complete.vars))
+x.dat <- rbind(x.dat, complete.vars)
+num.isobserve <- x.dat$total.x - x.dat$num.isna - x.dat$num.iscensor
+observe.pct <- num.isobserve / x.dat$total.x * 100
+x.dat$num.isobserve <- num.isobserve
+x.dat$observe.pct <- observe.pct
+x.dat
+```
+
+```{r}
+miss1 <- data.frame(x.dat[, 1:4], type = 0)
+censor1 <- data.frame(x.dat[, c(1, 2, 6, 7)], type = 2)
+observe1 <- data.frame(x.dat[, c(1, 2, 8, 9)], type = 1)
+colnames(miss1) <- colnames(censor1) <- colnames(observe1) <- c("key", "total", "num", "pct", "type")
+
+comp.x <- rbind(miss1, observe1, censor1)
+comp.x <- comp.x[order(comp.x$key), ]
+
+comp.x$key <- paste("PCB", substr(comp.x$key, 4, 6), sep = "")
+
+comp.x %>%
+  ggplot() +
+  geom_bar(aes(x = key,
+               y = pct, 
+               fill = as.factor(type)),
+       position = "stack",
+       stat = "identity") +
+  scale_fill_manual(name = "",
+                    values = c("steelblue", "tomato3", "lightgreen"),
+                    labels = c("Missing", "Observed", "Censored")) +
+  scale_x_discrete(limits = unique(comp.x$key),
+                   labels = paste(unique(comp.x$key))) +
+  coord_flip() +
+  labs(x = "Variable",
+       y = "Percentage")
+```
+
+```{r, message = FALSE}
+
+## initial imputation
+
+first.fill <- initial.impute(random.dat, missing.indx, missing.pos, censoring.indx, censoring.pos)
+
+# for (i in 1:ncol(random.dat)) {
+#   plot(density(na.omit(random.dat[, i])), main = colnames(random.dat)[i])
+#   lines(density(first.fill[, i]), col = 2, lwd = 2, lty = 2)
+# }
+
+## multiple imputation
+n <- nrow(random.dat); p <- ncol(random.dat)
+## calculate CC and AC parameters
+params <- calcu.param(random.dat)
+initial.vals <- list(
+  rep(0, p),
+  diag(p)
+)
+prior.params <- list(
+  rep(1, p),
+  diag(p),
+  100,
+  p * (p + 1) / 2
+)
+set.seed(123)
+iter <- 500
+begin <- Sys.time()
+sim.dat <- multiple.impute(
+  iter,
+  prior.params,
+  initial.vals,
+  first.fill,
+  missing.indx,
+  missing.pos,
+  censoring.indx,
+  censoring.pos,
+  censoring.val,
+  "left"
+)
+end <- Sys.time()
+dur <- end - begin
+dur
+```
+
+### Diagnostic plots
+
+The convergence plots of the simulated means and variances, respectively:
+
+```{r}
+conv.plot(sim.dat$simulated.mu, iter, title = "Simulated means vs. iteration")
+conv.plot(sim.dat$simulated.sig, iter, title = "Simulated variances vs. iteration")
+```
+
+The convergence plots of the average simulated means and variances:
+
+```{r}
+avg.plot(sim.dat$simulated.mu, iter, title = "Averaged simualted means vs. iterations")
+avg.plot(sim.dat$simulated.sig, iter, title = "Averaged simulated variances vs. iterations")
+```
+
+The autocorrelation plots:
+
+```{r}
+calcu.acf(sim.dat$simulated.mu, lag = 250, plot = TRUE, title = paste(colnames(sim.dat$simulated.mu), " mean", sep = ""))
+calcu.acf(sim.dat$simulated.sig, lag = 250, plot = TRUE, title = paste(colnames(sim.dat$simulated.sig), " variance", sep = ""))
+```
+
+### Marginal plots
+
+#### log scale
+
+We compare the marginal densities of the original observed data and the marginal densities of the complete data from the last iteration (log scale):
+
+```{r}
+for (i in 1:ncol(random.dat)) {
+  plot(density(na.omit(random.dat[, i])), main = colnames(random.dat)[i])
+  lines(density(sim.dat$imputed.dat[[iter]][, i]), col = 2, lwd = 2, lty = 2)
+}
+```
+
+#### original scale
+
+Comparison of marginal densities between original data and imputed data (original scale):
+
+```{r}
+for (i in 1:ncol(random.dat)) {
+  plot(density(na.omit(exp(random.dat[, i]))), main = colnames(random.dat)[i])
+  lines(density(exp(sim.dat$imputed.dat[[iter]][, i])), col = 2, lwd = 2, lty = 2)
+}
+
+```
+
