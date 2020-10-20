@@ -1,8 +1,8 @@
 ---
-title: "mvnimpute_tutorial"
+title: "Tutorial1_simulated_data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{mvnimpute_tutorial}
+  %\VignetteIndexEntry{Tutorial1_simulated_data"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,7 +10,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = FALSE,
-  comment = "#>"
+  comment = "#>",
+  fig.height = 6,
+  fig.width = 6
 )
 ```
 
@@ -43,12 +45,13 @@ dat <- dat.gen(
   n
 )
 
-# take a look at the output of the output list
-
-str(dat)
 
 # take a look at the first 5 rows of the data
 head(dat$comp.dat, 5)
+
+# take a look at the output of the output list
+
+str(dat)
 ```
 
 Currently, the **dat.gen** function only supports generating data with interval censored values. The result is a list of 10 including:
@@ -94,20 +97,20 @@ miss.dat
 censor.dat
 ```
 
-`miss.indx` and `miss.pos` includes the missing index and positions of missing variables
+`miss.indx` and `miss.pos` include the missing index and positions of missing variables.
 
 ```{r}
 # missing indicators
 head(miss.indx)
 
-# positons of missing variables
+# positions of missing variables
 miss.pos 
 ```
 
-`censor.indx`, `censor.pos` and `censor.val` include the censoring index, positions of censored variables, and lower and upper limits of censoring. Specifically, `censor.val` is a list of 2, first element is the lower limits , and second is the upper limits
+`censor.indx`, `censor.pos` and `censor.val` include the censoring index, positions of censored variables, and lower and upper limits of censoring. Specifically, `censor.val` is a list of 2, first element is the lower limits , and second is the upper limits.
 
 ```{r}
-# censoring indicatora
+# censoring indicators
 head(censor.indx)
 
 # positions of censored variables
@@ -120,9 +123,11 @@ head(censor.val[[1]])
 head(censor.val[[2]])
 ```
 
+**NOTE**: The dimension of `miss.indx` should match the length of `miss.pos`, that is the number of missing variables. The dimension of `censor.indx`, and that of `censor.val` should match the length of `censor.pos`, which should be the number of censored variables. They are not necessarily the dimension of the original dataset. The order of `miss.pos` or `censor.pos` does notneed to match the order of the corresponding index matrix, **multiple.impute** function will handle it internally
+
 ### Summary plot
 
-```{r}
+```{r, warning = FALSE}
 plot.dat <- as.data.frame(dat$comp.dat)
 
 missing.vals <- miss.indx %>%
@@ -189,7 +194,7 @@ The plot above shows the percentage of missing, censored, and observed values ac
 
 ### Multiple imputation
 
-First of all, as the incomplete data includes unobserved data, we need to fill up those values by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances.
+First of all, as the incomplete data includes unobserved data, we need to fill up those values by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances, for the initial stage of filling up the unobserved values.
 
 ```{r, message = FALSE}
 fil.dat <- initial.impute(dat$comp.dat, miss.indx, miss.pos, censor.indx, censor.pos)
@@ -221,6 +226,19 @@ initial.vals <- list(
 
 We run 500 iterations.
 
+For doing multiple imputation, the **multiple.impute** function requires several arguments including:
+
+* `iter`: the number of rounds doing multiple imputation.
+* `prior.param`: the parameter specifications for the prior distribution.
+* `ini.vals`: starting values for the parameters.
+* `dat`: the complete dataset with unobserved data filled in.
+* `miss.indx`: matrix including the missing index.
+* `miss.pos`: vector indicating the positions of missing variables in the original dataset.
+* `censor.indx`: matrix including the censoring index.
+* `censor.pos`: vector indicating the positions of censored variables in the original dataset.
+* `censor.val`: matrix (left/right censoring) or list of length two (interval censoring) including the censoring values.
+* `censor.type`: typical of censoring, it takes "left", "right", or "interval". Default is "interval".
+
 ```{r, message = FALSE}
 # multiple imputation
 iter <- 500
@@ -238,7 +256,6 @@ sim.dat <- multiple.impute(
 )
 ```
 
-In the case when the censored values are interval censored. The `censor.val` should be a *list* of length two, of which the first element includes the lower limits, the second element includes the upper limits. If the censoring is either left or right censoring. `censor.val` will be a matrix containing the censoring times instead. `censor.type` specifies the typing of censoring, it takes "right" for right censoring, "left" for left censoring, and "interval" for interval censoring. "interval" is default.
 
 ### Diagnostic plots
 
@@ -267,6 +284,8 @@ calcu.acf(sim.dat$simulated.mu, 100, plot = TRUE, title = paste(colnames(dat$com
 calcu.acf(sim.dat$simulated.sig, 100, plot = TRUE, title = paste(colnames(dat$comp.dat), " variance", sep = ""))
 ```
 
+The convergence plots show that the algorithm works and converges very fast, while the autocorrelations plots show that the autocorrelations among iterations decay and become negligible very fast.
+
 ### Parameters table
 
 Mean and variance biases:
@@ -294,6 +313,8 @@ bias.variance <- sweep(compare.var, 2, diag(V$Sigma))
 bias.mean
 bias.variance
 ```
+
+From the table above, we see the simuated parameters values are quite comparable to the full data parameter values in terms of the biases from the truly specified parameter values.
 
 ### Marginal plots
 

@@ -1,8 +1,8 @@
 ---
-title: "real_data"
+title: "Application_real_data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{real_data}
+  %\VignetteIndexEntry{Application_real_data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,7 +10,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.height = 6,
+  fig.width = 6
 )
 ```
 
@@ -20,6 +22,7 @@ library(tidyverse)
 `%notin%` <- Negate(`%in%`)
 ```
 
+For this application, it used the combined NHANES dataset from 2011-2016 as described in this package, which can be accessed by `data(nhanes.dat)`. The PCB measurements data are extracted. As almost 2/3 of the observations have unit nonresponse, we removed those unit nonresponse and artificially created some missing values that depend on a fully observed variable (PCB138). The total sample size is 6056 with 24 variables.
 
 ```{r}
 nhanes <- nhanes.dat$data
@@ -158,8 +161,6 @@ for (i in 1:ncol(random.dat)) {
   
 }
 
-summary(random.dat)
-
 ## create new missing and censoring index
 
 missing.indx <- ifelse(is.na(random.dat), 1, 0)
@@ -198,9 +199,9 @@ PCB.dat <- data.frame(obs.no = obs.no,
 PCB.dat
 ```
 
-### Summary plot
+The table above shows the number and percentage of missing, censored and observed values across each variable in the selected PCB dataset.
 
-Plot of missing and censoring percentages:
+### Summary plot
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 miss.val <- as.data.frame(missing.indx) %>%
@@ -242,7 +243,6 @@ num.isobserve <- x.dat$total.x - x.dat$num.isna - x.dat$num.iscensor
 observe.pct <- num.isobserve / x.dat$total.x * 100
 x.dat$num.isobserve <- num.isobserve
 x.dat$observe.pct <- observe.pct
-x.dat
 ```
 
 ```{r}
@@ -273,16 +273,13 @@ comp.x %>%
        y = "Percentage")
 ```
 
+The plot above graphically shows the percentages of missing, censoring and observed values across each variable.
+
 ```{r, message = FALSE}
 
 ## initial imputation
 
 first.fill <- initial.impute(random.dat, missing.indx, missing.pos, censoring.indx, censoring.pos)
-
-# for (i in 1:ncol(random.dat)) {
-#   plot(density(na.omit(random.dat[, i])), main = colnames(random.dat)[i])
-#   lines(density(first.fill[, i]), col = 2, lwd = 2, lty = 2)
-# }
 
 ## multiple imputation
 n <- nrow(random.dat); p <- ncol(random.dat)
@@ -318,6 +315,8 @@ dur <- end - begin
 dur
 ```
 
+The program takes `r round(dur, 2)` minutes to run.
+
 ### Diagnostic plots
 
 The convergence plots of the simulated means and variances, respectively:
@@ -340,6 +339,8 @@ The autocorrelation plots:
 calcu.acf(sim.dat$simulated.mu, lag = 250, plot = TRUE, title = paste(colnames(sim.dat$simulated.mu), " mean", sep = ""))
 calcu.acf(sim.dat$simulated.sig, lag = 250, plot = TRUE, title = paste(colnames(sim.dat$simulated.sig), " variance", sep = ""))
 ```
+
+The diagnostic plots show that the algorithm works well.
 
 ### Marginal plots
 
@@ -366,3 +367,4 @@ for (i in 1:ncol(random.dat)) {
 
 ```
 
+We compared the marginal densities of the original available data from each variable with the imputed data from the last iteration of running multiple imputation for both the data on log scale and the original scale.
