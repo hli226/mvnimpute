@@ -224,6 +224,19 @@ initial.vals <- list(
 
 ```
 
+Currently, we use the conjugate priors for the Gibbs sampler. Prior specifications `prior.param` should be a length of four include:
+
+* $\mu_0$: prior mean vector
+* $\Sigma_0$: prior scale matrix
+* $\kappa_0$: number of prior measurements
+* $\nu$:degrees for freedom of the prior scale matrix
+
+Starting values `inital.vals` is a list of length two including:
+
+* $\mu^{(0)}$: starting values for the mean vector.
+* $\Sigma^{(0)}$: staring values for the covariance matrix.
+
+
 We run 500 iterations.
 
 For doing multiple imputation, the **multiple.impute** function requires several arguments including:

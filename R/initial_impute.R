@@ -14,8 +14,8 @@
 #' @return a complete dataset with missing values filled in
 #' @export
 initial.impute <- function(dat, # input dataset, it should be data with missing info
-    miss.indx, miss.pos,
-    censor.indx, censor.pos
+                           miss.indx, miss.pos,
+                           censor.indx, censor.pos
 )
 {
   miss.dat <- dat
@@ -24,51 +24,54 @@ initial.impute <- function(dat, # input dataset, it should be data with missing 
 
   # fill-in missing data
 
-  for (i in 1:length(miss.pos)) {
+  if (!is.null(miss.indx)){
+    for (i in 1:length(miss.pos)) {
 
-    miss <- miss.pos[i]; miss.in <- miss.indx[, i]
-    x <- miss.dat[, miss][miss.in == 1]
-    miss.mean <- calcu.param(miss.dat)$CC.mean[miss]
-    miss.var <- calcu.param(miss.dat)$CC.var[miss]
+      miss <- miss.pos[i]; miss.in <- miss.indx[, i]
+      x <- miss.dat[, miss][miss.in == 1]
+      miss.mean <- calcu.param(miss.dat)$CC.mean[miss]
+      miss.var <- calcu.param(miss.dat)$CC.var[miss]
 
-    for (j in 1:length(x)) {
-      x[j] <- rnorm(1, miss.mean, sqrt(miss.var))
-      # generate normal random variable using the complete cases mean and variance
+      for (j in 1:length(x)) {
+        x[j] <- rnorm(1, miss.mean, sqrt(miss.var))
+        # generate normal random variable using the complete cases mean and variance
+      }
+
+      message(paste("Impute missing data column ", i, sep = ""))
+
+      miss.dat[, miss][miss.in == 1] <- x
+
     }
-
-    message(paste("Impute missing data column ", i, sep = ""))
-
-    miss.dat[, miss][miss.in == 1] <- x
-
   }
 
 
-
   # fill-in censored data
-  for (i in 1:length(censor.pos)) {
+  if (!is.null(censor.indx)) {
+    for (i in 1:length(censor.pos)) {
 
-    censor <- censor.pos[i]; censor.in <- censor.indx[, i]
-    t. <- miss.dat[, censor][censor.in == 1]
-    censor.mean <- calcu.param(miss.dat)$CC.mean[censor]
-    censor.var <- calcu.param(miss.dat)$CC.var[censor]
-    # censor.l <- censor.val[[1]][censor.in == 1]; censor.u <- censor.val[[2]][censor.in == 1]
+      censor <- censor.pos[i]; censor.in <- censor.indx[, i]
+      t. <- miss.dat[, censor][censor.in == 1]
+      censor.mean <- calcu.param(miss.dat)$CC.mean[censor]
+      censor.var <- calcu.param(miss.dat)$CC.var[censor]
+      # censor.l <- censor.val[[1]][censor.in == 1]; censor.u <- censor.val[[2]][censor.in == 1]
 
-    for (j in 1:length(t.)) {
+      for (j in 1:length(t.)) {
 
-      # t.[j] <- rtruncnorm(1, a = censor.l[j], b = censor.u[j],
-      #                     mean = censor.mean, sqrt(censor.var))
+        # t.[j] <- rtruncnorm(1, a = censor.l[j], b = censor.u[j],
+        #                     mean = censor.mean, sqrt(censor.var))
 
-      # t.[j] <- rnorm(1,
-      #                mean = censor.mean, sqrt(censor.var))
-      t.[j] <- rnorm(1,
-                     mean = censor.mean, sqrt(censor.var))
-      # generate random variable uniformly in the interval
+        # t.[j] <- rnorm(1,
+        #                mean = censor.mean, sqrt(censor.var))
+        t.[j] <- rnorm(1,
+                       mean = censor.mean, sqrt(censor.var))
+        # generate random variable uniformly in the interval
+      }
+
+      message(paste("Impute censored data column ", i, sep = ""))
+
+      miss.dat[, censor][censor.in == 1] <- t.
+
     }
-
-    message(paste("Impute censored data column ", i, sep = ""))
-
-    miss.dat[, censor][censor.in == 1] <- t.
-
   }
 
   return(miss.dat)
