@@ -2,7 +2,7 @@
 #'
 #' Generates the convergence plots for the parameter values
 #'
-#' @param dat dataset containing the simulated values.
+#' @param data dataset containing the simulated values.
 #' @param iter number of iterations for running multiple imputation.
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
 #' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values".
@@ -13,7 +13,7 @@
 #' @return The plot of simulated values across iterations.
 #'
 #' @export
-conv.plot <- function(dat,
+conv.plot <- function(data,
                       iter,
                       x.lab = "Iteration number",
                       y.lab = "Simulated values",
@@ -22,8 +22,8 @@ conv.plot <- function(dat,
 
   # transform data from wide to long
 
-  wide.dat <- as.data.frame(cbind(dat, 0:iter))
-  colnames(wide.dat) <- c(colnames(dat), "iter")
+  wide.dat <- as.data.frame(cbind(data, 0:iter))
+  colnames(wide.dat) <- c(colnames(data), "iter")
 
   # make sure the id column should be factor variable
 

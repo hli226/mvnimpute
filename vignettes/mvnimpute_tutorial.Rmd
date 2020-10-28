@@ -1,8 +1,8 @@
 ---
-title: "Tutorial1_simulated_data"
+title: "Tutorial_simulated_data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tutorial1_simulated_data"}
+  %\VignetteIndexEntry{Tutorial_simulated_data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,7 +28,7 @@ To use this package, one needs to pre-process the dataset for some necessary inf
 
 ### Data
 
-Here we generate a 10-dimensional multivariate normal data using the **data.gen** in this package, with 4 subject to missing (MAR) and 4 to interval censoring. In the summary, `NA` denotes the missing data and `NaN` the censored data. Column names indicate the types of the variables, missing, censored or observed, and the position of the variable in the original dataset.
+Here we generate a 10-dimensional multivariate normal data using the **data.gen** function in this package, with 4 subject to missing (MAR) and 4 to interval censoring. In the summary, `NA` denotes the missing data and `NaN` the censored data. Column names indicate the types of the variables, missing, censored or observed, and the position of the variable in the original dataset.
 
 ```{r}
 p <- 10; m <- 4; n <- 4
@@ -123,11 +123,11 @@ head(censor.val[[1]])
 head(censor.val[[2]])
 ```
 
-**NOTE**: The dimension of `miss.indx` should match the length of `miss.pos`, that is the number of missing variables. The dimension of `censor.indx`, and that of `censor.val` should match the length of `censor.pos`, which should be the number of censored variables. They are not necessarily the dimension of the original dataset. The order of `miss.pos` or `censor.pos` does notneed to match the order of the corresponding index matrix, **multiple.impute** function will handle it internally
+**NOTE**: The dimension of `miss.indx` should match the length of `miss.pos`, that is the number of missing variables. The dimension of `censor.indx`, and that of `censor.val` should match the length of `censor.pos`, which should be the number of censored variables. They are not necessarily the dimension of the original dataset. The order of `miss.pos` or `censor.pos` does not need to match the order of the corresponding index matrix, **multiple.impute** function will handle it internally.
 
 ### Summary plot
 
-```{r, warning = FALSE}
+```{r, message = FALSE}
 plot.dat <- as.data.frame(dat$comp.dat)
 
 missing.vals <- miss.indx %>%
@@ -194,7 +194,7 @@ The plot above shows the percentage of missing, censored, and observed values ac
 
 ### Multiple imputation
 
-First of all, as the incomplete data includes unobserved data, we need to fill up those values by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances, for the initial stage of filling up the unobserved values.
+First of all, as the incomplete data includes unobserved data, we need to fill those values up by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances, for the initial stage of filling up the unobserved values.
 
 ```{r, message = FALSE}
 fil.dat <- initial.impute(dat$comp.dat, miss.indx, miss.pos, censor.indx, censor.pos)
@@ -203,7 +203,7 @@ fil.dat <- initial.impute(dat$comp.dat, miss.indx, miss.pos, censor.indx, censor
 head(fil.dat)
 ```
 
-In the current algorithm, we use conjugate priors for the normal distribution for performing multiple imputation. We have to specify the prior parameter values and the start values to initiate the iterative process.
+In the current algorithm, we use conjugate priors for the normal distribution for performing multiple imputation. We have to specify the prior parameter values and the starting values to initiate the iterative process.
 
 ```{r}
 # calculate the CC and AC parameter values
@@ -211,30 +211,30 @@ params <- calcu.param(dat$comp.dat)
 
 # setup prior parameters and initial values for multiple imputation
 prior.param <- list(
-  params$AC.mean,
-  params$AC.var,
-  100,
-  p * (p + 1) / 2
+  mu.0 = params$AC.mean,
+  Lambda.0 = params$CC.cov,
+  kappa.0 = 100,
+  nu.0 = p * (p + 1) / 2
 )
 
 initial.vals <- list(
-  params$CC.mean,
-  params$CC.cov
+  mu = params$CC.mean,
+  sigma = params$CC.cov
 )
 
 ```
 
-Currently, we use the conjugate priors for the Gibbs sampler. Prior specifications `prior.param` should be a length of four include:
+Prior specifications `prior.param` should be a length of four including:
 
-* $\mu_0$: prior mean vector
-* $\Sigma_0$: prior scale matrix
-* $\kappa_0$: number of prior measurements
-* $\nu$:degrees for freedom of the prior scale matrix
+* `mu.0`: prior mean vector
+* `Lambda.0`: prior scale matrix
+* `kappa.0`: number of prior measurements
+* `nu.0`: degrees of freedom of the prior scale matrix
 
 Starting values `inital.vals` is a list of length two including:
 
-* $\mu^{(0)}$: starting values for the mean vector.
-* $\Sigma^{(0)}$: staring values for the covariance matrix.
+* `mu`: starting values for the mean vector.
+* `sigma`: staring values for the covariance matrix.
 
 
 We run 500 iterations.
@@ -242,14 +242,14 @@ We run 500 iterations.
 For doing multiple imputation, the **multiple.impute** function requires several arguments including:
 
 * `iter`: the number of rounds doing multiple imputation.
-* `prior.param`: the parameter specifications for the prior distribution.
-* `ini.vals`: starting values for the parameters.
-* `dat`: the complete dataset with unobserved data filled in.
-* `miss.indx`: matrix including the missing index.
+* `prior.params`: the parameter specifications for the prior distribution.
+* `initial.values`: starting values for the parameters.
+* `data`: the complete dataset with unobserved data filled in.
+* `miss.index`: matrix including the missing index. 1 for missing, 0 otherwise.
 * `miss.pos`: vector indicating the positions of missing variables in the original dataset.
-* `censor.indx`: matrix including the censoring index.
+* `censor.index`: matrix including the censoring index. 1 ofr missing, 0 otherwise.
 * `censor.pos`: vector indicating the positions of censored variables in the original dataset.
-* `censor.val`: matrix (left/right censoring) or list of length two (interval censoring) including the censoring values.
+* `censor.values`: matrix (left/right censoring) or list of length two (interval censoring) including the censoring values.
 * `censor.type`: typical of censoring, it takes "left", "right", or "interval".
 
 ```{r, message = FALSE}
@@ -257,14 +257,14 @@ For doing multiple imputation, the **multiple.impute** function requires several
 iter <- 500
 sim.dat <- multiple.impute(
   iter = iter,           # number of iterations
-  prior.param = prior.param,    # prior specifications
-  ini.vals = initial.vals,   # staring values
-  dat = fil.dat,        # complete data with missing and censored values filled in 
-  miss.indx = miss.indx,      # missing index matrix
+  prior.params = prior.param,    # prior specifications
+  initial.values = initial.vals,   # staring values
+  data = fil.dat,        # complete data with missing and censored values filled in 
+  miss.index = miss.indx,      # missing index matrix
   miss.pos = miss.pos,       # missing variables position vector
-  censor.indx = censor.indx,    # censoring index matrix
+  censor.index = censor.indx,    # censoring index matrix
   censor.pos = censor.pos,     # censoring variables position vector
-  censor.val = censor.val,     # censoring cutoff values list or matrix
+  censor.values = censor.val,     # censoring cutoff values list or matrix
   censor.type = "interval"      # censoring types
 )
 ```

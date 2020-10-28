@@ -1,27 +1,28 @@
 #' CC and AC parameters calculation function
 #'
-#' Calculates the complete-case and avaliable-case parameters
+#' Calculates the complete-case and available-case parameters
 #'
-#' @param dat dataset containing the variables with missing and censored values.
+#' @param data dataset containing the variables with missing and censored values.
 #'
-#' @return a list of length 5 containing the avaliable-case mean and variance for each variable, the complete-case covariance matrix,
+#' @return a list of length 5 containing the available-case mean and variance for each variable,
+#' the complete-case covariance matrix,
 #' the complete-case mean and variance for each variable.
 #'
 #' @export
-calcu.param <- function(dat) {
+calcu.param <- function(data) {
 
-  if (is.null(dim(dat))) stop("Need a multidimensional matrix!")
+  if (is.null(dim(data))) stop("Need a multidimensional matrix!")
 
   ## CC parameters
-  complete.dat <- dat[complete.cases(dat), ]
+  complete.dat <- data[complete.cases(data), ]
   CC.mean <- apply(complete.dat, 2, mean)
   CC.var <- apply(complete.dat, 2, var)
   CC.cov <- cov(complete.dat)
 
   ## AC parameters
-  AC.mean <- numeric(ncol(dat)); AC.var <- numeric(ncol(dat))
-  for (i in 1:ncol(dat)) {
-    available.dat <- na.omit(dat[, i])
+  AC.mean <- numeric(ncol(data)); AC.var <- numeric(ncol(data))
+  for (i in 1:ncol(data)) {
+    available.dat <- na.omit(data[, i])
     AC.mean[i] <- mean(available.dat)
     AC.var[i] <- var(available.dat)
   }

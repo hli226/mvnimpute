@@ -4,15 +4,16 @@
 \alias{calcu.param}
 \title{CC and AC parameters calculation function}
 \usage{
-calcu.param(dat)
+calcu.param(data)
 }
 \arguments{
-\item{dat}{dataset containing the variables with missing and censored values.}
+\item{data}{dataset containing the variables with missing and censored values.}
 }
 \value{
-a list of length 5 containing the avaliable-case mean and variance for each variable, the complete-case covariance matrix,
+a list of length 5 containing the available-case mean and variance for each variable,
+the complete-case covariance matrix,
 the complete-case mean and variance for each variable.
 }
 \description{
-Calculates the complete-case and avaliable-case parameters
+Calculates the complete-case and available-case parameters
 }

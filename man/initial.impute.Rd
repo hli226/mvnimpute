@@ -2,18 +2,24 @@
 % Please edit documentation in R/initial_impute.R
 \name{initial.impute}
 \alias{initial.impute}
-\title{Initial missing data fill-in fucntion}
+\title{Initial missing data fill-in function}
 \usage{
-initial.impute(dat, miss.indx, miss.pos, censor.indx, censor.pos)
+initial.impute(
+  data,
+  miss.index = NULL,
+  miss.pos = NULL,
+  censor.index = NULL,
+  censor.pos = NULL
+)
 }
 \arguments{
-\item{dat}{dataset with missing and censored values}
+\item{data}{dataset with missing and censored values}
 
-\item{miss.indx}{matrix containing the missing index}
+\item{miss.index}{matrix containing the missing index}
 
 \item{miss.pos}{position of variables with missing values in the original dataset}
 
-\item{censor.indx}{matrix containing the censoring index}
+\item{censor.index}{matrix containing the censoring index}
 
 \item{censor.pos}{position of variables with censored values in the original dataset}
 }
@@ -24,6 +30,7 @@ a complete dataset with missing values filled in
 Fills in data with missing and censored values for multiple imputation
 }
 \details{
-The missing values will initially be filled in by some single imputation methods. Currently, it only supports generating
-random values from the normal distribution with the mean and variance as the complete-case mean and variance, respectively.
+The unobserved values will initially be filled in by some single imputation methods.
+Currently, it only supports generating random values from the normal distribution with the
+mean and variance as the complete-case mean and variance, respectively.
 }

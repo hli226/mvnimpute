@@ -5,7 +5,7 @@
 #'
 #' @docType package
 #'
-#' @name mvnimpute
+#' @name mvnimpute-package
 #'
 #' @author
 #'  Hesen Li

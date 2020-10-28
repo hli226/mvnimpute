@@ -5,7 +5,7 @@
 \title{Convergence plot function}
 \usage{
 conv.plot(
-  dat,
+  data,
   iter,
   x.lab = "Iteration number",
   y.lab = "Simulated values",
@@ -13,7 +13,7 @@ conv.plot(
 )
 }
 \arguments{
-\item{dat}{dataset containing the simulated values.}
+\item{data}{dataset containing the simulated values.}
 
 \item{iter}{number of iterations for running multiple imputation.}
 

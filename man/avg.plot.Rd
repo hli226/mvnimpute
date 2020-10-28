@@ -2,10 +2,10 @@
 % Please edit documentation in R/average_plot.R
 \name{avg.plot}
 \alias{avg.plot}
-\title{Average values plot function}
+\title{Averaged simulated values plot function}
 \usage{
 avg.plot(
-  dat,
+  data,
   iter,
   x.lab = "Iteration number",
   y.lab = "Average of simulated values",
@@ -14,7 +14,7 @@ avg.plot(
 )
 }
 \arguments{
-\item{dat}{dataset containing the simulated values.}
+\item{data}{dataset containing the simulated values.}
 
 \item{iter}{number of iterations for running multiple imputation.}
 
@@ -24,10 +24,11 @@ avg.plot(
 
 \item{title}{title of the generated plot.}
 
-\item{details}{logical variable to specify whether the average simulate values are returned, default is set to TRUE.}
+\item{details}{logical variable to specify whether the average simulated values are returned, default is set to FALSE.}
 }
 \value{
-The plot of averaged values across iterations. If \code{details} = TRUE. A matrix containing the averaged values of all the variables across iterations.
+The plot of averaged values across iterations. If \code{details} = TRUE.
+A matrix containing the averaged values of all the variables across iterations.
 }
 \description{
 Generates average simulated values of the parameter values

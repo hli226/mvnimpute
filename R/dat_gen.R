@@ -31,9 +31,9 @@
 #' @export
 dat.gen <- function(
   n,          # number of data to be generated
+  p,          # number of in the variables of the data
   m.vec,      # mean vector should have length p
   sig,        # variance-covariance matrix have dimension p * p
-  p,          # number of in the variables of the data
   miss.num,   # number of variables subject to missing
   censor.num  # number of censoring subject
 ){

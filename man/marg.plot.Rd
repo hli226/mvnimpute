@@ -4,10 +4,10 @@
 \alias{marg.plot}
 \title{Marginal plots function}
 \usage{
-marg.plot(dat, title = NULL)
+marg.plot(data, title = NULL)
 }
 \arguments{
-\item{dat}{Dataset containing all the variables}
+\item{data}{Dataset containing all the variables}
 
 \item{title}{Titles of the generated plots}
 }

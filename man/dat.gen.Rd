@@ -4,16 +4,16 @@
 \alias{dat.gen}
 \title{Data generating function}
 \usage{
-dat.gen(n, m.vec, sig, p, miss.num, censor.num)
+dat.gen(n, p, m.vec, sig, miss.num, censor.num)
 }
 \arguments{
 \item{n}{number of observations to be generated.}
 
+\item{p}{number of variables to be generated.}
+
 \item{m.vec}{specified mean vector.}
 
 \item{sig}{specified covariance matrix.}
-
-\item{p}{number of variables to be generated.}
 
 \item{miss.num}{number of variables having missing values.}
 

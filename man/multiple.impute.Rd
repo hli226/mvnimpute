@@ -6,41 +6,44 @@
 \usage{
 multiple.impute(
   iter,
-  prior.param,
-  ini.vals,
-  dat,
-  miss.indx,
-  miss.pos,
-  censor.indx,
-  censor.pos,
-  censor.val,
-  censor.type = "interval"
+  prior.params,
+  initial.values,
+  data,
+  miss.index = NULL,
+  miss.pos = NULL,
+  censor.index = NULL,
+  censor.pos = NULL,
+  censor.values = NULL,
+  censor.type = NULL,
+  details = TRUE
 )
 }
 \arguments{
-\item{iter}{number of iterations}
+\item{iter}{number of rounds for doing multiple imputation}
 
-\item{prior.param}{list of prior parameter values}
+\item{prior.params}{list of prior parameter values}
 
-\item{ini.vals}{list of initial values}
+\item{initial.values}{list of initial values}
 
-\item{dat}{dataset to do multiple imputation}
+\item{data}{dataset to do multiple imputation}
 
-\item{miss.indx}{matrix of missing index}
+\item{miss.index}{matrix of missing index}
 
 \item{miss.pos}{vector containing the positions of variables with missing values in the original dataset}
 
-\item{censor.indx}{matrix of censoring index}
+\item{censor.index}{matrix of censoring index}
 
 \item{censor.pos}{vector containing the position of variables with censored values in the original dataset}
 
-\item{censor.val}{list containing cutoff values for the censored variables}
+\item{censor.values}{list containing cutoff values for the censored variables}
 
 \item{censor.type}{discrete variable specifying the censoring type, it takes "left" for left-censoring, "right" for right-censoring,
 and "interval" for interval-censoring}
+
+\item{details}{boolean variable indicating whether the running status is printed in the console. Default is TRUE}
 }
 \value{
-A list of length 4 containing the simulated mean and variance vectors, covariance matrix and the imputed dataset from
+A list of length 5 containing the simulated mean and variance vectors, covariance matrix the imputed dataset and the conditional parameters from
 each iteration.
 }
 \description{
@@ -48,13 +51,14 @@ Implements the multiple imputation of the missing and censored values
 }
 \details{
 This function implements the multiple imputation algorithm that concurrently handles missing and censored values. This
-function requires matrices that contain the respective indices for missing or censored values, and vectors that specify the
-positions of the variables having the missing or censored values in the original dataset. \code{Censor.val} includes the cutoff
+function requires matrices that contain the respective index for missing or censored values, and vectors that specify the
+positions of the variables having the missing or censored values in the original dataset. \code{censor.values} includes the cutoff
 values for the censored values, it should be a matrix which has the same dimension as the censoring index matrix if the data
 is right- or left-censored, while it should be a list of length 2 if the data is interval-censored. The first element of the
-list should contain the lower bounds of the censored values, and the upper bounds should be in the second element. \code{prior.param}
-is a list containing the specified parameters of the prior distributions, and \code{ini.vals} is a list containing the chosen
-inital values for the parameters.
+list should contain the lower bounds of the censored values, and the upper bounds should be in the second element. \code{prior.params}
+is a list containing the specified parameters of the prior distributions: \code{mu.0} for prior mean; \code{kappa.0} for prior number of measurements,
+\code{Lambda.0} for the prior scale matrix and \code{nu.0} for the prior degrees of freedom, and \code{initial.values} is a list containing
+the chosen initial values for the parameters: \code{mu} for the starting values of the mean vector, and \code{sigma} for the starting covariance matrix.
 }
 \references{
 Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.
