@@ -1,6 +1,6 @@
 #' Combined NHANES dataset from 2011 - 2016
 #'
-#' A dataset containing the demographic, PCB and metal pollutant measurements variables.
+#' A dataset containing the demographics, PCB and metal pollutant measurements variables.
 #'
 #' @format A data set frame with 14268 rows and 154 variables:
 #' \describe{

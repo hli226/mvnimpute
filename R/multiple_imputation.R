@@ -1,6 +1,6 @@
 #' Multiple imputation function
 #'
-#' Implements the multiple imputation of the missing and censored values
+#' Implements the multiple imputation for both missing and censored values
 #'
 #' @param iter number of rounds for doing multiple imputation
 #' @param prior.params list of prior parameter values
@@ -16,17 +16,26 @@
 #' @param details boolean variable indicating whether the running status is printed in the console. Default is TRUE
 #'
 #' @details This function implements the multiple imputation algorithm that concurrently handles missing and censored values. This
-#' function requires matrices that contain the respective index for missing or censored values, and vectors that specify the
+#' function requires matrices that contain the respective index of missing or censored values, and vectors that specify the
 #' positions of the variables having the missing or censored values in the original dataset. \code{censor.values} includes the cutoff
 #' values for the censored values, it should be a matrix which has the same dimension as the censoring index matrix if the data
 #' is right- or left-censored, while it should be a list of length 2 if the data is interval-censored. The first element of the
-#' list should contain the lower bounds of the censored values, and the upper bounds should be in the second element. \code{prior.params}
+#' list should contain the lower bounds of the censored values, and the upper bounds should be in the second. \code{prior.params}
 #' is a list containing the specified parameters of the prior distributions: \code{mu.0} for prior mean; \code{kappa.0} for prior number of measurements,
 #' \code{Lambda.0} for the prior scale matrix and \code{nu.0} for the prior degrees of freedom, and \code{initial.values} is a list containing
 #' the chosen initial values for the parameters: \code{mu} for the starting values of the mean vector, and \code{sigma} for the starting covariance matrix.
 #'
-#' @return A list of length 5 containing the simulated mean and variance vectors, covariance matrix the imputed dataset and the conditional parameters from
-#' each iteration.
+#' @return A list of length 5 including
+#'
+#' \code{simulated.mu}: The matrix containing the simulated mean values for each variable from each iteration
+#'
+#' \code{simulated.sig}: The matrix containing the simulated variance values for each variable from each iteration
+#'
+#' \code{simulated.cov}: A list including the simulated covariance matrix from each iteration
+#'
+#' \code{imputed.dat}: A list including the imputed data set from each iteration
+#'
+#' \code{conditional.params}: A list including the conditional parameter values by the sweep operator from each iteration
 #'
 #' @references
 #' Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.

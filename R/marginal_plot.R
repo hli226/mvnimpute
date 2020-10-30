@@ -2,8 +2,8 @@
 #'
 #' Draws the marginal density plots for each variable
 #'
-#' @param data Dataset containing all the variables
-#' @param title Titles of the generated plots
+#' @param data dataset containing all the variables
+#' @param title title of the generated plots
 #'
 #' @return Marginal density plots for each variable in the dataset
 #'

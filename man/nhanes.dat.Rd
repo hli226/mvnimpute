@@ -22,7 +22,7 @@ A data set frame with 14268 rows and 154 variables:
 nhanes.dat
 }
 \description{
-A dataset containing the demographic, PCB and metal pollutant measurements variables.
+A dataset containing the demographics, PCB and metal pollutant measurements variables.
 }
 \details{
 The dataset is combined from the NHANES release cycle 2011-2012, 2013-2014, 2015-2016. It includes three domains, the

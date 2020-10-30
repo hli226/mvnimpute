@@ -22,11 +22,29 @@
 #' V <- diag(p)
 #' miss.num <- 1
 #' censor.num <- 1
-#' dat <- dat.gen(n, m.vec, V, p, miss.num, censor.num)
+#' dat <- dat.gen(n, p, m.vec, V, miss.num, censor.num)
 #'
-#' @return A list containing the full data, the complete data with missing and censoring information applied,
-#'   the missing and censoring index, positions of the variables including the missing or censored values, or
-#'   the fully observed variable, and the two limits of the censored values
+#' @return A list of 10 including:
+#'
+#' \code{full.dat}: The full complete data before the missing and censoring information applied.
+#'
+#' \code{comp.dat}: The incomplete data after the missing and censoring information applied.
+#'
+#' \code{miss.indx}: The matrix containing the missing index for the missing data. 1 for missing values, 0 for oberved values.
+#'
+#' \code{miss.pos}: The vector indicating the position of the missing variables in the original dataset.
+#'
+#' \code{miss.point}: The vector containing the cutoff values for the missing data. For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
+#'
+#' \code{censor.ind}x: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
+#'
+#' \code{censor.pos}: The vector indicating the position of the censored variables in the original dataset.
+#'
+#' \code{C1}: The vector containing the lower limits of the censored values.
+#'
+#' \code{C2}: The vector containing the upper limits of the censored values.
+#'
+#' \code{full.pos}: The vector indicating the position of the fully observed variables.
 #'
 #' @export
 dat.gen <- function(

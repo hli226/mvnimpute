@@ -9,10 +9,10 @@
 #' @param title title of the generated plot.
 #' @param details logical variable to specify whether the average simulated values are returned, default is set to FALSE.
 #'
-#' @details This function calculates the averaged simulated values across simulations.
+#' @details This function calculates the average simulated values across simulations.
 #'
 #' @return The plot of averaged values across iterations. If \code{details} = TRUE.
-#' A matrix containing the averaged values of all the variables across iterations.
+#' A matrix containing the averaged values of all the variables across iterations will be returned.
 #'
 #' @export
 avg.plot <- function(data,

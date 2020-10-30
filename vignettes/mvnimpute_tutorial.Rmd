@@ -38,9 +38,9 @@ V <- clusterGeneration::genPositiveDefMat("eigen", dim = p)
 
 dat <- dat.gen(
   sample.size,
+    p,
   mu.vec,
   V$Sigma,
-  p,
   m,
   n
 )
