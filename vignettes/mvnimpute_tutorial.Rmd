@@ -127,10 +127,18 @@ head(censor.val[[2]])
 ### Summary plot
 
 ```{r, message = FALSE}
-# visulizatio tool of the data
+miss.indx <- as.data.frame(dat$miss.indx)
+censor.indx <- as.data.frame(dat$censor.indx)
+# have to make sure that the names of the miss.indx and censor.indx matrices
+# have the same name corresponding to the variable names of the missing variable
+# or censored variables
+colnames(miss.indx) <- colnames(dat$comp.dat)[grepl("miss", colnames(dat$comp.dat))]
+colnames(censor.indx) <- colnames(dat$comp.dat)[grepl("censor", colnames(dat$comp.dat))]
+  
+# visulization tool of the data
 visual.plot(dat$comp.dat,
-            dat$miss.indx,
-            dat$censor.indx)
+            miss.indx,
+            censor.indx)
 ```
 
 The plot above shows the percentage of missing, censored, and observed values across each variable.
