@@ -1,6 +1,6 @@
 #' Data generating function
 #'
-#' Generates multivariate normal data.
+#' Generates multivariate normal data
 #'
 #' @param n number of observations to be generated
 #' @param p number of variables to be generated
@@ -26,7 +26,7 @@
 #'
 #' @return A list of 10 including:
 #'
-#' \code{full.dat}: The full complete data before the missing and censoring information applied.
+#' \code{full.dat}: The fully observed complete data before the missing and censoring information applied.
 #'
 #' \code{comp.dat}: The incomplete data after the missing and censoring information applied.
 #'
@@ -36,9 +36,9 @@
 #'
 #' \code{miss.point}: The vector containing the cutoff values for the missing data. For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
 #'
-#' \code{censor.ind}x: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
-#'
 #' \code{censor.pos}: The vector indicating the position of the censored variables in the original dataset.
+#'
+#' \code{censor.indx}: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
 #'
 #' \code{C1}: The vector containing the lower limits of the censored values.
 #'

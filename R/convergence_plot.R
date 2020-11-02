@@ -6,7 +6,7 @@
 #' @param iter number of iterations for running multiple imputation
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number"
 #' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values"
-#' @param title title in the convergence plot.
+#' @param title title of the generated plot.
 #'
 #' @details The function generates the trace plot of simulated values across iterations.
 #'

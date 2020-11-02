@@ -22,7 +22,6 @@ Imports:
     rlang
 Suggests:
     tidyverse,
-    testthat,
     knitr,
     rmarkdown,
     clusterGeneration
