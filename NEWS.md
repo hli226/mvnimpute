@@ -8,3 +8,5 @@ title: mvnimpute package NEWS
 * Currently this package deals with the missing and censored data under multivariate normality assumption.
 * For single imputation approach applied in the *initial.impute* function, it currently only supports the stochastic regression imputation, need to extend this function to incorporate more SI approaches in the future.
 * For multiple imputation in the *multiple.impute* function, it uses the Normal-Inverse-Wishart conjugate prior distributions for performing the algorithm. Next will extend to more priors.
+* Add functions for some graphical diagnostic tools for multiple imputation algorithm.
+* Add function for drawing the "heatmap" showing the percentages of missing, censored or observed data, respectively.
