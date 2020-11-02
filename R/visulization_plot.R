@@ -121,13 +121,6 @@ visual.plot <- function(data,
 
   }
 
-
-  # censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
-  #
-  # censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
-  # censoring.vals <- censoring.vals[, -3]
-  # colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
-
   no.miss.censor <- colnames(data)[colnames(data) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
 
   if (length(no.miss.censor) == 0) {
@@ -156,7 +149,7 @@ visual.plot <- function(data,
   }
 
   complete.dat <- complete.dat %>%
-    arrange(key, type)
+    arrange(.data$key, .data$type)
 
   complete.dat %>%
     ggplot() +
