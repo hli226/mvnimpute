@@ -30,7 +30,18 @@ NULL
 #' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 ggtitle
 #' @importFrom ggplot2 aes
-#' @importFrom reshape2 melt
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom reshape2 melt
+#' @importFrom magrittr %>%
+#' @importFrom tidyr gather
+#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom dplyr n
+#' @importFrom rlang .data
 NULL
+

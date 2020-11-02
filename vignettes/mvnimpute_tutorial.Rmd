@@ -128,66 +128,10 @@ head(censor.val[[2]])
 ### Summary plot
 
 ```{r, message = FALSE}
-plot.dat <- as.data.frame(dat$comp.dat)
-
-missing.vals <- miss.indx %>%
-  gather(key = "key", value = "val") %>%
-  mutate(isna = (val == 1)) %>%
-  group_by(key) %>%
-  mutate(total = n()) %>%
-  group_by(key, total, isna) %>%
-  summarise(num.isna = n()) %>%
-  mutate(pct = num.isna / total * 100)
-
-censoring.vals <- censor.indx %>%
-  gather(key = "key", value = "val") %>%
-  mutate(iscensor = (val == 1)) %>%
-  group_by(key) %>%
-  mutate(total = n()) %>%
-  group_by(key, total, iscensor) %>%
-  summarise(num.iscensor = n()) %>%
-  mutate(pct = num.iscensor / total * 100)
-
-censoring.vals <- censoring.vals[order(censoring.vals[, 1]),]
-
-censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
-censoring.vals <- censoring.vals[, -3]
-colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
-
-missing.vals <- data.frame(missing.vals, type = ifelse(missing.vals$isna == TRUE, "0", "1"))
-missing.vals <- missing.vals[, -3]
-colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
-
-no.miss.censor <- colnames(dat$comp.dat)[colnames(dat$comp.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
-
-no.miss.censor.mat <- data.frame(
-  rbind(c(no.miss.censor[1], sample.size, sample.size, 100, 1),
-        c(no.miss.censor[2], sample.size, sample.size, 100, 1))
-)
-colnames(no.miss.censor.mat) <- c("key", "total", "num", "pct", "type")
-
-complete.dat <- rbind(missing.vals,
-                      censoring.vals,
-no.miss.censor.mat)
-# complete.dat <- rbind(missing.vals,
-#                       censoring.vals)
-
-complete.dat <- complete.dat[order(as.numeric(complete.dat$pct)), ]
-
-complete.dat %>%
-  ggplot() +
-  geom_bar(aes(x = key, 
-               y = as.numeric(pct),
-               fill = type), stat = "identity") + 
-  scale_fill_manual(name = "",
-                    values = c("tomato3", "steelblue", "lightgreen"),
-                    labels = c("Missing", "Observed", "Censored")) +
-  coord_flip() + 
-  labs(
-    x = "Variable",
-    y = "Percentage"
-  ) +
-  ggtitle("Percentage of missing/censored values in each variable")
+# visulizatio tool of the data
+visual.plot(dat$comp.dat,
+            dat$miss.indx,
+            dat$censor.indx)
 ```
 
 The plot above shows the percentage of missing, censored, and observed values across each variable.

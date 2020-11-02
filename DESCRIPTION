@@ -2,7 +2,7 @@ Package: mvnimpute
 Type: Package
 Title: Concurrently multiply impute the missing and censored values
 Version: 0.0.0.9000
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.4.0)
 Authors@R: person("Hesen", "Li", email = "hli226@uic.edu", role = c("aut", "cre"))
 Description: This package implements multiple imputation for missing and censored data under joint multivariate normal model assumption.
 License: GPL-3
@@ -15,7 +15,11 @@ Imports:
     MASS,
     mvtnorm,
     reshape2,
-    LaplacesDemon
+    LaplacesDemon,
+    dplyr,
+    magrittr,
+    tidyr,
+    rlang
 Suggests:
     tidyverse,
     testthat,
