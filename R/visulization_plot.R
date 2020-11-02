@@ -8,7 +8,8 @@
 #'
 #' @details The function draws the plot that graphically shows the percentage of the missing, censored and observed
 #' data in the dataset. Column names of the \code{miss.indx} and \code{censor.indx} matrices should correspond
-#' to the respective variable names that are subject to either missing or censoring.
+#' to the respective variable names that are subject to either missing or censoring, and those names should be
+#' handled before using the function.
 #'
 #' @return graph that shows the details of the different type of data in the dataset
 #'
