@@ -41,6 +41,8 @@ NULL
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarise
+#' @importFrom dplyr filter
+#' @importFrom dplyr arrange
 #' @importFrom dplyr n
 #' @importFrom rlang .data
 NULL

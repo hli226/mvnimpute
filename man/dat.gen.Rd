@@ -7,17 +7,17 @@
 dat.gen(n, p, m.vec, sig, miss.num, censor.num)
 }
 \arguments{
-\item{n}{number of observations to be generated.}
+\item{n}{number of observations to be generated}
 
-\item{p}{number of variables to be generated.}
+\item{p}{number of variables to be generated}
 
-\item{m.vec}{specified mean vector.}
+\item{m.vec}{specified mean vector}
 
-\item{sig}{specified covariance matrix.}
+\item{sig}{specified covariance matrix}
 
-\item{miss.num}{number of variables having missing values.}
+\item{miss.num}{number of variables having missing values}
 
-\item{censor.num}{number of variables having censored values.}
+\item{censor.num}{number of variables having censored values}
 }
 \value{
 A list of 10 including:

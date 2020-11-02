@@ -2,12 +2,12 @@
 #'
 #' Generates multivariate normal data.
 #'
-#' @param n number of observations to be generated.
-#' @param p number of variables to be generated.
-#' @param m.vec specified mean vector.
-#' @param sig specified covariance matrix.
-#' @param miss.num number of variables having missing values.
-#' @param censor.num number of variables having censored values.
+#' @param n number of observations to be generated
+#' @param p number of variables to be generated
+#' @param m.vec specified mean vector
+#' @param sig specified covariance matrix
+#' @param miss.num number of variables having missing values
+#' @param censor.num number of variables having censored values
 #'
 #' @details The function generates the multivariate normal data that can be used to verify the correctness of the multiple imputation
 #' algorithm. Users have to specify the mean vector, variance covariance matrix, sample size and dimension of the generated data, and

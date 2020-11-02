@@ -7,7 +7,7 @@
 calcu.param(data)
 }
 \arguments{
-\item{data}{dataset containing the variables with missing and censored values.}
+\item{data}{dataset containing the variables with missing and censored values}
 }
 \value{
 A list of length 5 containing the available-case mean and variance for each variable,

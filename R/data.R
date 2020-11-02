@@ -2,7 +2,7 @@
 #'
 #' A dataset containing the demographics, PCB and metal pollutant measurements variables.
 #'
-#' @format A data set frame with 14268 rows and 154 variables:
+#' @format A data frame with 14268 rows and 154 variables:
 #' \describe{
 #'   \item{SEQN}{respondent sequence nubmer}
 #'   \item{SDDSRVYR}{survey cycle identifier, it takes 7, 8, 9 in the data}

@@ -7,15 +7,15 @@
 calcu.acf(data, lag = 50, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
-\item{data}{dataset containing the variables of which autocorrelations are calculated.}
+\item{data}{dataset containing the variables of which autocorrelations are calculated}
 
-\item{lag}{lag at which the autocorrelation is calculated, default is set as 50.}
+\item{lag}{lag at which the autocorrelation is calculated, default is set as 50}
 
-\item{plot}{logical variable to specify whether the plot is generated, default is set to TRUE.}
+\item{plot}{logical variable to specify whether the plot is generated, default is set to TRUE}
 
-\item{title}{title of the generated autocorrelation plots.}
+\item{title}{title of the generated autocorrelation plots}
 
-\item{details}{boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE.}
+\item{details}{boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE}
 }
 \value{
 A matrix containing the calculated autocorrelations of all the variables in the dataset. If \code{plot} = TRUE,

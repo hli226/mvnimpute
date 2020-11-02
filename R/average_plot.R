@@ -22,8 +22,6 @@ avg.plot <- function(data,
                      title = NULL,
                      details = FALSE) {
 
-  value <- NULL
-
   # compute the cumulative averages of the parameter values to the current simulation
   avg.param <- matrix(nrow = iter + 1, ncol = ncol(data))
   avg.param[1, ] <- data[1, ]
@@ -49,7 +47,7 @@ avg.plot <- function(data,
 
   print(ggplot(data = long.dat,
          aes(x = as.numeric(iter),
-             y = value,
+             y = .data$value,
              group = var,
              color = var)) +
     geom_line() +

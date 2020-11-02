@@ -13,13 +13,13 @@ conv.plot(
 )
 }
 \arguments{
-\item{data}{dataset containing the simulated values.}
+\item{data}{dataset containing the simulated values}
 
-\item{iter}{number of iterations for running multiple imputation.}
+\item{iter}{number of iterations for running multiple imputation}
 
-\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
+\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number"}
 
-\item{y.lab}{label of the y axis in the generated plot, default is set to "Simulated values".}
+\item{y.lab}{label of the y axis in the generated plot, default is set to "Simulated values"}
 
 \item{title}{title in the convergence plot.}
 }

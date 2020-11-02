@@ -2,10 +2,10 @@
 #'
 #' Generates the convergence plots for the parameter values
 #'
-#' @param data dataset containing the simulated values.
-#' @param iter number of iterations for running multiple imputation.
-#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
-#' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values".
+#' @param data dataset containing the simulated values
+#' @param iter number of iterations for running multiple imputation
+#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number"
+#' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values"
 #' @param title title in the convergence plot.
 #'
 #' @details The function generates the trace plot of simulated values across iterations.
@@ -18,7 +18,6 @@ conv.plot <- function(data,
                       x.lab = "Iteration number",
                       y.lab = "Simulated values",
                       title = NULL) {
-  value <- NULL
 
   # transform data from wide to long
 
@@ -34,7 +33,7 @@ conv.plot <- function(data,
 
   ggplot(data = long.dat,
          aes(x = as.numeric(iter),
-             y = value,
+             y = .data$value,
              group = var,
              color = var)) +
     geom_line() +

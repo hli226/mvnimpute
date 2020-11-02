@@ -11,7 +11,7 @@ visual.plot(data, miss.index, censor.index)
 
 \item{miss.index}{missing index indicating the missing data in the original dataset}
 
-\item{censor.index}{censoring index indicating the censored data in the original datset}
+\item{censor.index}{censoring index indicating the censored data in the original dataset}
 }
 \value{
 graph that shows the details of the different type of data in the dataset

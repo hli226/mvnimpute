@@ -5,7 +5,7 @@
 \alias{nhanes.dat}
 \title{Combined NHANES dataset from 2011 - 2016}
 \format{
-A data set frame with 14268 rows and 154 variables:
+A data frame with 14268 rows and 154 variables:
 \describe{
   \item{SEQN}{respondent sequence nubmer}
   \item{SDDSRVYR}{survey cycle identifier, it takes 7, 8, 9 in the data}

@@ -2,7 +2,7 @@
 #'
 #' Calculates the complete-case and available-case parameters
 #'
-#' @param data dataset containing the variables with missing and censored values.
+#' @param data dataset containing the variables with missing and censored values
 #'
 #' @return A list of length 5 containing the available-case mean and variance for each variable,
 #' the complete-case covariance matrix,
