@@ -1,5 +1,5 @@
 ---
-title: "Short Introduction to mvnimpute package"
+title: Short Introduction to mvnimpute package
 ---
 # mvnimpute
 
@@ -14,7 +14,7 @@ You can install the version of mvnimpute in development from [GitHub](https://gi
 
 ``` r
 # install.packages("devtools")
-devtools::install_.packages_github("yuebanfengqing/mvnimpute")
+devtools::install_packages_github("yuebanfengqing/mvnimpute")
 ```
 
 add `built_vignettes = TRUE` argument to include vignette in the downloaded package. You have to install the development package **devtools** for installing packages from GitHub.
