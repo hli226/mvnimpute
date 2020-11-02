@@ -68,4 +68,4 @@ from the multiple imputation.
 heavy metal pollutants data.
 
 For detailed instructions on using the package and a walk-through
-example, please refer to the package downloaded with the package.
+example, please refer to the vignette downloaded with the package.

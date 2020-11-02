@@ -64,4 +64,4 @@ It has 10 functions including
 
 `nhanes.dat`: 2011 - 2016 NHANES demographics, PCB measurements, and heavy metal pollutants data.
 
-For detailed instructions on using the package and a walk-through example, please refer to the package downloaded with the package.
+For detailed instructions on using the package and a walk-through example, please refer to the vignette downloaded with the package.
