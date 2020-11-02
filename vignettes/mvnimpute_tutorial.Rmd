@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 # include the package
 library(mvnimpute)
 library(tidyverse)
-`%notin%` <- Negate(`%in%`)
 set.seed(223)
 ```
 
