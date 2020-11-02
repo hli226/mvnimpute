@@ -18,27 +18,19 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mvnimpute is to implement multiple imputation to the data when there are both missing and censored values (a single variable can have missing and censoring simultaneously; or it can have either one of missing or censored values)
+The goal of **mvnimpute** package is to implement multiple imputation to the data when there are both missing and censored values (a single variable can have missing and censoring simultaneously; or it can have either only missing or censored values)
+
 
 ## Installation
 
-You can the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("yuebanfengqing/mvnimpute")
-```
-
-## Installation
-
-You can install the version of mvnimpute in development from [GitHub](https://github.com) with:
+You can install **mvnimpute** package in development version from [GitHub](https://github.com) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_packages_github("yuebanfengqing/mvnimpute")
 ```
 
-add `built_vignettes = TRUE` argument to include vignette in the downloaded package. You have to install the development package **devtools** for installing packages from GitHub.
+add `built_vignettes = TRUE` argument to include vignette in the downloaded package. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.
 
 ## Basic functions
 
@@ -60,8 +52,8 @@ It has 10 functions including
 
 `avg.plot`: draws trace plots of the averaged values of the parameters from the multiple imputation.
 
-`calcu.acf`: calculates the autocorrelation values and draws acf plots.
+`calcu.acf`: calculates the autocorrelation values and draws ACF plots.
 
 `nhanes.dat`: 2011 - 2016 NHANES demographics, PCB measurements, and heavy metal pollutants data.
 
-For detailed instructions on using the package and a walk-through example, please refer to the vignette downloaded with the package.
+For detailed instructions on using the package and a walk-through example, please refer to the vignette downloaded with the package. Once the package is installed, the vignette can be accessed using the function `browseVignettes("mvnimpute")`, and it will open in an external viewer.
