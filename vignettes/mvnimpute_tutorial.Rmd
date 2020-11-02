@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
 ```{r setup, message = FALSE}
 # include the package
 library(mvnimpute)
-library(tidyverse)
 set.seed(223)
 ```
 
