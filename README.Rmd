@@ -27,7 +27,7 @@ You can install **mvnimpute** package in development version from [GitHub](https
 
 ``` r
 # install.packages("devtools")
-devtools::install_packages_github("yuebanfengqing/mvnimpute")
+devtools::install_github("yuebanfengqing/mvnimpute")
 ```
 
 add `built_vignettes = TRUE` argument to include vignette in the downloaded package. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.

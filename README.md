@@ -19,7 +19,7 @@ You can install **mvnimpute** package in development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_packages_github("yuebanfengqing/mvnimpute")
+devtools::install_github("yuebanfengqing/mvnimpute")
 ```
 
 add `built_vignettes = TRUE` argument to include vignette in the
