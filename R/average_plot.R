@@ -11,7 +11,7 @@
 #'
 #' @details This function calculates the average simulated values across simulations.
 #'
-#' @return The plot of averaged values across iterations. If \code{details} = TRUE.
+#' @return The plot of averaged values across iterations. If \code{details} = TRUE,
 #' A matrix containing the averaged values of all the variables across iterations will be returned.
 #'
 #' @export

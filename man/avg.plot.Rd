@@ -27,7 +27,7 @@ avg.plot(
 \item{details}{logical variable to specify whether the average simulated values are returned, default is set to FALSE.}
 }
 \value{
-The plot of averaged values across iterations. If \code{details} = TRUE.
+The plot of averaged values across iterations. If \code{details} = TRUE,
 A matrix containing the averaged values of all the variables across iterations will be returned.
 }
 \description{
