@@ -28,7 +28,7 @@ avg.plot(
 }
 \value{
 The plot of averaged values across iterations. If \code{details} = TRUE,
-A matrix containing the averaged values of all the variables across iterations will be returned.
+a matrix containing the averaged values of all the variables across iterations will be returned.
 }
 \description{
 Generates average simulated values of the parameter values
