@@ -37,10 +37,10 @@ censoring information.
 `calcu.param`: calculates the complete-case and available-case
 parameters.
 
-`visual.plot`: draw plot showing percentage of missing, censored, and
+`visual.plot`: draws plot showing percentage of missing, censored, and
 observed values.
 
-`marg.plot`: draw density plot for each marginal variable.
+`marg.plot`: draws density plot for each marginal variable.
 
 `initial.impute`: implements single imputation approach to makeup
 incomplete data.
