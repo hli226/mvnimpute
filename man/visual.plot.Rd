@@ -4,7 +4,7 @@
 \alias{visual.plot}
 \title{Function for missing and censored data visualization}
 \usage{
-visual.plot(data, miss.index, censor.index)
+visual.plot(data, miss.index, censor.index, title = NULL)
 }
 \arguments{
 \item{data}{dataset that contains the missing and censored values}
@@ -12,6 +12,8 @@ visual.plot(data, miss.index, censor.index)
 \item{miss.index}{missing index indicating the missing data in the original dataset}
 
 \item{censor.index}{censoring index indicating the censored data in the original dataset}
+
+\item{title}{the title of the plots. Default is NULL.}
 }
 \value{
 graph that shows the details of the different type of data in the dataset

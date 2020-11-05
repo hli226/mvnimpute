@@ -5,6 +5,7 @@
 #' @param data dataset that contains the missing and censored values
 #' @param miss.index missing index indicating the missing data in the original dataset
 #' @param censor.index censoring index indicating the censored data in the original dataset
+#' @param title the title of the plots. Default is NULL.
 #'
 #' @details The function draws the plot that graphically shows the percentage of the missing, censored and observed
 #' data in the dataset. Column names of the \code{miss.indx} and \code{censor.indx} matrices should correspond
@@ -16,7 +17,8 @@
 #' @export
 visual.plot <- function(data,
                         miss.index,
-                        censor.index) {
+                        censor.index,
+                        title = NULL) {
 
   `%notin%` <- Negate(`%in%`)
 
@@ -163,7 +165,7 @@ visual.plot <- function(data,
     coord_flip() +
     xlab("Variable") +
     ylab("Percentage") +
-    ggtitle("Percentage of missing/censored values in each variable")
+    ggtitle(title)
 
   # return(complete.dat)
 
