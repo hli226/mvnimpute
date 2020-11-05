@@ -13,7 +13,7 @@ visual.plot(data, miss.index, censor.index, title = NULL)
 
 \item{censor.index}{censoring index indicating the censored data in the original dataset}
 
-\item{title}{the title of the plots. Default is NULL.}
+\item{title}{the title of the plot. Default is NULL.}
 }
 \value{
 graph that shows the details of the different type of data in the dataset
