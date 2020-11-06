@@ -15,30 +15,19 @@
 #' @return graph that shows the details of the different type of data in the dataset
 #'
 #' @export
-visual.plot <- function(data,
-                        miss.index,
-                        censor.index,
-                        title = NULL) {
+visual.plot <- function(
+  data,
+  miss.index = NULL,
+  censor.index = NULL,
+  title = NULL) {
 
   `%notin%` <- Negate(`%in%`)
 
-  plot.dat <- as.data.frame(data)
-  miss.indx <- as.data.frame(miss.index)
-  censor.indx <- as.data.frame(censor.index)
+  if ((!is.null(miss.index)) & (is.null(censor.index))) {
+    # either missing or censoring index is null matrix
+    plot.dat <- data
+    miss.indx <- as.data.frame(miss.index)
 
-  miss.name <- colnames(miss.indx)
-  censor.name <- colnames(censor.indx)
-
-  common.name  <- NULL
-
-  for (i in 1:length(miss.name)) {
-
-    if (miss.name[i] %in% censor.name) common.name <- c(common.name, miss.name[i])
-
-  }
-
-  # (1) if all the variable have either missing or censored values
-  if (is.null(common.name)) {
     missing.vals <- miss.indx %>%
       gather(key = "key", value = "val") %>%
       mutate(isna = (.data$val == 1)) %>%
@@ -47,6 +36,60 @@ visual.plot <- function(data,
       group_by(.data$key, .data$total, .data$isna) %>%
       summarise(num.isna = n()) %>%
       mutate(pct = .data$num.isna / .data$total * 100)
+
+    no.missing <- colnames(plot.dat)[colnames(plot.dat) %notin% unique(missing.vals$key)]
+
+    if (length(no.missing) > 0) {
+
+      no.missingfalse <- data.frame(
+        key = no.missing,
+        total = nrow(plot.dat),
+        isna = FALSE,
+        num.isna = nrow(plot.dat),
+        pct = 100
+      )
+
+      no.missingtrue <- data.frame(
+        key = no.missing,
+        total = nrow(plot.dat),
+        isna = TRUE,
+        num.isna = 0,
+        pct = 0
+      )
+
+      missing.vals <- rbind(missing.vals, no.missingfalse, no.missingtrue)
+    }
+    levels <- (missing.vals %>% filter(isna == TRUE) %>% arrange(desc(pct)))$key
+
+    missing.vals %>%
+      ggplot() +
+      geom_bar(aes(x = reorder(.data$key, desc(.data$pct)),
+                   y = .data$pct, fill = .data$isna),
+               stat = "identity") +
+      scale_x_discrete(limits = levels,
+                       labels = paste(
+                         levels,
+                         " (",
+                         round((missing.vals %>% filter(isna == TRUE) %>% arrange(desc(pct)))$pct, 2),
+                         "%)", sep = ""
+                       )) +
+      scale_fill_manual(name = "",
+                        values = c("steelblue", "tomato3"),
+                        labels = c("Observed", "Missing")) +
+      coord_flip() +
+      labs(
+        x = "Variable",
+        y = "Percentage") +
+      ggtitle(title)
+
+  }
+
+  # 2. data only has censoring values
+  else if ((is.null(miss.index)) & (!is.null(censor.index))) {
+
+    # either missing or censoring index is null matrix
+    plot.dat <- data
+    censor.indx <- as.data.frame(censor.index)
 
     censoring.vals <- censor.indx %>%
       gather(key = "key", value = "val") %>%
@@ -57,114 +100,200 @@ visual.plot <- function(data,
       summarise(num.iscensor = n()) %>%
       mutate(pct = .data$num.iscensor / .data$total * 100)
 
-    missing.vals <- data.frame(missing.vals, type = ifelse(missing.vals$isna == TRUE, "0", "1"))
-    missing.vals <- missing.vals[, -3]
-    colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
+    no.censoring <- colnames(plot.dat)[colnames(plot.dat) %notin% unique(censoring.vals$key)]
 
-    censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
+    if (length(no.censoring) > 0) {
 
-    censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
-    censoring.vals <- censoring.vals[, -3]
-    colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
+      no.censoringfalse <- data.frame(
+        key = no.censoring,
+        total = nrow(plot.dat),
+        iscensor = FALSE,
+        num.iscensor = nrow(plot.dat),
+        pct = 100
+      )
 
-  }
+      no.censoringtrue <- data.frame(
+        key = no.censoring,
+        total = nrow(plot.dat),
+        iscensor = TRUE,
+        num.iscensor = 0,
+        pct = 0
+      )
 
-  # if some of the variables have both missing and censored values
-  else if (!is.null(common.name)) {
+      censoring.vals <- rbind(censoring.vals, no.censoringfalse, no.censoringtrue)
+    }
 
-    missing.vals <- miss.indx %>%
-      gather(key = "key", value = "val") %>%
-      mutate(isna = (.data$val == 1)) %>%
-      group_by(.data$key) %>%
-      mutate(total = n()) %>%
-      group_by(.data$key, .data$total, .data$isna) %>%
-      summarise(num.isna = n()) %>%
-      mutate(pct = .data$num.isna / .data$total * 100) %>%
-      filter(.data$isna == TRUE)
+    levels <- (censoring.vals %>% filter(iscensor == TRUE) %>% arrange(desc(pct)))$key
 
-    missing.other <- miss.indx %>%
-      gather(key = "key", value = "val") %>%
-      mutate(isna = (.data$val == 1)) %>%
-      group_by(.data$key) %>%
-      mutate(total = n()) %>%
-      group_by(.data$key, .data$total, .data$isna) %>%
-      summarise(num.isna = n()) %>%
-      mutate(miss.pct = .data$num.isna / .data$total * 100) %>%
-      filter(.data$isna == FALSE)
-
-    censoring.vals <- censor.indx %>%
-      gather(key = "key", value = "val") %>%
-      mutate(iscensor = (.data$val == 1)) %>%
-      group_by(.data$key) %>%
-      mutate(total = n()) %>%
-      group_by(.data$key, .data$total, .data$iscensor) %>%
-      summarise(num.iscensor = n()) %>%
-      mutate(pct = .data$num.iscensor / .data$total * 100) %>%
-      filter(!is.na(.data$iscensor))
-
-    missing.vals <- data.frame(missing.vals, type = rep("0", nrow(missing.vals)))
-    missing.vals <- missing.vals[, -3]
-    colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
-
-    missing.other <- data.frame(missing.other, type = rep("1", nrow(missing.other)))
-    missing.other <- missing.other[, -3]
-    colnames(missing.other) <- c("key", "total", "num", "pct", "type")
-
-    censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
-    censoring.vals <- censoring.vals[, -3]
-    colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
-
-    missing.other <- missing.other %>%
-      filter(missing.other$key %notin% censoring.vals$key)
-
-    missing.vals <- rbind(missing.vals, missing.other)
-
-    censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
-
+    censoring.vals %>%
+      ggplot() +
+      geom_bar(aes(x = reorder(.data$key, desc(.data$pct)),
+                   y = .data$pct, fill = .data$iscensor),
+               stat = "identity") +
+      scale_x_discrete(limits = levels,
+                       labels = paste(
+                         levels,
+                         " (",
+                         round((censoring.vals %>% filter(iscensor == TRUE) %>% arrange(desc(pct)))$pct, 2),
+                         "%)", sep = ""
+                       )) +
+      scale_fill_manual(name = "",
+                        values = c("steelblue", "lightgreen"),
+                        labels = c("Observed", "Censored")) +
+      coord_flip() +
+      labs(
+        x = "Variable",
+        y = "Percentage") +
+      ggtitle(title)
 
   }
 
-  no.miss.censor <- colnames(data)[colnames(data) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
+  else if ((!is.null(miss.index)) & (!is.null(censor.index))) {
 
-  if (length(no.miss.censor) == 0) {
-    complete.dat <- rbind(missing.vals,
-                          censoring.vals)
-  } else {
+    plot.dat <- as.data.frame(data)
+    miss.indx <- as.data.frame(miss.index)
+    censor.indx <- as.data.frame(censor.index)
 
-    no.miss.censor.mat <- NULL
+    miss.name <- colnames(miss.indx)
+    censor.name <- colnames(censor.indx)
 
-    for (i in 1:nrow(as.data.frame(no.miss.censor))) { # NOTE: as.data.frame transform vector to a column matrix
+    common.name  <- NULL
 
-      no.miss.censor.mat <- rbind(no.miss.censor.mat,
-                                  data.frame(key = no.miss.censor[i],
-                                             total = nrow(data),
-                                             num = nrow(data),
-                                             pct = 100,
-                                             type = 1))
+    for (i in 1:length(miss.name)) {
+
+      if (miss.name[i] %in% censor.name) common.name <- c(common.name, miss.name[i])
 
     }
 
-    colnames(no.miss.censor.mat) <- c("key", "total", "num", "pct", "type")
+    # (1) if all the variable have either missing or censored values
+    if (is.null(common.name)) {
 
-    complete.dat <- rbind(missing.vals,
-                          censoring.vals,
-                          no.miss.censor.mat)
+      missing.vals <- miss.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(isna = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$isna) %>%
+        summarise(num.isna = n()) %>%
+        mutate(pct = .data$num.isna / .data$total * 100)
+
+      censoring.vals <- censor.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(iscensor = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$iscensor) %>%
+        summarise(num.iscensor = n()) %>%
+        mutate(pct = .data$num.iscensor / .data$total * 100)
+
+      missing.vals <- data.frame(missing.vals, type = ifelse(missing.vals$isna == TRUE, "0", "1"))
+      missing.vals <- missing.vals[, -3]
+      colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
+
+      censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
+
+      censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
+      censoring.vals <- censoring.vals[, -3]
+      colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
+
+    }
+
+    # if some of the variables have both missing and censored values
+    else if (!is.null(common.name)) {
+
+      missing.vals <- miss.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(isna = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$isna) %>%
+        summarise(num.isna = n()) %>%
+        mutate(pct = .data$num.isna / .data$total * 100) %>%
+        filter(.data$isna == TRUE)
+
+      missing.other <- miss.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(isna = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$isna) %>%
+        summarise(num.isna = n()) %>%
+        mutate(miss.pct = .data$num.isna / .data$total * 100) %>%
+        filter(.data$isna == FALSE)
+
+      censoring.vals <- censor.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(iscensor = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$iscensor) %>%
+        summarise(num.iscensor = n()) %>%
+        mutate(pct = .data$num.iscensor / .data$total * 100) %>%
+        filter(!is.na(.data$iscensor))
+
+      missing.vals <- data.frame(missing.vals, type = rep("0", nrow(missing.vals)))
+      missing.vals <- missing.vals[, -3]
+      colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
+
+      missing.other <- data.frame(missing.other, type = rep("1", nrow(missing.other)))
+      missing.other <- missing.other[, -3]
+      colnames(missing.other) <- c("key", "total", "num", "pct", "type")
+
+      censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
+      censoring.vals <- censoring.vals[, -3]
+      colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
+
+      missing.other <- missing.other %>%
+        filter(missing.other$key %notin% censoring.vals$key)
+
+      missing.vals <- rbind(missing.vals, missing.other)
+
+      censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
+
+
+    }
+
+    no.miss.censor <- colnames(plot.dat)[colnames(plot.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
+
+    if (length(no.miss.censor) == 0) {
+      complete.dat <- rbind(missing.vals,
+                            censoring.vals)
+    } else {
+
+      no.miss.censor.mat <- NULL
+
+      for (i in 1:nrow(as.data.frame(no.miss.censor))) { # NOTE: as.data.frame transform vector to a column matrix
+
+        no.miss.censor.mat <- rbind(no.miss.censor.mat,
+                                    data.frame(key = no.miss.censor[i],
+                                               total = nrow(data),
+                                               num = nrow(data),
+                                               pct = 100,
+                                               type = 1))
+
+      }
+
+      colnames(no.miss.censor.mat) <- c("key", "total", "num", "pct", "type")
+
+      complete.dat <- rbind(missing.vals,
+                            censoring.vals,
+                            no.miss.censor.mat)
+    }
+
+    complete.dat <- complete.dat %>%
+      arrange(.data$key, .data$type)
+
+    complete.dat %>%
+      ggplot() +
+      geom_bar(aes(x = .data$key,
+                   y = as.numeric(.data$pct),
+                   fill = .data$type), stat = "identity") +
+      scale_fill_manual(name = "",
+                        values = c("tomato3", "steelblue", "lightgreen"),
+                        labels = c("Missing", "Observed", "Censored")) +
+      coord_flip() +
+      xlab("Variable") +
+      ylab("Percentage") +
+      ggtitle(title)
   }
-
-  complete.dat <- complete.dat %>%
-    arrange(.data$key, .data$type)
-
-  complete.dat %>%
-    ggplot() +
-    geom_bar(aes(x = .data$key,
-                 y = as.numeric(.data$pct),
-                 fill = .data$type), stat = "identity") +
-    scale_fill_manual(name = "",
-                      values = c("tomato3", "steelblue", "lightgreen"),
-                      labels = c("Missing", "Observed", "Censored")) +
-    coord_flip() +
-    xlab("Variable") +
-    ylab("Percentage") +
-    ggtitle(title)
-
 }
