@@ -202,6 +202,7 @@ visual.plot <- function(
       observing <- colnames(plot.dat)[colnames(plot.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
 
       if (length(observing) > 0) {
+
       observing.vals <- data.frame(
         key = observing,
         total = nrow(plot.dat),
@@ -330,6 +331,5 @@ visual.plot <- function(
       ylab("Percentage") +
       ggtitle(title)
 
-    # return(observing.vals)
   }
 }
