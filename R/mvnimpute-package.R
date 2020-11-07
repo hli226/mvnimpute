@@ -45,7 +45,7 @@ NULL
 #' @importFrom dplyr filter
 #' @importFrom dplyr arrange
 #' @importFrom dplyr n
-#' @importFrom dplyr desc
+#' @importFrom plyr desc
 #' @importFrom rlang .data
 NULL
 
