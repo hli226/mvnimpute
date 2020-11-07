@@ -4,7 +4,7 @@
 \alias{visual.plot}
 \title{Function for missing and censored data visualization}
 \usage{
-visual.plot(data, miss.index, censor.index, title = NULL)
+visual.plot(data, miss.index = NULL, censor.index = NULL, title = NULL)
 }
 \arguments{
 \item{data}{dataset that contains the missing and censored values}
