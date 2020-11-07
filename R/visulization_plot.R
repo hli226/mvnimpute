@@ -58,7 +58,9 @@ visual.plot <- function(
       )
 
       missing.vals <- rbind(missing.vals, no.missingfalse, no.missingtrue)
+
     }
+
     levels <- (missing.vals %>% filter(isna == TRUE) %>% arrange(desc(pct)))$key
 
     missing.vals %>%
@@ -121,6 +123,7 @@ visual.plot <- function(
       )
 
       censoring.vals <- rbind(censoring.vals, no.censoringfalse, no.censoringtrue)
+
     }
 
     levels <- (censoring.vals %>% filter(iscensor == TRUE) %>% arrange(desc(pct)))$key
@@ -196,6 +199,19 @@ visual.plot <- function(
       censoring.vals <- censoring.vals[, -3]
       colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
 
+      observing <- colnames(plot.dat)[colnames(plot.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
+
+      if (length(observing) > 0) {
+      observing.vals <- data.frame(
+        key = observing,
+        total = nrow(plot.dat),
+        num = rep(nrow(plot.dat), length(observing)),
+        pct = 100,
+        type = 1
+      )
+      }
+      complete.dat <- rbind(missing.vals, censoring.vals, observing.vals)
+
     }
 
     # if some of the variables have both missing and censored values
@@ -218,8 +234,23 @@ visual.plot <- function(
         mutate(total = n()) %>%
         group_by(.data$key, .data$total, .data$isna) %>%
         summarise(num.isna = n()) %>%
-        mutate(miss.pct = .data$num.isna / .data$total * 100) %>%
+        mutate(pct = .data$num.isna / .data$total * 100) %>%
         filter(.data$isna == FALSE)
+
+      no.missing <- missing.other$key[missing.other$key %notin% missing.vals$key]
+
+      if (length(no.missing) > 0) {
+
+        missing.0 <- data.frame(
+          key = no.missing,
+          total = nrow(plot.dat),
+          isna = rep(TRUE, length(no.missing)),
+          num.isna = rep(0, length(no.missing)),
+          pct = rep(0, length(no.missing))
+        )
+
+        missing.vals <- rbind(missing.vals, missing.0)
+      }
 
       censoring.vals <- censor.indx %>%
         gather(key = "key", value = "val") %>%
@@ -229,55 +260,58 @@ visual.plot <- function(
         group_by(.data$key, .data$total, .data$iscensor) %>%
         summarise(num.iscensor = n()) %>%
         mutate(pct = .data$num.iscensor / .data$total * 100) %>%
-        filter(!is.na(.data$iscensor))
+        filter(.data$iscensor == TRUE)
+
+      censoring.other <- censor.indx %>%
+        gather(key = "key", value = "val") %>%
+        mutate(iscensor = (.data$val == 1)) %>%
+        group_by(.data$key) %>%
+        mutate(total = n()) %>%
+        group_by(.data$key, .data$total, .data$iscensor) %>%
+        summarise(num.iscensor = n()) %>%
+        mutate(pct = .data$num.iscensor / .data$total * 100) %>%
+        filter(.data$iscensor == FALSE)
+
+      no.censoring <- censoring.other$key[censoring.other$key %notin% censoring.vals$key]
+
+      if (length(no.censoring) > 0) {
+
+        censoring.0 <- data.frame(
+          key = no.censoring,
+          total = nrow(plot.dat),
+          iscensor = rep(TRUE, length(no.censoring)),
+          num.iscensor = rep(0, length(no.censoring)),
+          pct = rep(0, length(no.censoring))
+        )
+
+        censoring.vals <- rbind(censoring.vals, censoring.0)
+
+      }
 
       missing.vals <- data.frame(missing.vals, type = rep("0", nrow(missing.vals)))
       missing.vals <- missing.vals[, -3]
       colnames(missing.vals) <- c("key", "total", "num", "pct", "type")
-
-      missing.other <- data.frame(missing.other, type = rep("1", nrow(missing.other)))
-      missing.other <- missing.other[, -3]
-      colnames(missing.other) <- c("key", "total", "num", "pct", "type")
+      missing.vals <- missing.vals[order(missing.vals$key), ]
 
       censoring.vals <- data.frame(censoring.vals, type = ifelse(censoring.vals$iscensor == TRUE, "2", "1"))
       censoring.vals <- censoring.vals[, -3]
       colnames(censoring.vals) <- c("key", "total", "num", "pct", "type")
+      censoring.vals <- censoring.vals[order(censoring.vals$key), ]
 
-      missing.other <- missing.other %>%
-        filter(missing.other$key %notin% censoring.vals$key)
-
-      missing.vals <- rbind(missing.vals, missing.other)
-
-      censoring.vals <- censoring.vals[order(censoring.vals[, 1]), ]
-
-
-    }
-
-    no.miss.censor <- colnames(plot.dat)[colnames(plot.dat) %notin% c(unique(missing.vals$key), unique(censoring.vals$key))]
-
-    if (length(no.miss.censor) == 0) {
-      complete.dat <- rbind(missing.vals,
-                            censoring.vals)
-    } else {
-
-      no.miss.censor.mat <- NULL
-
-      for (i in 1:nrow(as.data.frame(no.miss.censor))) { # NOTE: as.data.frame transform vector to a column matrix
-
-        no.miss.censor.mat <- rbind(no.miss.censor.mat,
-                                    data.frame(key = no.miss.censor[i],
-                                               total = nrow(data),
-                                               num = nrow(data),
-                                               pct = 100,
-                                               type = 1))
-
-      }
-
-      colnames(no.miss.censor.mat) <- c("key", "total", "num", "pct", "type")
+      observing.vals <- data.frame(
+        key = missing.vals$key,
+        total = rep(nrow(plot.dat), length(missing.vals$key)),
+        num = nrow(plot.dat) - missing.vals$num - censoring.vals$num,
+        pct = (nrow(plot.dat) - missing.vals$num - censoring.vals$num) / nrow(plot.dat),
+        type = rep(1, length(missing.vals$key))
+      )
 
       complete.dat <- rbind(missing.vals,
                             censoring.vals,
-                            no.miss.censor.mat)
+                            observing.vals)
+
+      complete.dat$pct <- complete.dat$num / complete.dat$total * 100
+
     }
 
     complete.dat <- complete.dat %>%
@@ -295,5 +329,7 @@ visual.plot <- function(
       xlab("Variable") +
       ylab("Percentage") +
       ggtitle(title)
+
+    # return(observing.vals)
   }
 }
