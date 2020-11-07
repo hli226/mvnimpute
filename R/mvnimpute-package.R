@@ -35,6 +35,7 @@ NULL
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
 #' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 scale_x_discrete
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>%
 #' @importFrom tidyr gather
@@ -44,6 +45,7 @@ NULL
 #' @importFrom dplyr filter
 #' @importFrom dplyr arrange
 #' @importFrom dplyr n
+#' @importFrom dplyr desc
 #' @importFrom rlang .data
 NULL
 
