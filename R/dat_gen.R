@@ -124,8 +124,8 @@ dat.gen <- function(
       # down <- quantile(fully.obs, prob = 0.65)
 
       # select n pairs from the censored values as the limits of censoring
-      t1 <- runif(n, max(censor.dat) * 0.6, max(censor.dat) * 0.65)
-      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.78)
+      t1 <- runif(n, max(censor.dat) * 0.4, max(censor.dat) * 0.65)
+      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.88)
 
       # t1 <- rexp(n, 1 / up)
       # t2 <- rexp(n , 1 / down)
@@ -238,8 +238,8 @@ dat.gen <- function(
       # t1 <- rexp(n, 1 / up)
       # t2 <- rexp(n , 1 / down)
 
-      t1 <- runif(n, max(censor.dat) * 0.6, max(censor.dat) * 0.65)
-      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.78)
+      t1 <- runif(n, max(censor.dat) * 0.4, max(censor.dat) * 0.65)
+      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.88)
 
       censor.ll[, i] <- t1
       censor.ul[, i] <- t2
