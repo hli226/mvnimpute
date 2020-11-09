@@ -23,7 +23,8 @@ visual.plot <- function(
 
   `%notin%` <- Negate(`%in%`)
 
-  if ((!is.null(miss.index)) & (is.null(censor.index))) {
+  # 1. data only has missing values
+  if (!is.null(miss.index) & is.null(censor.index)) {
     # either missing or censoring index is null matrix
     plot.dat <- data
     miss.indx <- as.data.frame(miss.index)
@@ -86,10 +87,9 @@ visual.plot <- function(
 
   }
 
-  # 2. data only has censoring values
-  else if ((is.null(miss.index)) & (!is.null(censor.index))) {
+  # 2. data only has censored values
+  else if (is.null(miss.index) & !is.null(censor.index)) {
 
-    # either missing or censoring index is null matrix
     plot.dat <- data
     censor.indx <- as.data.frame(censor.index)
 
@@ -151,7 +151,7 @@ visual.plot <- function(
 
   }
 
-  else if ((!is.null(miss.index)) & (!is.null(censor.index))) {
+  else if (!is.null(miss.index) & !is.null(censor.index)) {
 
     plot.dat <- as.data.frame(data)
     miss.indx <- as.data.frame(miss.index)
@@ -332,4 +332,5 @@ visual.plot <- function(
       ggtitle(title)
 
   }
+
 }

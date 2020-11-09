@@ -34,6 +34,7 @@ NULL
 #' @importFrom ggplot2 geom_bar
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
+#' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_fill_manual
 #' @importFrom ggplot2 scale_x_discrete
 #' @importFrom reshape2 melt

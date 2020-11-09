@@ -103,7 +103,7 @@ dat.gen <- function(
       dat[, miss.p][miss.in == 1] <- NA
     }
 
-    ### censoring data
+    ### censored data
     ### generate censoring times
 
     censor.ll <- matrix(NA, nrow = n, ncol = censor.num) # lower limit of the censoring interval
@@ -116,16 +116,25 @@ dat.gen <- function(
 
       censor.p <- censor.pos[i]
 
-      # censoring times
+      # censored times
 
-      t1 <- rexp(n, 1 / up)
-      t2 <- rexp(n , 1 / down)
-      censor.ll[, i] <- pmin(t1, t2)
-      censor.ul[, i] <- pmax(t1, t2)
+      censor.dat <- dat[, censor.p]
+
+      # up <- quantile(fully.obs, prob = 0.45)
+      # down <- quantile(fully.obs, prob = 0.65)
+
+      # select n pairs from the censored values as the limits of censoring
+      t1 <- runif(n, max(censor.dat) * 0.6, max(censor.dat) * 0.65)
+      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.78)
+
+      # t1 <- rexp(n, 1 / up)
+      # t2 <- rexp(n , 1 / down)
+      censor.ll[, i] <- t1
+      censor.ul[, i] <- t2
 
       # generating censoring indices
 
-      censor.dat <- dat[, censor.p]
+      # censor.dat <- dat[, censor.p]
       censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
 
       # set the value where data is censoring to NaN
@@ -223,13 +232,17 @@ dat.gen <- function(
 
     for (i in 1:censor.num) {
       censor.p <- censor.pos[i]
-      t1 <- rexp(n, 1 / up)
-      t2 <- rexp(n , 1 / down)
-
-      censor.ll[, i] <- pmin(t1, t2)
-      censor.ul[, i] <- pmax(t1, t2)
 
       censor.dat <- dat[, censor.p]
+
+      # t1 <- rexp(n, 1 / up)
+      # t2 <- rexp(n , 1 / down)
+
+      t1 <- runif(n, max(censor.dat) * 0.6, max(censor.dat) * 0.65)
+      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.78)
+
+      censor.ll[, i] <- t1
+      censor.ul[, i] <- t2
 
       censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
 

@@ -100,7 +100,7 @@ multiple.impute <- function(
     y.bar <- apply(iter.dat, 2, mean)
     mu.n <- kappa.0 * mu.0 / (kappa.0 + n) + n  * y.bar / (kappa.0 + n)
 
-    # P-step
+    ###### P-step
     # update mu vector from normal distribution condition on Sigma
     mu.iter <- rmvnorm(1, mean = mu.n, sig.iter/kappa.n)
 
