@@ -109,8 +109,8 @@ dat.gen <- function(
     censor.ll <- matrix(NA, nrow = n, ncol = censor.num) # lower limit of the censoring interval
     censor.ul <- matrix(NA, nrow = n, ncol = censor.num) # upper limit of the censoring interval
     censor.indx <- matrix(NA, nrow = n, ncol = censor.num) # censoring indices
-    up <- quantile(fully.obs, prob = 0.45)
-    down <- quantile(fully.obs, prob = 0.65)
+    # up <- quantile(fully.obs, prob = 0.45)
+    # down <- quantile(fully.obs, prob = 0.65)
 
     for (i in 1:censor.num) {
 
@@ -184,7 +184,7 @@ dat.gen <- function(
     for (i in 1:miss.num) {
 
       # randomly generate missing probability
-      miss.prob <- sample(seq(0.1, 0.3, by = 0.001), 1, replace = TRUE)
+      miss.prob <- sample(seq(0.1, 0.5, by = 0.001), 1, replace = TRUE)
       miss.point[i] <- sort(fully.obs)[miss.prob * length(fully.obs)]
 
       # MAR missing mechanism
@@ -227,8 +227,8 @@ dat.gen <- function(
     censor.ll <- matrix(NA, nrow = n, ncol = censor.num)
     censor.ul <- matrix(NA, nrow = n, ncol = censor.num)
     censor.indx <- matrix(NA, nrow = n, ncol = censor.num)
-    up <- quantile(fully.obs, prob = 0.45)
-    down <- quantile(fully.obs, prob = 0.65)
+    # up <- quantile(fully.obs, prob = 0.45)
+    # down <- quantile(fully.obs, prob = 0.65)
 
     for (i in 1:censor.num) {
       censor.p <- censor.pos[i]
