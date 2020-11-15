@@ -32,6 +32,7 @@ Here we generate a 10-dimensional multivariate normal data using the **data.gen*
 p <- 10; m <- 4; n <- 4
 mu.vec <- rnorm(p, 5, 0.5)
 sample.size <- 2000
+set.seed(123)
 V <- clusterGeneration::genPositiveDefMat("eigen", dim = p)
 
 dat <- dat.gen(
@@ -147,6 +148,7 @@ The plot above shows the percentage of missing, censored, and observed values ac
 First of all, as the incomplete data includes unobserved data, we need to fill those values up by some simple methods before running multiple imputation. Currently, the **initial.impute** function only incorporates the stochastic regression method in which the unobserved values are generated from the normal distribution with means and variances as the complete-cases means and variances, for the initial stage of filling up the unobserved values.
 
 ```{r, message = FALSE}
+set.seed(123)
 fil.dat <- initial.impute(dat$comp.dat, miss.indx, miss.pos, censor.indx, censor.pos)
 
 # take a glance at the first few rows
@@ -204,7 +206,8 @@ For doing multiple imputation, the **multiple.impute** function requires several
 
 ```{r, message = FALSE}
 # multiple imputation
-iter <- 500
+iter <- 1000
+set.seed(123)
 sim.dat <- multiple.impute(
   iter = iter,           # number of iterations
   prior.params = prior.param,    # prior specifications

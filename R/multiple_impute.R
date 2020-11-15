@@ -96,22 +96,9 @@ multiple.impute <- function(
 
   for (i in 1:iter) { ## iteration number
 
-    ### posterior parameters
-    y.bar <- apply(iter.dat, 2, mean)
-    mu.n <- kappa.0 * mu.0 / (kappa.0 + n) + n  * y.bar / (kappa.0 + n)
-
-    ###### P-step
-    # update mu vector from normal distribution condition on Sigma
-    mu.iter <- rmvnorm(1, mean = mu.n, sig.iter/kappa.n)
-
-    # posterior parameters for covariance matrix
-    S <- apply(iter.dat, 1, "-", mu.iter) %*%
-      t(apply(iter.dat, 1, "-", mu.iter))
-
-    Lambda.n <- Lambda.0 + S + kappa.0 * n * (y.bar - mu.0) %*% t(y.bar - mu.0) / (kappa.0 + n)
-
-    # update Sigma from inverse-Wishart distribution
-    sig.iter <- rinvwishart(nu.n, Lambda.n)
+    ###########################################
+    ## 1. Use starting values to update data ##
+    ###########################################
 
     # SWP to calculate conditional parameters
     cond.param <- conditional.parameters(iter.dat) # sweep operator
@@ -290,6 +277,27 @@ multiple.impute <- function(
         }
       }
     }
+
+    ############################################
+    ## 2. Use update data to update paramters ##
+    ############################################
+
+    ### posterior parameters
+    y.bar <- apply(iter.dat, 2, mean)
+    mu.n <- kappa.0 * mu.0 / (kappa.0 + n) + n  * y.bar / (kappa.0 + n)
+
+    ###### P-step
+    # update mu vector from normal distribution condition on Sigma
+    mu.iter <- rmvnorm(1, mean = mu.n, sig.iter/kappa.n)
+
+    # posterior parameters for covariance matrix
+    S <- apply(iter.dat, 1, "-", mu.iter) %*%
+      t(apply(iter.dat, 1, "-", mu.iter))
+
+    Lambda.n <- Lambda.0 + S + kappa.0 * n * (y.bar - mu.0) %*% t(y.bar - mu.0) / (kappa.0 + n)
+
+    # update Sigma from inverse-Wishart distribution
+    sig.iter <- rinvwishart(nu.n, Lambda.n)
 
     # renames
     rownames(sig.iter) <- colnames(sig.iter) <- colnames(iter.dat)
