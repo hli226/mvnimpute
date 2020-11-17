@@ -21,6 +21,8 @@ NULL
 #' @importFrom stats rnorm
 #' @importFrom stats complete.cases
 #' @importFrom stats density
+#' @importFrom stats runif
+#' @importFrom stats reorder
 #' @importFrom graphics plot
 #' @importFrom graphics abline
 #' @importFrom LaplacesDemon rinvwishart

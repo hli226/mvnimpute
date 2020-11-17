@@ -62,7 +62,7 @@ visual.plot <- function(
 
     }
 
-    levels <- (missing.vals %>% filter(isna == TRUE) %>% arrange(desc(pct)))$key
+    levels <- (missing.vals %>% filter(.data$isna == TRUE) %>% arrange(desc(.data$pct)))$key
 
     missing.vals %>%
       ggplot() +
@@ -73,7 +73,7 @@ visual.plot <- function(
                        labels = paste(
                          levels,
                          " (",
-                         round((missing.vals %>% filter(isna == TRUE) %>% arrange(desc(pct)))$pct, 2),
+                         round((missing.vals %>% filter(.data$isna == TRUE) %>% arrange(desc(.data$pct)))$pct, 2),
                          "%)", sep = ""
                        )) +
       scale_fill_manual(name = "",
@@ -126,7 +126,7 @@ visual.plot <- function(
 
     }
 
-    levels <- (censoring.vals %>% filter(iscensor == TRUE) %>% arrange(desc(pct)))$key
+    levels <- (censoring.vals %>% filter(.data$iscensor == TRUE) %>% arrange(desc(.data$pct)))$key
 
     censoring.vals %>%
       ggplot() +
@@ -137,7 +137,7 @@ visual.plot <- function(
                        labels = paste(
                          levels,
                          " (",
-                         round((censoring.vals %>% filter(iscensor == TRUE) %>% arrange(desc(pct)))$pct, 2),
+                         round((censoring.vals %>% filter(.data$iscensor == TRUE) %>% arrange(desc(.data$pct)))$pct, 2),
                          "%)", sep = ""
                        )) +
       scale_fill_manual(name = "",

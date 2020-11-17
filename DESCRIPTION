@@ -8,7 +8,7 @@ Maintainer: Hesen Li <hli226@uic.edu>
 URL: https://github.com/yuebanfengqing/mvnimpute
 BugReports: https://github.com/yuebanfengqing/mvnimpute/issues
 Description: This package implements multiple imputation for missing and censored data under multivariate normality assumption.
-License: GPL-3
+License: GPL-2|GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
