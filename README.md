@@ -16,7 +16,9 @@ package directly from GitHub (R &gt;= 3.6.0) or from local source file.
 
 ### From GitHub
 
-You can install **mvnimpute** package in development version from
+**NOTE: To correctly install the package from GitHub, you have to update
+the R software to at least version 3.6.0**. You can install
+**mvnimpute** package in development version from
 [GitHub](https://github.com) with:
 
 ``` r
@@ -28,8 +30,6 @@ add `built_vignettes = TRUE` argument to include vignette in the
 downloaded package. You have to install the development package
 **devtools** for installing packages from GitHub. The packages that
 **mvnimpute** depends on will be automatically downloaded and installed.
-**NOTE: To correctly install the package from GitHub, you have to update
-the R software to at least version 3.6.0**.
 
 ### From local file
 
