@@ -9,6 +9,8 @@
 #' @param title title of the generated plot.
 #'
 #' @details The function generates the trace plot of simulated values across iterations.
+#' \code{iter} can be any number of iterations you want to draw, the corresponding number of rows
+#' of the data is \code{iter} + 1.
 #'
 #' @return The plot of simulated values across iterations.
 #'

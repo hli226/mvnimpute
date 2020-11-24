@@ -35,4 +35,6 @@ Generates average simulated values of the parameter values
 }
 \details{
 This function calculates the average simulated values across simulations.
+\code{iter} can be any number of iterations you want to draw, the corresponding number of rows
+of the data should be \code{iter} + 1.
 }

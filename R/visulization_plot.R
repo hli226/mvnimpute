@@ -2,17 +2,17 @@
 #'
 #' Draws the plots that graphically presents the percentage of the missing, censored and observed data
 #'
-#' @param data dataset that contains the missing and censored values
-#' @param miss.index missing index indicating the missing data in the original dataset
-#' @param censor.index censoring index indicating the censored data in the original dataset
-#' @param title the title of the plot. Default is NULL.
+#' @param data dataset with missing and censored values
+#' @param miss.index matrix containing the missing index
+#' @param censor.index matrix containing the censoring index
+#' @param title the title of the plot. Default is NULL
 #'
 #' @details The function draws the plot that graphically shows the percentage of the missing, censored and observed
 #' data in the dataset. Column names of the \code{miss.indx} and \code{censor.indx} matrices should correspond
 #' to the respective variable names that are subject to either missing or censoring, and those names should be
 #' handled beforehand.
 #'
-#' @return graph that shows the details of the different type of data in the dataset
+#' @return The plot that shows the details of the different type of data in the dataset
 #'
 #' @export
 visual.plot <- function(

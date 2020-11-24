@@ -17,20 +17,20 @@ initial.impute(
 
 \item{miss.index}{matrix containing the missing index}
 
-\item{miss.pos}{position of variables with missing values in the original dataset}
+\item{miss.pos}{vector containing the positions of variables with missing values in the original dataset}
 
 \item{censor.index}{matrix containing the censoring index}
 
-\item{censor.pos}{position of variables with censored values in the original dataset}
+\item{censor.pos}{vector containing the positions of variables with censored values in the original dataset}
 }
 \value{
-a complete dataset with missing values filled in
+a complete dataset with missing and censored values filled in
 }
 \description{
 Fills in data with missing and censored values for multiple imputation
 }
 \details{
-The unobserved values will initially be filled in by some single imputation methods.
+The unobserved values are initially filled in by some single imputation methods.
 Currently, it only supports generating random values from the normal distribution with the
 mean and variance as the complete-case mean and variance, respectively.
 }

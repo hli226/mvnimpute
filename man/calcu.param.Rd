@@ -11,8 +11,7 @@ calcu.param(data)
 }
 \value{
 A list of length 5 containing the available-case mean and variance for each variable,
-the complete-case covariance matrix,
-the complete-case mean and variance for each variable.
+the complete-case covariance matrix, mean and variance for each variable.
 }
 \description{
 Calculates the complete-case and available-case parameters

@@ -1,11 +1,11 @@
-#' Marginal plots function
+#' Marginal density plots function
 #'
 #' Draws the marginal density plots for each variable
 #'
 #' @param data dataset containing all the variables
 #' @param title title of the generated plots
 #'
-#' @return Marginal density plots for each variable in the dataset
+#' @return Marginal density plot for each variable in the dataset
 #'
 #' @export
 marg.plot <- function(data, title = NULL) {

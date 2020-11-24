@@ -4,15 +4,15 @@
 #'
 #' @param data dataset with missing and censored values
 #' @param miss.index matrix containing the missing index
-#' @param miss.pos position of variables with missing values in the original dataset
+#' @param miss.pos vector containing the positions of variables with missing values in the original dataset
 #' @param censor.index matrix containing the censoring index
-#' @param censor.pos position of variables with censored values in the original dataset
+#' @param censor.pos vector containing the positions of variables with censored values in the original dataset
 #'
-#' @details The unobserved values will initially be filled in by some single imputation methods.
+#' @details The unobserved values are initially filled in by some single imputation methods.
 #' Currently, it only supports generating random values from the normal distribution with the
 #' mean and variance as the complete-case mean and variance, respectively.
 #'
-#' @return a complete dataset with missing values filled in
+#' @return a complete dataset with missing and censored values filled in
 #' @export
 initial.impute <- function(data,
                            miss.index = NULL, miss.pos = NULL,

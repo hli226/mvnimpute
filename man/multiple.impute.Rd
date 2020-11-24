@@ -21,17 +21,17 @@ multiple.impute(
 \arguments{
 \item{iter}{number of rounds for doing multiple imputation}
 
-\item{prior.params}{list of prior parameter values}
+\item{prior.params}{list of prior parameter specifications}
 
-\item{initial.values}{list of initial values}
+\item{initial.values}{list of starting values}
 
 \item{data}{dataset to do multiple imputation}
 
-\item{miss.index}{matrix of missing index}
+\item{miss.index}{matrix containing the missing index}
 
 \item{miss.pos}{vector containing the positions of variables with missing values in the original dataset}
 
-\item{censor.index}{matrix of censoring index}
+\item{censor.index}{matrix containing the censoring index}
 
 \item{censor.pos}{vector containing the position of variables with censored values in the original dataset}
 
@@ -40,14 +40,14 @@ multiple.impute(
 \item{censor.type}{discrete variable specifying the censoring type, it takes "left" for left-censoring, "right" for right-censoring,
 and "interval" for interval-censoring}
 
-\item{details}{boolean variable indicating whether the running status is printed in the console. Default is TRUE}
+\item{details}{boolean variable indicating whether the running status is printed in the console. Default set to TRUE}
 }
 \value{
 A list of length 5 including
 
-\code{simulated.mu}: The matrix containing the simulated mean values for each variable from each iteration
+\code{simulated.mu}: The matrix containing the simulated mean values for each variable from each iteration, including the starting values
 
-\code{simulated.sig}: The matrix containing the simulated variance values for each variable from each iteration
+\code{simulated.sig}: The matrix containing the simulated variance values for each variable from each iteration, including the starting values
 
 \code{simulated.cov}: A list including the simulated covariance matrix from each iteration
 

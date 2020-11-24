@@ -10,6 +10,8 @@
 #' @param details logical variable to specify whether the average simulated values are returned, default is set to FALSE.
 #'
 #' @details This function calculates the average simulated values across simulations.
+#' \code{iter} can be any number of iterations you want to draw, the corresponding number of rows
+#' of the data should be \code{iter} + 1.
 #'
 #' @return The plot of averaged values across iterations. If \code{details} = TRUE,
 #' a matrix containing the averaged values of all the variables across iterations will be returned.

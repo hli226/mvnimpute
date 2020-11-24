@@ -7,16 +7,16 @@
 visual.plot(data, miss.index = NULL, censor.index = NULL, title = NULL)
 }
 \arguments{
-\item{data}{dataset that contains the missing and censored values}
+\item{data}{dataset with missing and censored values}
 
-\item{miss.index}{missing index indicating the missing data in the original dataset}
+\item{miss.index}{matrix containing the missing index}
 
-\item{censor.index}{censoring index indicating the censored data in the original dataset}
+\item{censor.index}{matrix containing the censoring index}
 
-\item{title}{the title of the plot. Default is NULL.}
+\item{title}{the title of the plot. Default is NULL}
 }
 \value{
-graph that shows the details of the different type of data in the dataset
+The plot that shows the details of the different type of data in the dataset
 }
 \description{
 Draws the plots that graphically presents the percentage of the missing, censored and observed data

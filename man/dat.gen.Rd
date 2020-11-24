@@ -26,13 +26,14 @@ A list of 10 including:
 
 \code{comp.dat}: The incomplete data after the missing and censoring information applied.
 
-\code{miss.indx}: The matrix containing the missing index for the missing data. 1 for missing values, 0 for oberved values.
+\code{miss.indx}: The matrix containing the missing index for the missing data. 1 for missing values, 0 for observed values.
 
-\code{miss.pos}: The vector indicating the position of the missing variables in the original dataset.
+\code{miss.pos}: The vector indicating the position of the variables subject to missing in the original dataset.
 
-\code{miss.point}: The vector containing the cutoff values for the missing data. For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
+\code{miss.point}: The vector containing the cutoff values for the missing data.
+For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
 
-\code{censor.pos}: The vector indicating the position of the censored variables in the original dataset.
+\code{censor.pos}: The vector indicating the position of the variables subject to censoring in the original dataset.
 
 \code{censor.indx}: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
 
@@ -46,11 +47,13 @@ A list of 10 including:
 Generates multivariate normal data
 }
 \details{
-The function generates the multivariate normal data that can be used to verify the correctness of the multiple imputation
-algorithm. Users have to specify the mean vector, variance covariance matrix, sample size and dimension of the generated data, and
-the desired number of variables subject to missing and censoring, respectively. Currently, it only supports generating the data with
-a certain type of MAR missing mechanism and interval censoring mechanism, in which case there should be at least one variable that is fully
-observed in the dataset.
+This function generates the multivariate normal data that can be used to
+verify the correctness of the multiple imputation algorithm. Users have to specify
+the mean vector, variance covariance matrix, sample size and dimension of the generated
+data, and the desired number of variables subject to missing and censoring, respectively.
+Currently, it only supports generating the data with a certain type of MAR missing mechanism
+and interval censoring mechanism, in which case there should be at least one variable that is
+fully observed in the dataset.
 }
 \examples{
 n <- 1000

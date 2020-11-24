@@ -8,12 +8,12 @@
 #' @param title title of the generated autocorrelation plots
 #' @param details boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE
 #'
-#' @details This function calculates the autocorrelation values of all the variables on a column by column base.
-#' The default value of \code{lag} is set as 50, the maximum number of lag should not exceed the number of row of the dataset,
+#' @details This function calculates the autocorrelations of all the variables on a column by column base.
+#' The default value of \code{lag} is set as 50, the maximum number of lag should not exceed the number of rows of the dataset,
 #' which reflects the corresponding number of iteration of running the multiple imputation.
 #'
-#' @return A matrix containing the calculated autocorrelations of all the variables in the dataset. If \code{plot} = TRUE,
-#' the autocorrelation plots of all the variables will be drawn.
+#' @return If \code{details} = TRUE, a matrix containing the calculated autocorrelations of all the variables in the dataset will be returned.
+#' If \code{plot} = TRUE, the autocorrelation plots of all the variables will be drawn.
 #'
 #' @export
 calcu.acf <- function(data, lag = 50, plot = TRUE, title = NULL, details = FALSE) {

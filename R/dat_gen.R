@@ -9,7 +9,7 @@
 #' @param miss.num number of variables having missing values
 #' @param censor.num number of variables having censored values
 #'
-#' @details The function generates the multivariate normal data that can be used to
+#' @details This function generates the multivariate normal data that can be used to
 #' verify the correctness of the multiple imputation algorithm. Users have to specify
 #' the mean vector, variance covariance matrix, sample size and dimension of the generated
 #' data, and the desired number of variables subject to missing and censoring, respectively.
@@ -36,7 +36,8 @@
 #'
 #' \code{miss.pos}: The vector indicating the position of the variables subject to missing in the original dataset.
 #'
-#' \code{miss.point}: The vector containing the cutoff values for the missing data. For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
+#' \code{miss.point}: The vector containing the cutoff values for the missing data.
+#' For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
 #'
 #' \code{censor.pos}: The vector indicating the position of the variables subject to censoring in the original dataset.
 #'

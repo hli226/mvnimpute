@@ -2,7 +2,7 @@
 % Please edit documentation in R/marginal_plot.R
 \name{marg.plot}
 \alias{marg.plot}
-\title{Marginal plots function}
+\title{Marginal density plots function}
 \usage{
 marg.plot(data, title = NULL)
 }
@@ -12,7 +12,7 @@ marg.plot(data, title = NULL)
 \item{title}{title of the generated plots}
 }
 \value{
-Marginal density plots for each variable in the dataset
+Marginal density plot for each variable in the dataset
 }
 \description{
 Draws the marginal density plots for each variable

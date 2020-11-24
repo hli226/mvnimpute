@@ -3,17 +3,17 @@
 #' Implements the multiple imputation for both missing and censored values
 #'
 #' @param iter number of rounds for doing multiple imputation
-#' @param prior.params list of prior parameter values
-#' @param initial.values list of initial values
+#' @param prior.params list of prior parameter specifications
+#' @param initial.values list of starting values
 #' @param data dataset to do multiple imputation
-#' @param miss.index matrix of missing index
+#' @param miss.index matrix containing the missing index
 #' @param miss.pos vector containing the positions of variables with missing values in the original dataset
-#' @param censor.index matrix of censoring index
+#' @param censor.index matrix containing the censoring index
 #' @param censor.pos vector containing the position of variables with censored values in the original dataset
 #' @param censor.values list containing cutoff values for the censored variables
 #' @param censor.type discrete variable specifying the censoring type, it takes "left" for left-censoring, "right" for right-censoring,
 #' and "interval" for interval-censoring
-#' @param details boolean variable indicating whether the running status is printed in the console. Default is TRUE
+#' @param details boolean variable indicating whether the running status is printed in the console. Default set to TRUE
 #'
 #' @details This function implements the multiple imputation algorithm that concurrently handles missing and censored values. This
 #' function requires matrices that contain the respective index of missing or censored values, and vectors that specify the
@@ -27,9 +27,9 @@
 #'
 #' @return A list of length 5 including
 #'
-#' \code{simulated.mu}: The matrix containing the simulated mean values for each variable from each iteration
+#' \code{simulated.mu}: The matrix containing the simulated mean values for each variable from each iteration, including the starting values
 #'
-#' \code{simulated.sig}: The matrix containing the simulated variance values for each variable from each iteration
+#' \code{simulated.sig}: The matrix containing the simulated variance values for each variable from each iteration, including the starting values
 #'
 #' \code{simulated.cov}: A list including the simulated covariance matrix from each iteration
 #'
@@ -279,7 +279,7 @@ multiple.impute <- function(
     }
 
     ############################################
-    ## 2. Use update data to update paramters ##
+    ## 2. Use updated data to update parameters ##
     ############################################
 
     ### posterior parameters
