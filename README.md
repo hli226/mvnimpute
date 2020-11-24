@@ -4,13 +4,13 @@
 # mvnimpute
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
 variable can have missing and censoring simultaneously; or it can have
-either only missing or censored values)
+either only missing or censored values). **NOTE: To correctly install
+this package, you have to update the R software to at least 3.6.0.**
 
 ## Installation
 
