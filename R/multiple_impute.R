@@ -288,7 +288,7 @@ multiple.impute <- function(
 
     ###### P-step
     # update mu vector from normal distribution condition on Sigma
-    mu.iter <- rmvnorm(1, mean = mu.n, sig.iter/kappa.n)
+    mu.iter <- mvrnorm(1, mu.n, sig.iter/kappa.n)
 
     # posterior parameters for covariance matrix
     S <- apply(iter.dat, 1, "-", mu.iter) %*%
