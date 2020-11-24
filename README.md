@@ -9,10 +9,12 @@
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
 variable can have missing and censoring simultaneously; or it can have
-either only missing or censored values). **NOTE: To correctly install
-this package, you have to update the R software to at least 3.6.0.**
+either only missing or censored values). You can either install this
+package directly from GitHub (R &gt;= 3.6.0) or from local source file.
 
 ## Installation
+
+### From GitHub
 
 You can install **mvnimpute** package in development version from
 [GitHub](https://github.com) with:
@@ -26,6 +28,40 @@ add `built_vignettes = TRUE` argument to include vignette in the
 downloaded package. You have to install the development package
 **devtools** for installing packages from GitHub. The packages that
 **mvnimpute** depends on will be automatically downloaded and installed.
+**NOTE: To correctly install the package from GitHub, you have to update
+the R software to at least version 3.6.0**.
+
+### From local file
+
+For R version number less than 3.5.0, you have to install corresponding
+Rtools from <https://cran.r-project.org/bin/windows/Rtools/history.html>
+to the system PATH before running the following code.
+
+Please email to <hli226@uic.edu> for the latest compiled package source
+file. For installing package from local source file, you have to
+manually install the dependencies first and as
+
+``` r
+## install dependencies
+install.packages("ggplot2")
+install.packages("truncnorm")
+install.packages("mvtnorm")
+install.packages("reshape2")
+install.packages("LaplacesDemon")
+install.packages("dplyr")
+install.packages("magrittr")
+install.packages("tidyr")
+install.packages("rlang")
+```
+
+Then the package can be installed with replacing the *path-of-file* by
+your local path that stores the package source file
+(**mvnimpute\_0.0.0.9000.tar.gz**) as
+
+``` r
+## install mvnimpute package from local source file
+install.packages("path-of-file/mvnimpute_0.0.0.9000.tar.gz", repos = NULL, type = "source")
+```
 
 ## Basic functions
 
