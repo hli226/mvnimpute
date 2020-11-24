@@ -33,13 +33,14 @@ the R software to at least version 3.6.0**.
 
 ### From local file
 
-For R version number less than 3.5.0, you have to install corresponding
-Rtools from <https://cran.r-project.org/bin/windows/Rtools/history.html>
-to the system PATH before running the following code.
+For R version number less than **3.5.0**, you have to install the
+corresponding Rtools from
+<https://cran.r-project.org/bin/windows/Rtools/history.html> to the
+system PATH before running the following code.
 
 Please email to <hli226@uic.edu> for the latest compiled package source
 file. For installing package from local source file, you have to
-manually install the dependencies first and as
+manually install the dependencies first as
 
 ``` r
 ## install dependencies
