@@ -16,7 +16,7 @@ Imports:
     ggplot2,
     truncnorm,
     MASS,
-    mvtnorm,
+    MASS,
     reshape2,
     LaplacesDemon,
     dplyr,

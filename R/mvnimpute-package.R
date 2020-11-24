@@ -11,7 +11,7 @@
 #'  Hesen Li
 NULL
 # various imports
-#' @importFrom mvtnorm rmvnorm
+#' @importFrom MASS mvrnorm
 #' @importFrom stats quantile
 #' @importFrom stats rexp
 #' @importFrom stats na.omit
