@@ -32,7 +32,7 @@ The goal of **mvnimpute** package is to implement multiple imputation to the dat
 devtools::install_github("yuebanfengqing/mvnimpute")
 ```
 
-add `build_vignettes = TRUE` argument to include vignette in the downloaded package. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.  
+add `build_vignettes = TRUE` argument to include vignette in the downloaded package, you may have to include `force = TRUE` to force installation. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.  
 
 ### From local file
 
@@ -42,13 +42,12 @@ Please email to hli226@uic.edu for the latest compiled package source file. For 
 
 ``` r
 ## install dependencies
+install.packages("magrittr")
 install.packages("ggplot2")
 install.packages("truncnorm")
-install.packages("mvtnorm")
 install.packages("reshape2")
 install.packages("LaplacesDemon")
 install.packages("dplyr")
-install.packages("magrittr")
 install.packages("tidyr")
 install.packages("rlang")
 ```

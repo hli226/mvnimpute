@@ -27,9 +27,10 @@ devtools::install_github("yuebanfengqing/mvnimpute")
 ```
 
 add `build_vignettes = TRUE` argument to include vignette in the
-downloaded package. You have to install the development package
-**devtools** for installing packages from GitHub. The packages that
-**mvnimpute** depends on will be automatically downloaded and installed.
+downloaded package, you may have to include `force = TRUE` to force
+installation. You have to install the development package **devtools**
+for installing packages from GitHub. The packages that **mvnimpute**
+depends on will be automatically downloaded and installed.
 
 ### From local file
 
@@ -44,13 +45,12 @@ manually install the dependencies first as
 
 ``` r
 ## install dependencies
+install.packages("magrittr")
 install.packages("ggplot2")
 install.packages("truncnorm")
-install.packages("mvtnorm")
 install.packages("reshape2")
 install.packages("LaplacesDemon")
 install.packages("dplyr")
-install.packages("magrittr")
 install.packages("tidyr")
 install.packages("rlang")
 ```
