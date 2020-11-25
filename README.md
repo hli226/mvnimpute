@@ -26,7 +26,7 @@ the R software to at least version 3.6.0**. You can install
 devtools::install_github("yuebanfengqing/mvnimpute")
 ```
 
-add `built_vignettes = TRUE` argument to include vignette in the
+add `build_vignettes = TRUE` argument to include vignette in the
 downloaded package. You have to install the development package
 **devtools** for installing packages from GitHub. The packages that
 **mvnimpute** depends on will be automatically downloaded and installed.
