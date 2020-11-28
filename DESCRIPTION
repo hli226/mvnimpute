@@ -26,6 +26,5 @@ Imports:
 Suggests:
     tidyverse,
     knitr,
-    rmarkdown,
-    clusterGeneration
+    rmarkdown
 VignetteBuilder: knitr

@@ -42,6 +42,7 @@ Please email to hli226@uic.edu for the latest compiled package source file. For 
 
 ``` r
 ## install dependencies
+install.packaegs("MASS")
 install.packages("magrittr")
 install.packages("ggplot2")
 install.packages("truncnorm")

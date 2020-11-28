@@ -64,7 +64,7 @@ dat.gen <- function(
   if (length(m.vec) != p) stop("Your desired dimensions do not match!")
   if (dim(sig)[1] != dim(sig)[2]) stop("Covariance matrix should be a sqaure matrix!")
 
-  # use mvrnorm function from the mvtnorm package to generate multivariate normal data
+  # use mvrnorm function from the MASS package to generate multivariate normal data
   dat <- mvrnorm(n, m.vec, sig)
 
   # full data without applying missing and censoring information

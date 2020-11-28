@@ -33,13 +33,16 @@ p <- 10; m <- 4; n <- 4
 mu.vec <- rnorm(p, 5, 0.5)
 sample.size <- 2000
 set.seed(123)
-V <- clusterGeneration::genPositiveDefMat("eigen", dim = p)
 
+## create a positive definite covariance matrix
+mat <- matrix(rnorm(p^2), ncol = p)
+V <- t(mat) %*% mat
+  
 dat <- dat.gen(
   sample.size,
     p,
   mu.vec,
-  V$Sigma,
+  V,
   m,
   n
 )
@@ -272,9 +275,9 @@ CC.var <- params$CC.var
 
 simulate.var <- apply(sim.dat$simulated.sig[Gibbs, ], 2, mean)
 
-compare.var <- data.frame(rbind(full.dat.var, CC.var, simulate.var, diag(V$Sigma)))
+compare.var <- data.frame(rbind(full.dat.var, CC.var, simulate.var, diag(V)))
 rownames(compare.var) <- c("full.variance", "CC.variance", "simulated.variance","true.variance")
-bias.variance <- sweep(compare.var, 2, diag(V$Sigma))
+bias.variance <- sweep(compare.var, 2, diag(V))
 
 bias.mean
 bias.variance

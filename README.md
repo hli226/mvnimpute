@@ -45,6 +45,7 @@ manually install the dependencies first as
 
 ``` r
 ## install dependencies
+install.packaegs("MASS")
 install.packages("magrittr")
 install.packages("ggplot2")
 install.packages("truncnorm")
