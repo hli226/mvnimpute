@@ -25,7 +25,7 @@ To use this package, one needs to pre-process the dataset for some necessary inf
 
 ### Data
 
-Here we generate a 10-dimensional multivariate normal data using the **data.gen** function in this package, with 4 subject to missing (MAR) and 4 to interval censoring. In the summary, `NA` denotes the missing data and `NaN` the censored data. Column names indicate the types of the variables, missing, censored or observed, and the position of the variable in the original dataset.
+Here we generate a 5-dimensional multivariate normal data using the **data.gen** function in this package, with 2 subject to missing (MAR) and 2 to interval censoring. 
 
 ```{r}
 # Data specifications
