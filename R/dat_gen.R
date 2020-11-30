@@ -24,7 +24,7 @@
 #' V <- diag(p)
 #' miss.num <- 1
 #' censor.num <- 1
-#' dat <- dat.gen(n, p, m.vec, V, miss.num, censor.num)
+#' dat <- data.gen(n, p, m.vec, V, miss.num, censor.num)
 #'
 #' @return A list of 10 including:
 #'
@@ -50,7 +50,7 @@
 #' \code{full.pos}: The vector indicating the position of the fully observed variables.
 #'
 #' @export
-dat.gen <- function(
+data.gen <- function(
   n,          # number of data to be generated
   p,          # number of in the variables of the data
   m.vec,      # mean vector should have length p
