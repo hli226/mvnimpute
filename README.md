@@ -15,6 +15,10 @@ source file.
 
 ## Installation
 
+For Windows users, the Rtools for building R packages should be
+installed according to your R version from
+<https://cran.r-project.org/bin/windows/Rtools/history.html>.
+
 ### From GitHub
 
 **NOTE: To correctly install the package from GitHub, you have to update
