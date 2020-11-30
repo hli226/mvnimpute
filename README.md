@@ -8,9 +8,10 @@
 
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
-variable can have missing and censoring simultaneously; or it can have
-either only missing or censored values). You can either install this
-package directly from GitHub (R &gt;= 3.6.0) or from local source file.
+variable can have both missing and censored values simultaneously; or it
+can have either only missing or censored values). You can either install
+this package directly from GitHub (R &gt;= 3.6.0) or from the local
+source file.
 
 ## Installation
 
@@ -22,48 +23,18 @@ the R software to at least version 3.6.0**. You can install
 [GitHub](https://github.com) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("yuebanfengqing/mvnimpute")
+# install the development package devtools for installing packages from GitHub
+install.packages("devtools")
+
+# install mvnimpute package with vignette from GitHub
+devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE)
 ```
 
-add `build_vignettes = TRUE` argument to include vignette in the
-downloaded package, you may have to include `force = TRUE` to force
-installation. You have to install the development package **devtools**
-for installing packages from GitHub. The packages that **mvnimpute**
-depends on will be automatically downloaded and installed.
-
-### From local file
-
-For R version number less than **3.5.0**, you have to install the
-corresponding Rtools from
-<https://cran.r-project.org/bin/windows/Rtools/history.html> to the
-system PATH before running the following code.
-
-Please email to <hli226@uic.edu> for the latest compiled package source
-file. For installing package from local source file, you have to
-manually install the dependencies first as
-
-``` r
-## install dependencies
-install.packaegs("MASS")
-install.packages("magrittr")
-install.packages("ggplot2")
-install.packages("truncnorm")
-install.packages("reshape2")
-install.packages("LaplacesDemon")
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("rlang")
-```
-
-Then the package can be installed with replacing the *path-of-file* by
-your local path that stores the package source file
-(**mvnimpute\_0.0.0.9000.tar.gz**) as
-
-``` r
-## install mvnimpute package from local source file
-install.packages("path-of-file/mvnimpute_0.0.0.9000.tar.gz", repos = NULL, type = "source")
-```
+`build_vignettes = TRUE` argument is added for including the vignette,
+which gives the step-by-step instructions on how to use this package
+using an artificial example. You have to install the development package
+**devtools** for installing packages from GitHub. The packages that
+**mvnimpute** depends on will be automatically downloaded and installed.
 
 ## Basic functions
 
@@ -101,4 +72,4 @@ For detailed instructions on using the package and a walk-through
 example, please refer to the vignette downloaded with the package. Once
 the package is installed, the vignette can be accessed using the
 function `browseVignettes("mvnimpute")`, and it will open in an external
-viewer.
+web browser.
