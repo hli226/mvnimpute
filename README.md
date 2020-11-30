@@ -32,6 +32,9 @@ install.packages("devtools")
 
 # install mvnimpute package with vignette from GitHub
 devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE)
+
+# if this package has been installed previously
+# devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE, force = TRUE)
 ```
 
 `build_vignettes = TRUE` argument is added for including the vignette,
