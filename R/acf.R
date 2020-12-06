@@ -16,7 +16,7 @@
 #' If \code{plot} = TRUE, the autocorrelation plots of all the variables will be drawn.
 #'
 #' @export
-calcu.acf <- function(data, lag = 50, plot = TRUE, title = NULL, details = FALSE) {
+acf.calc <- function(data, lag = 50, plot = TRUE, title = NULL, details = FALSE) {
 
   auto.cor <- matrix(NA, nrow = lag + 1, ncol = ncol(data))
 

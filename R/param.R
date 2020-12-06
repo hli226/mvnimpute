@@ -8,28 +8,37 @@
 #' the complete-case covariance matrix, mean and variance for each variable.
 #'
 #' @export
-calcu.param <- function(data) {
+param.calc <- function(data) {
 
-  if (is.null(dim(data))) stop("Need a multidimensional matrix!")
+  lvalue <- data[[1]]
+  rvalue <- data[[2]]
 
-  ## CC parameters
-  complete.dat <- data[complete.cases(data), ]
-  CC.mean <- apply(complete.dat, 2, mean)
-  CC.var <- apply(complete.dat, 2, var)
-  CC.cov <- cov(complete.dat)
+  # number of observations and variables
+  n <- nrow(lvalue); p <- ncol(rvalue)
 
-  ## AC parameters
-  AC.mean <- numeric(ncol(data)); AC.var <- numeric(ncol(data))
-  for (i in 1:ncol(data)) {
-    available.dat <- na.omit(data[, i])
-    AC.mean[i] <- mean(available.dat)
-    AC.var[i] <- var(available.dat)
+  ## complete-case data
+  CC.dat <- lvalue[apply(lvalue == rvalue, 1, sum) == p, ]
+
+  CC.mean <- apply(CC.dat, 2, mean)
+  CC.cov <- cov(CC.dat)
+
+  ## available-case dataa: does not include censored values
+  AC.mean <- numeric(p)
+  AC.var <- numeric(p)
+  names(AC.mean) <- names(AC.var) <- colnames(lvalue)
+  for (i in 1:p) {
+
+    obs.indx <- lvalue[, i] == rvalue[, i]
+    obs.dat <- lvalue[obs.indx, i]
+
+    AC.mean[i] <- mean(obs.dat)
+    AC.var[i] <- var(obs.dat)
   }
 
   return(list(
-    AC.mean = AC.mean,
-    AC.var = AC.var,
-    CC.cov = CC.cov,
-    CC.mean = CC.mean,
-    CC.var = CC.var))
+    CC.mean = CC.mean,   # complete-case mean vector
+    CC.cov = CC.cov,     # complete-case covariance matrix
+    AC.mean = AC.mean,   # available-case mean vector
+    AC.var = AC.var      # available-case variance
+  ))
 }

@@ -4,10 +4,14 @@
 #'
 #' @param n number of observations to be generated
 #' @param p number of variables to be generated
-#' @param m.vec specified mean vector
-#' @param sig specified covariance matrix
-#' @param miss.num number of variables having missing values
-#' @param censor.num number of variables having censored values
+#' @param mu specified mean vector
+#' @param Sigma specified covariance matrix
+#' @param miss.pos a
+#' @param miss.percent b
+#' @param miss.type c
+#' @param censor.pos d
+#' @param censor.percent e
+#' @param censor.type f
 #'
 #' @details This function generates the multivariate normal data that can be used to
 #' verify the correctness of the multiple imputation algorithm. Users have to specify
@@ -17,260 +21,147 @@
 #' and interval censoring mechanism, in which case there should be at least one variable that is
 #' fully observed in the dataset.
 #'
-#' @examples
-#' n <- 1000
-#' p <- 3
-#' m.vec <- c(3, 2, 1)
-#' V <- diag(p)
-#' miss.num <- 1
-#' censor.num <- 1
-#' dat <- data.gen(n, p, m.vec, V, miss.num, censor.num)
-#'
-#' @return A list of 10 including:
-#'
-#' \code{full.dat}: The fully observed complete data before the missing and censoring information applied.
-#'
-#' \code{comp.dat}: The incomplete data after the missing and censoring information applied.
-#'
-#' \code{miss.indx}: The matrix containing the missing index for the missing data. 1 for missing values, 0 for observed values.
-#'
-#' \code{miss.pos}: The vector indicating the position of the variables subject to missing in the original dataset.
-#'
-#' \code{miss.point}: The vector containing the cutoff values for the missing data.
-#' For the observed data that is less than or equal to the cutoff value, the corresponding missing variables are set to be missing.
-#'
-#' \code{censor.pos}: The vector indicating the position of the variables subject to censoring in the original dataset.
-#'
-#' \code{censor.indx}: The matrix containing the censoring index for the censored data. 1 for censored values, 0 otherwise.
-#'
-#' \code{C1}: The vector containing the lower limits of the censored values.
-#'
-#' \code{C2}: The vector containing the upper limits of the censored values.
-#'
-#' \code{full.pos}: The vector indicating the position of the fully observed variables.
-#'
 #' @export
-data.gen <- function(
-  n,          # number of data to be generated
-  p,          # number of in the variables of the data
-  m.vec,      # mean vector should have length p
-  sig,        # variance-covariance matrix have dimension p * p
-  miss.num,   # number of variables subject to missing
-  censor.num  # number of censoring subject
-){
+data.generation <- function(
+  n,                        # number of observations
+  p,                        # number of variables
+  mu,                       # mean vector
+  Sigma,                    # covariance matrix
+  ############################################
+  miss.pos,                 # variables subject to missing
+  miss.percent,             # missing percentages
+  miss.type = "MCAR",       # missing mechanism
+  censor.pos,               # variables subject to censoring
+  censor.percent,           # censoring percentages
+  censor.type = "interval"  # censoring type
+) {
 
-  `%notin%` <- Negate(`%in%`)
+  #######################################
+  ## Generate multivariate normal data ##
+  #######################################
+  ## complete data before applying the missing and censored data information
+  multi.data <- mvrnorm(n = n, mu = mu, Sigma = Sigma)
 
-  if (length(m.vec) != p) stop("Your desired dimensions do not match!")
-  if (dim(sig)[1] != dim(sig)[2]) stop("Covariance matrix should be a sqaure matrix!")
+  ## create a list to store the lower and upper limits of the incomplete data
+  incomplete.data <- list()
+  incomplete.data[[1]] <- multi.data
+  incomplete.data[[2]] <- multi.data
 
-  # use mvrnorm function from the MASS package to generate multivariate normal data
-  dat <- mvrnorm(n, m.vec, sig)
+  if (miss.type == "MCAR") {
+    # gernate variable type indicator matrix
+    data.ind <- MCAR.type(n, p, miss.pos, miss.percent, censor.pos, censor.percent)
 
-  # full data without applying missing and censoring information
-  full <- dat
+    for (i in 1:n) {
 
-  ### generate missing and censoring index
-  # will draw random number for the missing variables and censoring variables
-  var.num <- 1:p
+      for (j in 1:p) {
 
-  # 1. missing data and censoring data in the dataset
-  # (1) when data has a mixed type of missing and censoring
-  if (miss.num != 0 & censor.num != 0)
-  {
-    miss.pos <- sample(var.num, miss.num, replace = FALSE)
-    censor.pos <- sample(var.num[var.num %notin% miss.pos], censor.num, replace = FALSE)
-    full.pos <- var.num[var.num %notin% c(miss.pos, censor.pos)]
+        if (data.ind[i, j] == 1) {
+          # observed data
+          incomplete.data[[1]][i, j] <- incomplete.data[[2]][i, j] <- multi.data[i, j]
+        } else if (data.ind[i, j] == 0) {
+          # missing data
+          incomplete.data[[1]][i, j] <- -10e10 # a small number for negative infinity
+          incomplete.data[[2]][i, j] <- 10e10  # a large number for positive infinity
+        } else {
+          # censored data
+          if (censor.type == "interval") {
+            # interval censoring
+            c1 <- rnorm(1, 0, 1)
+            c2 <- rnorm(1, 2, 1)
 
-    # fully observed data that missing and censoring data will depend on
-    # the first of the fully observed variables
-    fully.obs <- as.matrix(dat[, full.pos], nrow = n, byrow = FALSE)[, 1]
+            incomplete.data[[1]][i, j] <- min(c1, c2)
+            incomplete.data[[2]][i, j] <- max(c1, c2)
+          } else if (censor.type == "right") {
+            # right censoring
+            c1 <- rnorm(1, 0, 1)
 
-    ### missing data
-    # generate missing index
-    miss.indx <- matrix(NA, nrow = n, ncol = miss.num)
+            incomplete.data[[1]][i, j] <- c1
+            incomplete.data[[2]][i, j] <- -10e10 # a small number for negative infinity
+          } else if (censor.type == "left"){
+            # left censoring
+            c2 <- rnorm(1, 2, 1)
 
-    miss.point <- numeric(miss.num)
-
-    for (i in 1:miss.num) {
-
-      # randomly generate truncation point
-      miss.prob <- sample(seq(0.1, 0.3, by = 0.001), 1, replace = TRUE)
-      miss.point[i] <- sort(fully.obs)[miss.prob * length(fully.obs)]
-
-      # MAR missing mechanism
-      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 1, 0)
-
-      # set the value where missingness happens to be NA
-      miss.p <- miss.pos[i];  miss.in <- miss.indx[, i]
-      dat[, miss.p][miss.in == 1] <- NA
+            incomplete.data[[1]][i, j] <- c2
+            incomplete.data[[2]][i, j] <- 10e10 # a large number for positive infinity
+          }
+        }
+      }
     }
+    # rename each variable
+    colnames(incomplete.data[[1]]) <- colnames(incomplete.data[[2]]) <- colnames(data.ind)
+  }
+  else if (miss.type == "MAR") {
 
-    ### censored data
-    ### generate censoring times
+    # observed data and missing data
+    incomplete.data <- MAR.type(incomplete.data, miss.pos, miss.percent, censor.pos, censor.percent)$data
+    data.ind <- MAR.type(incomplete.data, miss.pos, miss.percent, censor.pos, censor.percent)$ind
 
-    censor.ll <- matrix(NA, nrow = n, ncol = censor.num) # lower limit of the censoring interval
-    censor.ul <- matrix(NA, nrow = n, ncol = censor.num) # upper limit of the censoring interval
-    censor.indx <- matrix(NA, nrow = n, ncol = censor.num) # censoring indices
-    # up <- quantile(fully.obs, prob = 0.45)
-    # down <- quantile(fully.obs, prob = 0.65)
+    # censored data
+    if (censor.type == "interval") {
+      for (i in 1:length(censor.pos)) {
 
-    for (i in 1:censor.num) {
+        # the observations that are not missing
+        not.miss <- which(incomplete.data[[1]][, censor.pos[i]] > -10e10)
 
-      censor.p <- censor.pos[i]
+        # introduce randomness into the censoring percentage
+        c.percent <- censor.percent[i] * runif(1, 0.95, 1.05)
+        censor.obs <- numeric(n * c.percent)
 
-      # censored times
+        for (j in 1:length(censor.obs)) {
+          censor.obs <- sample(not.miss, n * c.percent, replace = FALSE)
+        }
+        c1 <- rnorm(n * c.percent, 0, 1)
+        c2 <- rnorm(n * c.percent, 2, 1)
 
-      censor.dat <- dat[, censor.p]
-
-      # up <- quantile(fully.obs, prob = 0.45)
-      # down <- quantile(fully.obs, prob = 0.65)
-
-      # select n pairs from the censored values as the limits of censoring
-      t1 <- runif(n, max(censor.dat) * 0.4, max(censor.dat) * 0.65)
-      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.88)
-
-      # t1 <- rexp(n, 1 / up)
-      # t2 <- rexp(n , 1 / down)
-      censor.ll[, i] <- t1
-      censor.ul[, i] <- t2
-
-      # generating censoring indices
-
-      # censor.dat <- dat[, censor.p]
-      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
-
-      # set the value where data is censoring to NaN
-
-      censor.p <- censor.pos[i]; censor.in <- censor.indx[, i]
-      dat[, censor.p][censor.in == 1] <- NaN
+        data.ind[censor.obs, censor.pos[i]] <- 2
+        incomplete.data[[1]][censor.obs, censor.pos[i]] <- pmin(c1, c2)
+        incomplete.data[[2]][censor.obs, censor.pos[i]] <- pmax(c1, c2)
+      }
+      data.ind <- ifelse(is.na(data.ind), 1, data.ind)
     }
+    else if (censor.type == "right") {
+      for (i in 1:length(censor.pos)) {
 
-    # rename the columns
-    # the prefix suggests the type of the variable, and the number indicates the column number
-    colnames(dat) <- 1:p
-    colnames(dat)[miss.pos] <- paste("miss", miss.pos, sep = ".")
-    colnames(dat)[censor.pos] <- paste("censor", censor.pos, sep = ".")
+        # the observations that are not missing
+        not.miss <- which(incomplete.data[[1]][, censor.pos[i]] > -10e10)
 
-    f <- 1:p
-    m.s <- c(miss.pos, censor.pos)
-    full.f <- f[-m.s]
-    colnames(dat)[-c(miss.pos, censor.pos)] <- paste("full", full.f, sep = ".")
+        # introduce randomness into the censoring percentage
+        c.percent <- censor.percent[i] * runif(1, 0.95, 1.05)
+        censor.obs <- numeric(n * c.percent)
 
-    # create a list to store the results
-    res <- list(
-      full.dat = full,
-      comp.dat = dat,
-      miss.indx = miss.indx, miss.pos = miss.pos, miss.point = miss.point,
-      censor.indx = censor.indx, censor.pos = censor.pos,
-      C1 = censor.ll, C2 = censor.ul,
-      full.pos = full.pos
-    )
+        for (j in 1:length(censor.obs)) {
+          censor.obs <- sample(not.miss, n * c.percent, replace = FALSE)
+        }
+        c1 <- rnorm(n * c.percent, 0, 1)
+
+        data.ind[censor.obs, censor.pos[i]] <- 2
+        incomplete.data[[1]][censor.obs, censor.pos[i]] <- pmin(c1, c2)
+        incomplete.data[[2]][censor.obs, censor.pos[i]] <-10e10
+      }
+      data.ind <- ifelse(is.na(data.ind), 1, data.ind)
+    } else if (censor.type == "left") {
+      for (i in 1:length(censor.pos)) {
+
+        # the observations that are not missing
+        not.miss <- which(incomplete.data[[1]][, censor.pos[i]] > -10e10)
+
+        # introduce randomness into the censoring percentage
+        c.percent <- censor.percent[i] * runif(1, 0.95, 1.05)
+        censor.obs <- numeric(n * c.percent)
+
+        for (j in 1:length(censor.obs)) {
+          censor.obs <- sample(not.miss, n * c.percent, replace = FALSE)
+        }
+        c2 <- rnorm(n * c.percent, 2, 1)
+
+        data.ind[censor.obs, censor.pos[i]] <- 2
+        incomplete.data[[1]][censor.obs, censor.pos[i]] <- -10e10
+        incomplete.data[[2]][censor.obs, censor.pos[i]] <- pmax(c1, c2)
+      }
+      data.ind <- ifelse(is.na(data.ind), 1, data.ind)
+    }
   }
 
-  # (2) only missing data in the dataset
+  return(list(data = incomplete.data, ind = data.ind))
 
-  if (miss.num != 0 & censor.num == 0)
-  {
-    miss.pos <- sample(var.num, miss.num, replace = FALSE)
-    full.pos <- var.num[var.num %notin% miss.pos]
-
-    # fully observed data that missing data will depend on
-    # the first of the fully observed variables
-    fully.obs <- as.matrix(dat[, full.pos], nrow = n, byrow = FALSE)[, 1]
-
-    ### missing data
-    # generate missing index
-    miss.indx <- matrix(NA, nrow = n, ncol = miss.num)
-    miss.point <- numeric(miss.num)
-
-    for (i in 1:miss.num) {
-
-      # randomly generate missing probability
-      miss.prob <- sample(seq(0.1, 0.5, by = 0.001), 1, replace = TRUE)
-      miss.point[i] <- sort(fully.obs)[miss.prob * length(fully.obs)]
-
-      # MAR missing mechanism
-      miss.indx[, i]  <- ifelse(fully.obs < miss.point[i], 1, 0)
-
-      miss.p <- miss.pos[i];  miss.in <- miss.indx[, i]
-
-      # set the value where data is missing to NA
-      dat[, miss.p][miss.in == 1] <- NA
-    }
-
-    # rename the columns
-    colnames(dat) <- 1:p
-    colnames(dat)[miss.pos] <- paste("miss", miss.pos, sep = ".")
-
-    f <- 1:p
-    m.s <- miss.pos
-    full.f <- f[-m.s]
-    colnames(dat)[-miss.pos] <- paste("full", full.f, sep = ".")
-
-    # create a list to store the results
-    res <- list(
-      full.dat = full,
-      comp.dat = dat,
-      miss.indx = miss.indx, miss.pos = miss.pos, miss.point = miss.point,
-      full.pos = full.pos
-    )
-  }
-
-  # (3) only censoring data in the dataset
-
-  if (miss.num == 0 & censor.num != 0)
-  {
-    censor.pos <- sample(var.num, censor.num, replace = FALSE)
-    full.pos <- var.num[var.num %notin% censor.pos]
-    fully.obs <- as.matrix(dat[, full.pos], nrow = n, byrow = FALSE)[, 1] # fully observed data that censoring data will depen
-
-    ### censoring data
-    ### generate censoring times
-    censor.ll <- matrix(NA, nrow = n, ncol = censor.num)
-    censor.ul <- matrix(NA, nrow = n, ncol = censor.num)
-    censor.indx <- matrix(NA, nrow = n, ncol = censor.num)
-    # up <- quantile(fully.obs, prob = 0.45)
-    # down <- quantile(fully.obs, prob = 0.65)
-
-    for (i in 1:censor.num) {
-      censor.p <- censor.pos[i]
-
-      censor.dat <- dat[, censor.p]
-
-      # t1 <- rexp(n, 1 / up)
-      # t2 <- rexp(n , 1 / down)
-
-      t1 <- runif(n, max(censor.dat) * 0.4, max(censor.dat) * 0.65)
-      t2 <- runif(n, max(censor.dat) * 0.7, max(censor.dat) * 0.88)
-
-      censor.ll[, i] <- t1
-      censor.ul[, i] <- t2
-
-      censor.indx[, i] <- ifelse((censor.dat > censor.ll[, i] & censor.dat < censor.ul[, i]), 1, 0)
-
-      censor.p <- censor.pos[i]; censor.in <- censor.indx[, i]
-      dat[, censor.p][censor.in == 1] <- NaN
-    }
-
-    # rename the columns
-    colnames(dat) <- 1:p
-    colnames(dat)[censor.pos] <- paste("censor", censor.pos, sep = ".")
-
-    f <- 1:p
-    m.s <- censor.pos
-    full.f <- f[-m.s]
-    colnames(dat)[-censor.pos] <- paste("full", full.f, sep = ".")
-
-    # create a list to store the results
-    res <- list(
-      full.dat = full,
-      comp.dat = dat,
-      censor.indx = censor.indx, censor.pos = censor.pos,
-      C1 = censor.ll, C2 = censor.ul,
-      full.pos = full.pos
-    )
-  }
-
-  return(res)
 }

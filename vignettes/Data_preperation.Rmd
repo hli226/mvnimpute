@@ -1,0 +1,164 @@
+---
+title: "Data_preperation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data_preperation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE}
+library(mvnimpute)
+library(dplyr)
+```
+
+In this tutorial, the steps needed for preparing the data for use in the `mvnimpute` package are presented. I will use a small dataset of the `nhanes.dat` in this package for illustration. It includes 24 PCB variables and from data release cycle 2011 - 2012.
+
+```{r}
+# PCB.dat <- nhanes.dat$data %>%
+#   dplyr::select("SDDSRVYR", starts_with("LBC"), -ends_with("LA"))
+# PCB.ind <- nhanes.dat$data %>%
+#   dplyr::select("SDDSRVYR", starts_with("LBD"))
+# 
+# PCB.lod <- nhanes.dat$PCB.LOD
+# 
+# # transform to matrices
+# PCB.ind <- as.matrix(PCB.ind)
+# # recode missing values to 0
+# PCB.ind <- ifelse(is.na(PCB.ind), 0, PCB.ind)
+# 
+# PCB.dat <- as.matrix(PCB.dat)
+# 
+# 
+# ## subset data from data release cycle 2011 - 2012
+# 
+# PCB.dat <- PCB.dat[which(PCB.dat[, 1] == 7), ]; PCB.dat <- PCB.dat[, -1]
+# PCB.ind <- PCB.ind[which(PCB.ind[, 1] == 7), ]; PCB.ind <- PCB.ind[, -1]
+# 
+# PCB.lod <- as.matrix(PCB.lod[1, ])
+# PCB.dat <- log(PCB.dat); PCB.lod <- log(PCB.lod)
+# 
+# colnames(PCB.dat) <- colnames(PCB.ind) <- names(PCB.lod) <- paste0("PCB", substr(colnames(PCB.dat), 4, 6))
+```
+
+Take a look at the dimension of the data
+```{r}
+# dim(PCB.dat)
+```
+
+Then we take a look at a few lines of first 10 variables
+
+```{r}
+# head(PCB.dat[, 1:10])
+```
+
+Next, we prepare a indicator matrix to contain the indicators for the different data types. 
+
++ 0: missing values
++ 1: observed values
++ 2: censored values
+
+
+```{r}
+# # create a matrix to include the data type indicators
+# data.ind <- matrix(NA, nrow = nrow(PCB.dat), ncol = ncol(PCB.dat))
+# 
+# # code missing values to 0 if PCB data is missing
+# data.ind <- ifelse(is.na(PCB.dat), 0, 1)
+# # code censored values to 2 if PCB indicators is censored
+# data.ind <- ifelse(PCB.ind == 1, 2, data.ind)
+```
+
+Now, we have created data type indicator matrix, then we will use this matrix to create data that will be used in the multiple imputation. The data should be a list of length 2, which means we take a pair of values, denote as $X_{lower}$ and $X_{upper}$. We store $X_{lower}$'s in the first element of the resulting list, and $X_{upper}$'s  in the second element of the list. Specifically, we treat the two values in the following way
+
++ For the observed values (as 1 in the data type indicator matrix), we set $X_{lower} = X_{upper}$. 
++ For the missing values (as 0 in the data type indicator matrix), we consider those values as special cases of interval censored values, with interval as $(X_{lower} = -\infty, X_{upper} = \infty)$. We take $-10^{10}$ and $10^{10}$ as proxies for $-\infty$ and $\infty$ respectively in the generated data.
++ For the censored values (as 2 in the data type indicator matrix), we generate the two limits of the censored values, respectively. Specifically, when the values are interval censored, $X_{lower}$, $X_{upper}$ should both be finite values; when the values are right censored, $X_{upper} = \infty$ while $X_{lower}$ is finite; and when the value are left censored, $X_{upper}$ is finite and $X_{lower} = -\infty$. The PCB data are subject to the limits of detection, which is a case of left censoring.
+
+```{r}
+# incomplete.data <- list()
+# 
+# # create a matrix dimensions equal to the PCB data (except the data release cycle indicator) in each of the list element
+# incomplete.data[[1]] <- incomplete.data[[2]] <- matrix(NA, nrow = nrow(PCB.dat), ncol = ncol(PCB.dat))
+# 
+# 
+# for (i in 1:nrow(PCB.dat)) {
+#   
+#   for (j in 1:ncol(PCB.dat)) {
+#     
+#     # lower limits
+#     incomplete.data[[1]][i, j] <- ifelse(data.ind[i, j] == 0, -10e10,          # set missing values to -10e10
+#                                     ifelse(data.ind[i, j] == 1, PCB.dat[i, j], # set observed values from the original data set
+#                                     -10e10))                                   # set left censored values to -10e10
+# 
+#     # upper limits
+#     incomplete.data[[2]][i, j] <- ifelse(data.ind[i, j] == 0, 10e10,           # set missing values to 10e10
+#                                     ifelse(data.ind[i, j] == 1, PCB.dat[i, j], # set observed values from the original data set
+#                                     PCB.lod[j]))                               # set left censored values LODs
+#     
+#   }
+#   
+# }
+# 
+# colnames(incomplete.data[[1]]) <- colnames(incomplete.data[[2]]) <- colnames(PCB.dat)
+```
+
+We then take a look at the first few lines of the first five variables of $X_{lower}$ and $X_{upper}$ as shown in below.
+
+```{r}
+# head(incomplete.data[[1]][, 1:5]); head(incomplete.data[[2]][, 1:5])
+
+```
+
+
+```{r}
+# param <- new.calcu.param(incomplete.data)
+```
+
+```{r}
+# summary(single.impution(incomplete.data))
+```
+
+
+```{r}
+# prior <- list(
+#   mu.0 = param$CC.mean,
+#   Lambda.0 = param$CC.cov,
+#   kappa.0 = 100,
+#   nu.0 = p * (p+ 1) / 2
+# )
+# 
+# starting <- list(
+#   mu = param$CC.mean,
+#   sigma = param$CC.cov
+# )
+# 
+# sim.dat <- multiple.impution(
+#   incomplete.data,
+#   prior,
+#   starting,
+#   200
+# )
+```
+
+```{r}
+## convergence plot
+# mvnimpute::conv.plot(sim.dat$simulated.mu, 200)
+# mvnimpute::conv.plot(sim.dat$simulated.sig, 200)
+# 
+# 
+# mvnimpute::avg.plot(sim.dat$simulated.mu, 200)
+# mvnimpute::avg.plot(sim.dat$simulated.sig, 200)
+# 
+# 
+# mvnimpute::calcu.acf(sim.dat$simulated.mu, title = paste0(colnames(incomplete.data[[1]]), " mean"))
+# 
+# mvnimpute::calcu.acf(sim.dat$simulated.sig, title = paste0(colnames(incomplete.data[[1]]), " variance"))
+```
