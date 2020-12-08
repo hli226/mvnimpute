@@ -1,31 +1,32 @@
 #' Function for missing and censored data visualization
 #'
-#' Draws the plots that graphically presents the percentage of the missing, censored and observed data
+#' Draws plot that graphically show the percentages of the missing, censored and observed data
 #'
-#' @param data.ind dataset with missing and censored values
-#' @param title a
+#' @param data.indicator matrix that contains the data type indicators of the original data
+#' @param title title of the generated plot, default is set to "Summary plot"
 #'
-#' @details The function draws the plot that graphically shows the percentage of the missing, censored and observed
-#' data in the dataset. Column names of the \code{miss.indx} and \code{censor.indx} matrices should correspond
-#' to the respective variable names that are subject to either missing or censoring, and those names should be
-#' handled beforehand.
+#' @details The function draws the plot that graphically shows the percentages of the missing, censored and observed
+#' data in the dataset. \code{data.indicator} should be a matrix containing the data type indicators as generated in the
+#' data preparation step. 0 for missing values, 1 for obsrved values, and 2 for censored values. \code{title} is the title
+#' of the generated plot.
 #'
 #' @return The plot that shows the details of the different type of data in the dataset
 #'
 #' @export
-visualization.plot <- function(
-  data.ind,
-  title = NULL) {
+visual.plot <- function(
+  data.indicator,
+  title = "Summary plot") {
 
-  n <- nrow(data.ind)
-  p <- ncol(data.ind)
+  c.names <- colnames(data.indicator) # get column names of the data
+  n <- nrow(data.indicator)
+  p <- ncol(data.indicator)
 
   data.t <- matrix(NA, nrow = p, ncol = 3)
   colnames(data.t) <- c("Observed", "Missing", "Censored")
 
   for (i in 1:p) {
 
-    summ <- table(data.ind[, i])
+    summ <- table(data.indicator[, i])
     names.summ <- names(summ)
 
     if ("0" %in% names.summ) {
@@ -48,7 +49,7 @@ visualization.plot <- function(
 
   }
 
-  new.data <- data.frame(id = paste0("y", 1:p), data.t)
+  new.data <- data.frame(id = c.names, data.t)
   new.data$Observed <- new.data$Observed/n * 100
   new.data$Missing <- new.data$Missing/n * 100
   new.data$Censored <- new.data$Censored/n * 100

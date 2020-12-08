@@ -21,9 +21,9 @@ installed according to your R version from
 
 ### From GitHub
 
-**NOTE: To correctly install the package from GitHub, you have to update
-the R software to at least version 3.6.0**. You can install
-**mvnimpute** package in development version from
+**NOTE: Dependency of this package may depend the latest version of R,
+it is recommended to update the R software to at least version 3.6.0**.
+You can install **mvnimpute** package in development version from
 [GitHub](https://github.com) with:
 
 ``` r
@@ -47,10 +47,10 @@ using an artificial example. You have to install the development package
 
 It has 10 functions including
 
-`data.gen`: generates multivariate normal data with missing and
-censoring information.
+`data.generation`: generates multivariate normal data with missing and
+censored values.
 
-`calcu.param`: calculates the complete-case and available-case
+`param.calc`: calculates the complete-case and available-case
 parameters.
 
 `visual.plot`: draws plot showing percentage of missing, censored, and
@@ -58,10 +58,10 @@ observed values.
 
 `marg.plot`: draws density plot for each marginal variable.
 
-`initial.impute`: implements single imputation approach to makeup
+`single.imputation`: implements single imputation approach to makeup
 incomplete data.
 
-`multiple.impute`: implements multiple imputation for missing and
+`multiple.imputation`: implements multiple imputation for missing and
 censored data, have to perform on the complete data.
 
 `conv.plot`: draws trace plots of the parameters from the multiple
@@ -70,7 +70,7 @@ imputation.
 `avg.plot`: draws trace plots of the averaged values of the parameters
 from the multiple imputation.
 
-`calcu.acf`: calculates the autocorrelation values and draws ACF plots.
+`acf.calc`: calculates the autocorrelation values and draws ACF plots.
 
 `nhanes.dat`: 2011 - 2016 NHANES demographics, PCB measurements, and
 heavy metal pollutants data.

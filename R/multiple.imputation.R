@@ -2,11 +2,11 @@
 #'
 #' Implements the multiple imputation for both missing and censored values
 #'
-#' @param data dataset to do multiple imputation
+#' @param data a list of data containing the information for the missing and censored values
 #' @param prior.params list of prior parameter specifications
-#' @param initial.values list of starting values
+#' @param starting.values list of starting values
 #' @param iter number of rounds for doing multiple imputation
-#' @param details boolean variable indicating whether the running status is printed in the console. Default set to TRUE
+#' @param details boolean variable indicating whether the running status is printed in the console. Default is set to TRUE
 #'
 #' @references
 #' Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.
@@ -16,16 +16,16 @@
 multiple.imputation <- function(
   data,          # the list that contains the censored values
   prior.params,  # prior specifications
-  initial.values,# starting values
+  starting.values,# starting values
   iter,          # iterations of Gibbs sampler
   details = TRUE # boolean variable to print out running status
 ) {
 
-  ### single imputation to make up incompletel data
+  ### single imputation to make up incomplete data
   iter.data <- single.imputation(data)
 
   lvalue <- data[[1]]; rvalue <- data[[2]]
-  # numbe of observations and variables
+  # number of observations and variables
   n <- nrow(lvalue); p <- ncol(lvalue)
 
   ###########################################
@@ -36,8 +36,8 @@ multiple.imputation <- function(
   nu.0 <- prior.params$nu.0
 
   # starting values
-  mu.iter <- mu.ini <- initial.values$mu
-  sig.iter <- sig.ini <- initial.values$sigma
+  mu.iter <- mu.ini <- starting.values$mu
+  sig.iter <- sig.ini <- starting.values$sigma
 
   # vector and list to store results
   impute <- list()
@@ -70,7 +70,6 @@ multiple.imputation <- function(
 
     ##### I-step
 
-    # (1) missing values
     for (j in 1:n) {
 
       for (k in 1:p) {
@@ -145,7 +144,7 @@ multiple.imputation <- function(
     simulated.mu = Mu.iter,         # simulated mean vector: a vector
     simulated.sig = Sig.iter,       # simulated variance vector: a vector
     simulated.cov = Covmat,         # simulate covariance matrix: a list
-    imputed.dat = impute,           # simulated data: a list
+    imputeda.dat = impute,           # simulated data: a list
     conditional.params = cond.      # conditional parameters: a list
   ))
 

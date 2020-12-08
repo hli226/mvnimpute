@@ -2,13 +2,15 @@
 #'
 #' Fills in data with missing and censored values for multiple imputation
 #'
-#' @param data dataset with missing and censored values
+#' @param data a list of data containing the information of the missing and censored values
 #'
 #' @details The unobserved values are initially filled in by some single imputation methods.
-#' Currently, it only supports generating random values from the normal distribution with the
-#' mean and variance as the complete-case mean and variance, respectively.
+#' Currently, the missing values are generated from the normal distribution with complete-case
+#' mean and variance as the mean and variance, and the censored values are generated from the
+#' truncated normal distribution with complete-case parameters.
 #'
-#' @return a complete dataset with missing and censored values filled in
+#' @return a complete dataset with missing and censored values filled in.
+#'
 #' @export
 #### simple imputation function to make up incomplete data
 single.imputation <- function(
