@@ -22,8 +22,8 @@ installed according to your R version from
 ### From GitHub
 
 **NOTE: Dependency of this package may depend the latest version of R,
-it is recommended to update the R software to at least version 3.6.0**.
-You can install **mvnimpute** package in development version from
+it is recommended to update the R software to the latest version**. You
+can install **mvnimpute** package in development version from
 [GitHub](https://github.com) with:
 
 ``` r
@@ -53,7 +53,7 @@ censored values.
 `param.calc`: calculates the complete-case and available-case
 parameters.
 
-`visual.plot`: draws plot showing percentage of missing, censored, and
+`visual.plot`: draws plot showing percentages of missing, censored, and
 observed values.
 
 `marg.plot`: draws density plot for each marginal variable.

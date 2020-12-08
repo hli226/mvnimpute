@@ -27,7 +27,7 @@ For Windows users, the Rtools for building R packages should be installed accord
 
 ### From GitHub
 
-**NOTE: Dependency of this package may depend the latest version of R, it is recommended to update the R software to at least version 3.6.0**. You can install **mvnimpute** package in development version from [GitHub](https://github.com) with:
+**NOTE: Dependency of this package may depend the latest version of R, it is recommended to update the R software to the latest version**. You can install **mvnimpute** package in development version from [GitHub](https://github.com) with:
 
 ``` r
 # install the development package devtools for installing packages from GitHub
@@ -51,7 +51,7 @@ It has 10 functions including
 
 `param.calc`: calculates the complete-case and available-case parameters.
 
-`visual.plot`: draws plot showing percentage of missing, censored, and observed values.
+`visual.plot`: draws plot showing percentages of missing, censored, and observed values.
 
 `marg.plot`: draws density plot for each marginal variable.
 
