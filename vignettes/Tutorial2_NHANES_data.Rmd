@@ -68,8 +68,6 @@ dat.censor <- log(dat.censor)
 
 ## 1. Summary of the data
 
-We see that there are 10 variables, and the sample size is 3168
-
 ```{r, echo = FALSE}
 ## data structures
 dims <- dim(dat)
@@ -78,6 +76,8 @@ p <- dims[2]
 cat("Number of observations: ", n, "\n")
 cat("Number of variables: ", p)
 ```
+We see that there are `r n` variables, and the sample size is `r p`.
+
 ```{r, echo = FALSE}
 ## summary of each variable
 summary(dat)
