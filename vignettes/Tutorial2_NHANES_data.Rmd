@@ -76,7 +76,7 @@ p <- dims[2]
 cat("Number of observations: ", n, "\n")
 cat("Number of variables: ", p)
 ```
-We see that there are `r n` variables, and the sample size is `r p`.
+We see that there are `r p` variables, and the sample size is `r n`.
 
 ```{r, echo = FALSE}
 ## summary of each variable
