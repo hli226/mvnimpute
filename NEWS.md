@@ -63,4 +63,4 @@ The results of the function includes:
 * `imputa.dat`: imputed data set across iterations.
 * `conditional.params`: regression parameters by the sweep operator across iterations。
 
-
+**NOTE: The censoring types are all Type I censoring.**
