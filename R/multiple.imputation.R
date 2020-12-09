@@ -144,7 +144,7 @@ multiple.imputation <- function(
     simulated.mu = Mu.iter,         # simulated mean vector: a vector
     simulated.sig = Sig.iter,       # simulated variance vector: a vector
     simulated.cov = Covmat,         # simulate covariance matrix: a list
-    imputeda.dat = impute,           # simulated data: a list
+    impute.data = impute,           # simulated data: a list
     conditional.params = cond.      # conditional parameters: a list
   ))
 
