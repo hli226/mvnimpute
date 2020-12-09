@@ -18,11 +18,7 @@ Imports:
     MASS,
     reshape2,
     LaplacesDemon,
-    dplyr,
-    magrittr,
-    tidyr,
-    rlang,
-    plyr
+    rlang
 Suggests:
     tidyverse,
     knitr,

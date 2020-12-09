@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 ```{r setup, message = FALSE}
 # loading packages
 library(mvnimpute)
-library(dplyr)
 ```
 
 In this tutorial, we will use a small subset of PCB variables from the NHANES 2011 - 2012 data set in this package. We will start from the data preparation step to the multiple imputation step to show how can we prepare any arbitrary data to the required structure that can be used for multiple imputation using this packages. First of all, let us see the structure of the data
@@ -28,12 +27,15 @@ In this tutorial, we will use a small subset of PCB variables from the NHANES 20
 ```{r, echo = FALSE}
 # 2011-2016 NHANES data
 # measurement data
-dat <- nhanes.dat$data %>%
-  select("SDDSRVYR", starts_with("LBC"), -ends_with("LA"))
+dat <- nhanes.dat$data[, grepl("LBC", colnames(nhanes.dat$data))]
+dat <- dat[, -which(grepl("LA", colnames(dat)))]
+dat <- cbind(nhanes.dat$data["SDDSRVYR"], dat)
+
 # censoring indicator
-dat.ind <- nhanes.dat$data %>%
-  select("SDDSRVYR", starts_with("LBD"))
+dat.ind <- nhanes.dat$data[, grepl("LBD", colnames(nhanes.dat$data))]
+dat.ind <- cbind(nhanes.dat$data["SDDSRVYR"], dat.ind)
 # censoring values
+
 dat.censor <- as.matrix(nhanes.dat$PCB.LOD[1, ][1:10])
 
 # transform data frames to matrices
@@ -225,7 +227,6 @@ conv.plot(sim.dat$simulated.sig, iter)
 
 ```{r}
 acf.calc(sim.dat$simulated.mu, title = colnames(sim.dat$simulated.mu))
-
 ```
 
 ### 5.4 Autocorrelation functions for the variance

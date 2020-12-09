@@ -11,9 +11,6 @@
 #'  Hesen Li
 NULL
 # various imports
-#' @importFrom MASS mvrnorm
-#' @importFrom stats quantile
-#' @importFrom stats rexp
 #' @importFrom stats na.omit
 #' @importFrom stats var
 #' @importFrom stats cor
@@ -22,33 +19,21 @@ NULL
 #' @importFrom stats complete.cases
 #' @importFrom stats density
 #' @importFrom stats runif
-#' @importFrom stats reorder
-#' @importFrom graphics plot
-#' @importFrom graphics abline
-#' @importFrom LaplacesDemon rinvwishart
-#' @importFrom truncnorm rtruncnorm
-#' @importFrom reshape2 melt
 #' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 ggtitle
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_bar
+#' @importFrom ggplot2 labs
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
-#' @importFrom ggplot2 labs
-#' @importFrom ggplot2 scale_fill_manual
-#' @importFrom ggplot2 scale_x_discrete
-#' @importFrom reshape2 melt
-#' @importFrom magrittr %>%
-#' @importFrom tidyr gather
-#' @importFrom dplyr mutate
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
-#' @importFrom dplyr filter
-#' @importFrom dplyr arrange
-#' @importFrom dplyr n
-#' @importFrom plyr desc
+#' @importFrom ggplot2 geom_line
 #' @importFrom rlang .data
+#' @importFrom graphics plot
+#' @importFrom graphics abline
+#' @importFrom LaplacesDemon rinvwishart
+#' @importFrom truncnorm rtruncnorm
+#' @importFrom MASS mvrnorm
+#' @importFrom reshape2 melt
 NULL
 

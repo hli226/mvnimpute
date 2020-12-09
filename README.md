@@ -21,10 +21,10 @@ installed according to your R version from
 
 ### From GitHub
 
-**NOTE: Dependency of this package may depend the latest version of R,
-it is recommended to update the R software to the latest version**. You
-can install **mvnimpute** package in development version from
-[GitHub](https://github.com) with:
+**NOTE: Dependent packages of this package may depend the latest version
+of R, it is recommended to update the R software to the latest
+version**. You can install **mvnimpute** package in development version
+from [GitHub](https://github.com) with:
 
 ``` r
 # install the development package devtools for installing packages from GitHub
