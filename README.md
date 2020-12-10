@@ -9,9 +9,7 @@
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
 variable can have both missing and censored values simultaneously; or it
-can have either only missing or censored values). You can either install
-this package directly from GitHub (R &gt;= 3.6.0) or from the local
-source file.
+can have either only missing or censored values).
 
 ## Installation
 
