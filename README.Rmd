@@ -41,7 +41,7 @@ devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE)
 
 ```
 
-`build_vignettes = TRUE` argument is added for including the vignette, which gives the step-by-step instructions on how to use this package using an artificial example. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.  
+`build_vignettes = TRUE` argument is added for including the vignettes, which give the step-by-step instructions on how to use this package using an artificial example and a real data example. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.  
 
 ## Basic functions
 
