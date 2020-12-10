@@ -52,7 +52,7 @@ Specifically, to make correct imputation decisions, the testing of the data type
 
 * If `incomplete.data[[1]][i, j] == incomplete.data[[2]][i, j]`, then the value is observed, no imputation will be performed.
 * If `incomplete.data[[1]][i, j] == -10e10 & incomplete.data[[2]][i, j] == 10e10`, the value is missing, and the imputed value will be generated from the normal distribution with the correct parameters.
-* If `incomplete.data[[1]][i, j] >= -10e10 & incomplete.data[[2]][i, j] <= 10e10`, the value is interval censored, and the imputed value will be generated from the truncated normal distribution with two sides truncated.
+* If `(incomplete.data[[1]][i, j] != incomplete.data[[2]][i, j]) & (incomplete.data[[1]][i, j] >= -10e10 & incomplete.data[[2]][i, j] <= 10e10`), the value is interval censored, and the imputed value will be generated from the truncated normal distribution with two sides truncated.
 * If either of the value is infinite, while the other is finite, the value is left/right censored, and the imputed value will be generated from the truncated normal distribution with one side truncated.
 
 The results of the function includes:
