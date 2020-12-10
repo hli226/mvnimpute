@@ -64,10 +64,10 @@ incomplete data.
 `multiple.imputation`: implements multiple imputation for missing and
 censored data, have to perform on the complete data.
 
-`conv.plot`: draws trace plots of the parameters from the multiple
+`conv.plot`: draws trace plot of the parameters from the multiple
 imputation.
 
-`avg.plot`: draws trace plots of the averaged values of the parameters
+`avg.plot`: draws trace plot of the averaged values of the parameters
 from the multiple imputation.
 
 `acf.calc`: calculates the autocorrelation values and draws ACF plots.
