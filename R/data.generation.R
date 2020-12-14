@@ -168,7 +168,7 @@ data.generation <- function(
           if (data.remain[j] >= ll) {
             incomplete.data[[1]][not.miss, censor.pos[i]][j] <- ll
             incomplete.data[[2]][not.miss, censor.pos[i]][j] <- 10e10
-            # updat data type indicator matrix
+            # update data type indicator matrix
             data.ind[not.miss, censor.pos[i]][j] <- 2
           }
         }
