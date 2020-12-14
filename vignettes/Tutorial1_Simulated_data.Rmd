@@ -175,14 +175,6 @@ starting <- list(
 
 ```
 
-We use the complete-case mean and covariance matrix as the staring values and we run the Gibbs sampling for `r iter`iterations. The *multiple.imputation* function implements the multiple imputation algorithm, it requires five arguments including:
-
-+ `data`: the list of two generated in the data generation step that include the missing and censoring information.
-+ `prior.params`: the list of priors specifications that has the fixed format as described above.
-+ `starting.values`: the starting values for initializing the multiple imputation algorithm.
-+ `iter`: rounds of perfoming multiple imputation.
-+ `details`: logical variable to specify whether the running status is printed.
-
 ```{r, message = FALSE}
 # multiple imputation rounds
 iter <- 500
@@ -196,6 +188,14 @@ sim.dat <- multiple.imputation(
   details = FALSE
 )
 ```
+
+We use the complete-case mean and covariance matrix as the staring values and we run the Gibbs sampling for `r iter` iterations. The *multiple.imputation* function implements the multiple imputation algorithm, it requires five arguments including:
+
++ `data`: the list of two generated in the data generation step that include the missing and censoring information.
++ `prior.params`: the list of priors specifications that has the fixed format as described above.
++ `starting.values`: the starting values for initializing the multiple imputation algorithm.
++ `iter`: rounds of performing multiple imputation.
++ `details`: logical variable to specify whether the running status is printed.
 
 
 ## 4. Diagnostic plots
