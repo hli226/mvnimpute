@@ -29,10 +29,10 @@ version from [GitHub](https://github.com) with:
 install.packages("devtools")
 
 # install mvnimpute package with vignette from GitHub
-devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE)
+devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
 
 # if this package has been installed previously
-# devtools::install_github("yuebanfengqing/mvnimpute", build_vignettes = TRUE, force = TRUE)
+# devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE, force = TRUE)
 ```
 
 `build_vignettes = TRUE` argument is added for including the vignettes,
@@ -79,3 +79,8 @@ example, please refer to the vignette downloaded with the package. Once
 the package is installed, the vignette can be accessed using the
 function `browseVignettes("mvnimpute")`, and it will open in an external
 web browser.
+
+## Acknowlegements
+
+This package is based on the work supported by the National Institute of
+Environmental Health Sciences under grant 1R01ES028790-01.
