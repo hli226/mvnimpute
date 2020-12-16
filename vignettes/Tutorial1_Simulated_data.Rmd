@@ -116,7 +116,7 @@ head(dat$data[[1]], 5)
 ```
 
 ### upper limits
- 
+
 ```{r}
 head(dat$data[[2]], 5)
 ```
