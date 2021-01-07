@@ -9,7 +9,9 @@
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
 variable can have both missing and censored values simultaneously; or it
-can have either only missing or censored values).
+can have either only missing or censored values). An example of
+application of this package is for imputing the NHANES laboratory
+measurement data that are subject to limits of detection (LODs).
 
 ## Installation
 
@@ -20,9 +22,11 @@ installed according to your R version from
 ### From GitHub
 
 **NOTE: Some of the packages this package depends on may require the
-latest version of R, it is recommended to update the R software to the
-latest version**. You can install **mvnimpute** package in development
-version from [GitHub](https://github.com) with:
+latest version of R, it is recommended to update your R software to the
+latest version**. You can install **mvnimpute** package in its
+development version from [GitHub](https://github.com) with:
+
+#### For first-time users
 
 ``` r
 # install the development package devtools for installing packages from GitHub
@@ -30,9 +34,16 @@ install.packages("devtools")
 
 # install mvnimpute package with vignette from GitHub
 devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
+```
+
+#### For users who have already installed the package
+
+``` r
+# install the development package devtools for installing packages from GitHub
+install.packages("devtools")
 
 # if this package has been installed previously
-# devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE, force = TRUE)
+devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE, force = TRUE)
 ```
 
 `build_vignettes = TRUE` argument is added for including the vignettes,

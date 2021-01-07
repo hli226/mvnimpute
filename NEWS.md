@@ -64,3 +64,9 @@ The results of the function includes:
 * `conditional.params`: regression parameters by the sweep operator across iterations。
 
 **NOTE: The censoring types are all Type I censoring.**
+
+## Updating notes: 01.07.2021:
+* Update README.md file, add instruction section subtitle "first-time users" and "Users who have already installed the package".
+* Set default argument values for the `data.generation` function.
+
+
