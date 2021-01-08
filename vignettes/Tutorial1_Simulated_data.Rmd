@@ -26,7 +26,7 @@ To use this package, one needs to prepare the data with the specified format tha
 
 ## 1. Data generation
 
-Here, we generate a **5-dimensional** multivariate normal data with sample size **2000**, using the `data.generation` function in this package, with two variables subject to missing (MAR) and three variables to interval censoring. 
+Here, we generate a **5-dimensional** multivariate normal data with sample size **2000** and specified parameter values, using the `data.generation` function in this package, with two variables subject to missing (MAR) and three variables to interval censoring. Specifically, the function call `data.generation()` without any arguments uses the default settings to generate a dataset whose variables are multivariate normally distributed. 
 
 The `data.generation` function needs several arguments including:
 
@@ -100,8 +100,6 @@ There are three outputs include
 + `full.data`: a full data without missing and censoring information applied.
 + `data`: a list of two elements is generated for containing the two sets of values.
 + `indicator`: a data type indicator matrix that indicates the corresponding data type. It would only be used for visualization purpose.
-
-**NOTE**: One can use the function call without arguments `data.generation()` to use the default settings for the simulated data.
 
 ### data type indicator matrix
 
