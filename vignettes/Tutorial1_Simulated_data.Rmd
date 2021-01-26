@@ -125,7 +125,7 @@ head(dat$data[[1]], 5)
 ```{r}
 head(dat$data[[2]], 5)
 ```
-In the generated data, we see that the first and fifth values of $y_2$ are missing, as indicated in the data type matrix by 0, The corresponding values of the upper and lower limits are $-10^{10}$ and $10^{10}$, respectively. The pair for the third observation for $y_3$ are different from each other and are finite, suggesting that value is interval censored, as indicted by 2 in the data type matrix.
+In the generated data, we see that the first and fifth values of $y_2$ are missing, as indicated in the data type matrix by 0, The corresponding values of the lower and upper limits are $-10^{10}$ and $10^{10}$, respectively. The pair for the third observation of $y_3$ are different from each other and are finite, suggesting that value is interval censored, as indicted by 2 in the data type matrix.
 
 ## 2. Data visualization
 
@@ -183,7 +183,7 @@ sim.dat <- multiple.imputation(
   prior.params = prior,
   starting.values = starting,
   iter = iter,
-  details = FALSE
+  details = TRUE
 )
 ```
 
