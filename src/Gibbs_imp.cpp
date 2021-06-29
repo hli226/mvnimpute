@@ -14,7 +14,6 @@ NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const Nu
 
   NumericMatrix iter_data = data;
 
-
   for (int i = 0; i < n; i++) {
 
 
