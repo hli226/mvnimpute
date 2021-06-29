@@ -7,6 +7,8 @@
 #'
 #' @name mvnimpute-package
 #'
+#' @useDynLib mvnimpute
+#'
 #' @author
 #'  Hesen Li
 NULL
@@ -35,5 +37,6 @@ NULL
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom MASS mvrnorm
 #' @importFrom reshape2 melt
+#' @importFrom Rcpp sourceCpp
 NULL
 
