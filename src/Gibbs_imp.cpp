@@ -16,7 +16,6 @@ NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const Nu
 
   for (int i = 0; i < n; i++) {
 
-
     for (int j = 0; j < p; j++) {
       // covariates vector
       NumericVector cov_ij(p - 1);
