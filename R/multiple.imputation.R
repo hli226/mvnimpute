@@ -77,7 +77,8 @@ multiple.imputation <- function(
         if (lvalue[j, k] == -10e10 & rvalue[j, k] == 10e10) {
           iter.data[j, k] <- rnorm(1,
                                    mean = mu.iter[k] + t(cond.param[k, 2:p]) %*%
-                                     (iter.data[j, -k] - mu.iter[-k]))
+                                     (iter.data[j, -k] - mu.iter[-k]),
+                                   sd = sqrt(cond.param[k, p + 1]))
         }
         else if (lvalue[j, k] != rvalue[j, k] &
                  (lvalue[j, k] > -10e10 & rvalue[j, k] < 10e10)) {
@@ -87,7 +88,8 @@ multiple.imputation <- function(
                                         a = lvalue[j, k],
                                         b = rvalue[j, k],
                                         mean = mu.iter[k] + t(cond.param[k, 2:p]) %*%
-                                          (iter.data[j, -k] - mu.iter[-k]))
+                                          (iter.data[j, -k] - mu.iter[-k]),
+                                        sd = sqrt(cond.param[k, p + 1]))
         }
         else if (lvalue[j, k] != rvalue[j, k] &
                  (lvalue[j, k] > -10e10 & rvalue[j, k] == 10e10))  {
@@ -95,7 +97,8 @@ multiple.imputation <- function(
           iter.data[j, k] <- rtruncnorm(1,
                                         a = lvalue[j, k],
                                         mean = mu.iter[k] + t(cond.param[k, 2:p]) %*%
-                                          (iter.data[j, -k] - mu.iter[-k]))
+                                          (iter.data[j, -k] - mu.iter[-k]),
+                                        sd = sqrt(cond.param[k, p + 1]))
         }
         else if (lvalue[j, k] != rvalue[j, k] &
                  (lvalue[j, k] == -10e10 & rvalue[j, k] < 10e10)) {
@@ -103,7 +106,8 @@ multiple.imputation <- function(
           iter.data[j, k] <- rtruncnorm(1,
                                         b = rvalue[j, k],
                                         mean = mu.iter[k] + t(cond.param[k, 2:p]) %*%
-                                          (iter.data[j, -k] - mu.iter[-k]))
+                                          (iter.data[j, -k] - mu.iter[-k]),
+                                        sd = sqrt(cond.param[k, p + 1]))
         }
       }
     }
