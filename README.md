@@ -68,9 +68,6 @@ observed values.
 
 `marg.plot`: draws density plot for each marginal variable.
 
-`single.imputation`: implements single imputation approach to makeup
-incomplete data.
-
 `multiple.imputation`: implements multiple imputation for missing and
 censored data, have to perform on the complete data.
 
