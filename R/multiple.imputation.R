@@ -22,7 +22,7 @@ multiple.imputation <- function(
 ) {
 
   ### single imputation to make up incomplete data
-  iter.data <- single.imputation(data)
+  iter.data <- single_imputation(data)
 
   # number of observations and variables
   n <- nrow(data[[1]]); p <- ncol(data[[1]])

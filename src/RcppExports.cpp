@@ -25,9 +25,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// single_imputation
+NumericMatrix single_imputation(List data);
+RcppExport SEXP _mvnimpute_single_imputation(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_imputation(data));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mvnimpute_Gibbs_imp", (DL_FUNC) &_mvnimpute_Gibbs_imp, 4},
+    {"_mvnimpute_single_imputation", (DL_FUNC) &_mvnimpute_single_imputation, 1},
     {NULL, NULL, 0}
 };
 
