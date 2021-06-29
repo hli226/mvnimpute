@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 /***********************************/
-// Function for performing Gibbs sampler for the imputation step
+// Function for performing Gibbs sampler for the imputation step for multiple imputation
 // [[Rcpp::export]]
 NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const NumericVector mu_vec, const NumericMatrix cond_param) {
 
