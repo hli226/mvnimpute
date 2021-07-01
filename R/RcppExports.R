@@ -5,6 +5,14 @@ Gibbs_imp <- function(data, data_indx, mu_vec, cond_param) {
     .Call('_mvnimpute_Gibbs_imp', PACKAGE = 'mvnimpute', data, data_indx, mu_vec, cond_param)
 }
 
+SWP <- function(data, swp_indx) {
+    .Call('_mvnimpute_SWP', PACKAGE = 'mvnimpute', data, swp_indx)
+}
+
+cond_param <- function(data) {
+    .Call('_mvnimpute_cond_param', PACKAGE = 'mvnimpute', data)
+}
+
 single_imputation <- function(data) {
     .Call('_mvnimpute_single_imputation', PACKAGE = 'mvnimpute', data)
 }

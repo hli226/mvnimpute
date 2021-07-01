@@ -65,7 +65,7 @@ multiple.imputation <- function(
     ###########################################
 
     # SWP to calculate conditional parameters
-    cond.param <- conditional.parameters(iter.data) # sweep operator
+    cond.param <- cond_param(iter.data)
 
     ##### I-step
     iter.data <- Gibbs_imp(iter.data, data, mu.iter, cond.param)

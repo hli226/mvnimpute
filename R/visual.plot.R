@@ -57,7 +57,7 @@ visual.plot <- function(
   percent.mat <- melt(new.data, id.vars = "id")
 
   ggplot(percent.mat) +
-    geom_bar(aes(x = .data$id, y = .data$value, fill = .data$variable),
+    geom_bar(aes(x = factor(.data$id, levels = c.names), y = .data$value, fill = .data$variable),
              stat = "identity") +
     coord_flip() +
     labs(x = "Variable", y = "Percentage (%)") +
