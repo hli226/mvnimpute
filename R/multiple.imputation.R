@@ -68,7 +68,7 @@ multiple.imputation <- function(
     cond.param <- conditional.parameters(iter.data) # sweep operator
 
     ##### I-step
-    iter_data <- Gibbs_imp(iter.data, data, mu.iter, cond.param)
+    iter.data <- Gibbs_imp(iter.data, data, mu.iter, cond.param)
 
     ##############################################
     ## 2. Use updated data to update parameters ##
