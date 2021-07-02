@@ -38,7 +38,7 @@ data.generation <- function(
   mu = rnorm(p, 5, 0.5),                  # mean vector
   Sigma = diag(5),                        # covariance matrix
   ############################################
-  miss.pos = c(2, 3),                     # variables subject to missing
+  miss.pos = c(2, 6),                     # variables subject to missing
   miss.percent = c(0.21, 0.38),           # missing percentages
   miss.type = "MCAR",                     # missing mechanism
   censor.pos = c(3, 4, 5),                # variables subject to censoring

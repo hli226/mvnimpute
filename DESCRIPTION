@@ -5,8 +5,8 @@ Version: 0.0.0.9002
 Depends: R (>= 3.4.0)
 Author: Hesen Li
 Maintainer: Hesen Li <hli226@uic.edu>
-URL: https://github.com/yuebanfengqing/mvnimpute
-BugReports: https://github.com/yuebanfengqing/mvnimpute/issues
+URL: https://github.com/hli226/mvnimpute
+BugReports: https://github.com/hli226/mvnimpute/issues
 Description: This package implements multiple imputation for missing and censored data under multivariate normality assumption.
 License: GPL-2 | GPL-3
 Encoding: UTF-8

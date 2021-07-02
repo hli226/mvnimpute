@@ -9,7 +9,7 @@ data.generation(
   p = 5,
   mu = rnorm(p, 5, 0.5),
   Sigma = diag(5),
-  miss.pos = c(2, 3),
+  miss.pos = c(2, 6),
   miss.percent = c(0.21, 0.38),
   miss.type = "MCAR",
   censor.pos = c(3, 4, 5),

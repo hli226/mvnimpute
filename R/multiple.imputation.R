@@ -75,7 +75,7 @@ multiple.imputation <- function(
     ##############################################
 
     ### posterior parameters
-    y.bar <- apply(iter.data, 2, mean)
+    y.bar <- colMeans(iter.data)
     mu.n <- kappa.0 * mu.0 / (kappa.0 + n) + n  * y.bar / (kappa.0 + n)
 
     ###### P-step
@@ -83,8 +83,12 @@ multiple.imputation <- function(
     mu.iter <- mvrnorm(1, mu.n, sig.iter/kappa.n)
 
     # posterior parameters for covariance matrix
-    S <- apply(iter.data, 1, "-", mu.iter) %*%
-      t(apply(iter.data, 1, "-", mu.iter))
+    # S <- apply(iter.data, 1, "-", mu.iter) %*%
+    #   t(apply(iter.data, 1, "-", mu.iter))
+    # S <- apply(iter.data, 1, "-", y.bar) %*%
+    #   t(apply(iter.data, 1, "-", y.bar))
+    S <- t(sweep(iter.data, 1, y.bar)) %*%
+      sweep(iter.data, 1, y.bar)
 
     Lambda.n <- Lambda.0 + S + kappa.0 * n * (y.bar - mu.0) %*% t(y.bar - mu.0) / (kappa.0 + n)
 
