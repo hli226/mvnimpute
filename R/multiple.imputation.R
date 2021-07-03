@@ -83,10 +83,6 @@ multiple.imputation <- function(
     mu.iter <- mvrnorm(1, mu.n, sig.iter/kappa.n)
 
     # posterior parameters for covariance matrix
-    # S <- apply(iter.data, 1, "-", mu.iter) %*%
-    #   t(apply(iter.data, 1, "-", mu.iter))
-    # S <- apply(iter.data, 1, "-", y.bar) %*%
-    #   t(apply(iter.data, 1, "-", y.bar))
     S <- t(sweep(iter.data, 2, y.bar)) %*%
       sweep(iter.data, 2, y.bar)
 
