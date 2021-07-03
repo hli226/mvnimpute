@@ -87,8 +87,8 @@ multiple.imputation <- function(
     #   t(apply(iter.data, 1, "-", mu.iter))
     # S <- apply(iter.data, 1, "-", y.bar) %*%
     #   t(apply(iter.data, 1, "-", y.bar))
-    S <- t(sweep(iter.data, 1, y.bar)) %*%
-      sweep(iter.data, 1, y.bar)
+    S <- t(sweep(iter.data, 2, y.bar)) %*%
+      sweep(iter.data, 2, y.bar)
 
     Lambda.n <- Lambda.0 + S + kappa.0 * n * (y.bar - mu.0) %*% t(y.bar - mu.0) / (kappa.0 + n)
 

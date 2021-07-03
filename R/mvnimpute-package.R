@@ -21,6 +21,7 @@ NULL
 #' @importFrom stats complete.cases
 #' @importFrom stats density
 #' @importFrom stats runif
+#' @importFrom stats rexp
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 ggtitle
 #' @importFrom ggplot2 aes
