@@ -12,7 +12,13 @@ NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const Nu
   const NumericMatrix ll = data_indx[0];
   const NumericMatrix ul = data_indx[1];
 
-  NumericMatrix iter_data = data;
+  // preventing the from modifying the data matrix
+  NumericMatrix iter_data(data.nrow(), data.ncol());
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < p; j++) {
+      iter_data(i, j) = data(i, j);
+    }
+  }
 
   for (int i = 0; i < n; i++) {
 
@@ -42,6 +48,7 @@ NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const Nu
         iter_data(i, j) = r_truncnorm(mu_vec(j) + mean_i, sqrt(cond_j(p)), ll(i, j), ul(i, j));
     }
   }
+
   return iter_data;
 }
 

@@ -4,7 +4,7 @@
 \alias{multiple.imputation}
 \title{Multiple imputation function}
 \usage{
-multiple.imputation(data, prior.params, starting.values, iter, details = TRUE)
+multiple.imputation(data, prior.params, starting.values, iter, verbose = TRUE)
 }
 \arguments{
 \item{data}{a list of data containing the information for the missing and censored values}
@@ -15,7 +15,7 @@ multiple.imputation(data, prior.params, starting.values, iter, details = TRUE)
 
 \item{iter}{number of rounds for doing multiple imputation}
 
-\item{details}{boolean variable indicating whether the running status is printed in the console. Default is set to TRUE}
+\item{verbose}{boolean variable indicating whether the running status is printed in the console. Default is set to TRUE}
 }
 \description{
 Implements the multiple imputation for both missing and censored values

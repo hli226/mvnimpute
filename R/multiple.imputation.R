@@ -6,7 +6,7 @@
 #' @param prior.params list of prior parameter specifications
 #' @param starting.values list of starting values
 #' @param iter number of rounds for doing multiple imputation
-#' @param details boolean variable indicating whether the running status is printed in the console. Default is set to TRUE
+#' @param verbose boolean variable indicating whether the running status is printed in the console. Default is set to TRUE
 #'
 #' @references
 #' Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.
@@ -18,7 +18,7 @@ multiple.imputation <- function(
   prior.params,  # prior specifications
   starting.values,# starting values
   iter,          # iterations of Gibbs sampler
-  details = TRUE # boolean variable to print out running status
+  verbose = TRUE # boolean variable to print out running status
 ) {
 
   ### single imputation to make up incomplete data
@@ -99,14 +99,14 @@ multiple.imputation <- function(
     Sig.iter[i + 1, ] <- diag(sig.iter)                           # store the simulated variances from Gibbs sampler
     Covmat[[i + 1]] <- sig.iter                                   # store the simulated covariance matrices from Gibbs sampler
     cond.[[i]] <- cond.param                                      # store the conditional parameters from SWEEP operator
-    if (details) message(paste(i, "-th iteration!", sep = ""))    # print out the running status
+    if (verbose) message(paste(i, "-th iteration!", sep = ""))    # print out the running status
   }
 
   return(list(
-    simulated.mu = Mu.iter,         # simulated mean vector: a vector
+    simulated.mu = Mu.iter,       # simulated mean vector: a vector
     simulated.sig = Sig.iter,       # simulated variance vector: a vector
     simulated.cov = Covmat,         # simulate covariance matrix: a list
-    impute.data = impute,           # simulated data: a list
+    imputed.data = impute,           # simulated data: a list
     conditional.params = cond.      # conditional parameters: a list
   ))
 
