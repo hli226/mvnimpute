@@ -1,7 +1,7 @@
 ####################
 ## SWEEP Operator ##
 ####################
-# test change
+
 
 swp <- function
 (
