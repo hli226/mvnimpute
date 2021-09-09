@@ -21,9 +21,9 @@
 #' the bounds information of the observed data and the data type indicator matrix
 #'
 #' @export
-data.generation.new <- function(
+data.generation <- function(
   num_ind = 2000,      # number of subjects
-  mean_vec = rnorm(5),     # specify mean vectors
+  mean_vec = rnorm(5),    # specify mean vectors
   cov_mat = diag(5),      # specify covariance matrix
   miss_var = c(2, 3),     # index of variables that have missing values
   miss_mech = "MCAR", # missing data mechanism
