@@ -12,6 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(scipen = 999)
+set.seed(115)
 ```
 
 ```{r setup}
@@ -23,5 +25,195 @@ This a tutorial describing how to use our package. We will go through an example
 ## Data generation
 
 ```{r}
-example.data <- data.generation()
+#### data generation
+n <- 500; p <- 6
+# set.seed(133)
+m <- c(1, 1, 2, 4, 3, 5)
+v <- clusterGeneration::genPositiveDefMat(p, "eigen")$Sigma
+
+miss.var <- c(1, 2)
+censor.var <- c(3, 5)
+
+example.data <- data.generation(num_ind = n,
+                                mean_vec = m,
+                                cov_mat = v,
+                                miss_var = miss.var,
+                                miss_mech = "MAR",
+                                miss_prob = NULL,
+                                censor_var = censor.var,
+                                censor_type = "interval",
+                                censor_param = 0.5)
+
+names(example.data)
+```
+
+We generate a dataset with sample size is `r n`,  and specified mean vector consists of six specified values, and an positive definite covariance matrix. The output includes four objects which include, `full.data`, the data matrix that would have been observed without missing and censoring information; `observe.data`, the truly observed data matrix with missing and censoring information; `bounds`, the bounds information of the variables that have missing or or censored values. Specifically, we take missing as a special type of interval censoring with no censoring limits (censoring limits are set as $\pm \infty$); `indicator`, the matrix that indicating the data type: 0 as the missing data, 1 as the observed data, and 2 as the censored data. Now, let us take a look at the dataset
+
+```{r}
+# data
+full <- example.data$full.data
+observed <- example.data$observe.data
+censoring.bounds <- example.data$bounds
+indicator <- example.data$indicator
+# summary
+tail(observed) # observed data
+tail(censoring.bounds[[1]]);tail(censoring.bounds[[2]]) # censoring bounds information
+tail(indicator) # indicator matrix
+```
+
+From the observed data matrix, the missing values are denoted as `NA`, the censored values are denoted as `NaN`. The missing data has censoring limits set as $\pm 10,000$ (we set $\pm 10,000$ as proxies for $\pm \infty$). The indicator matrix labels the missing value as 0 and censored value as 2.
+
+## Multiple Imputation
+
+For doing multiple imputation, we take a Normal-Inverse-Wishart conjugate prior distribution of the mean vector and covariance matrix. We run MCMC simulation for 1,000 iterations.
+
+```{r, message = FALSE}
+### prior specifications
+prior.spec <- list(
+  mu.0 = rep(0, p),
+  Lambda.0 = diag(10, p),
+  kappa.0 = 100,
+  nu.0 = p * (p + 1) / 2
+)
+
+start.vals <- list(
+  mu = rep(1, p),
+  sigma = diag(p)
+)
+### MCMC simulation
+iter <- 1000
+sim.res <- multiple.imputation(
+  censoring.bounds,
+  prior.spec,
+  start.vals,
+  iter,
+  TRUE
+)
+```
+
+### Convergence plots
+
+```{r, fig.align = "center", fig.height = 5, fig.width = 5}
+conv.plot(sim.res$simulated.mu, iter, title = "convergence plot of the mean values")
+conv.plot(sim.res$simulated.sig, iter, title = "convergence plot of the variance values")
+```
+
+### Autocorrelation plots
+
+```{r}
+title = paste("acf: variable", 1:p)
+acf.calc(sim.res$simulated.mu, title = title)
+acf.calc(sim.res$simulated.sig, title = title)
+```
+
+From the convergence plots and the autocorrelation plots, we see that the posterior distributions of both the mean and variance seem to converge to equilibrium in first few iterations. 
+
+### Comparison of data parameters
+
+```{r}
+## full data parameters
+full.m <- colMeans(full)
+full.v <- diag(var(full))
+
+sim.m <- colMeans(sim.res$simulated.mu[-c(1:100), ])
+sim.v <- colMeans(sim.res$simulated.sig[-c(1:100), ])
+
+cc.m <- colMeans(observed[complete.cases(observed), ])
+cc.v <- diag(cov(observed[complete.cases(observed), ]))
+
+compare.m <- data.frame(
+  true.m = m,
+  full.m = full.m,
+  sim.m = sim.m,
+  cc.m = cc.m
+)
+
+compare.v <- data.frame(
+  true.v = diag(v),
+  full.v = full.v,
+  sim.v = sim.v,
+  cc.v = cc.v
+)
+
+compare.m
+compare.v
+```
+
+### Linear Regression
+```{r}
+##############################################
+swp.true <- function(
+  aug.mat, # augmented covariance matrix
+  # NOTE: swp = 0 is to sweep the first row
+  outcome, # outcome variable
+  swp.indx # index of variables
+) {
+  
+  aug.mat.dim <- dim(aug.mat)
+  rows <- aug.mat.dim[1]
+  cols <- aug.mat.dim[2]
+  
+  # initiate SWEEP Operator
+  swp.mat <- aug.mat
+  # create a matrix to store the values after SWEEP Operator
+  # this matrix will iterate in the loop
+  
+  h.jj <- NA # the diagonal element
+  h.ij <- numeric(rows - 1) # the margin vectors
+  mat.jk <- matrix(NA, nrow = (rows - 1), ncol = (cols - 1)) # the SS-CP matrix
+  
+  swp.ind <- swp.indx[swp.indx != outcome]
+  
+  for (i in swp.ind) {
+    
+    h.jj <- -1 / swp.mat[(i + 1), (i + 1)]
+    h.ij <- swp.mat[(i + 1),-(i + 1)] / swp.mat[(i + 1), (i + 1)]
+    mat.jk <- swp.mat[-(i + 1), -(i + 1)] - swp.mat[(i + 1),-(i + 1)] %*% t(swp.mat[(i + 1),-(i + 1)]) / swp.mat[(i + 1), (i + 1)]
+    
+    swp.mat[i + 1, i + 1] <- h.jj # the swept element
+    swp.mat[i + 1, -(i + 1)] <- swp.mat[-(i + 1), i + 1] <- h.ij # the swept row and column
+    swp.mat[-(i + 1), - (i+ 1)] <- mat.jk
+    
+  }
+  return(swp.mat)
+}
+```
+
+```{r}
+# true regression parameters
+## construct the augmented covariance matrix
+aug.cov <- rbind(c(-1, m), cbind(m, v))
+colnames(aug.cov) <- rownames(aug.cov) <- NULL
+out.var <- 4
+true.beta <- swp.true(aug.cov, out.var, 1:p)[, out.var + 1][-(out.var + 1)]
+```
+
+```{r}
+full.reg <- coef(lm(y4 ~ y1 + y2 + y3 + y5 + y6, data = data.frame(full)))
+cc.reg <- coef(lm(y4 ~ y1 + y2 + y3 + y5 + y6, data = data.frame(observed)))
+
+### imputed data
+gibbs <- seq(800, 1000, 50)
+
+#### mvnimpute
+mvnimpute.dat <- list()
+model.param <- list()
+for (i in 1:length(gibbs)) {
+  
+  mvnimpute.dat[[i]] <- sim.res$imputed.data[[gibbs[i]]]
+  colnames(mvnimpute.dat[[i]]) <- paste0("y", 1:p)
+  model.param[[i]] <- lm(y4 ~ y1 + y2 + y3 + y5 + y6, data.frame(mvnimpute.dat[[i]]))
+  
+}
+
+mvnimpute.mod <- summary(mice::pool(model.param))
+sim.reg <- mvnimpute.mod[, 2]
+
+reg.compare <- data.frame(
+  true = true.beta,
+  full = full.reg,
+  mvnimpute = sim.reg,
+  cc = cc.reg
+)
+reg.compare
 ```
