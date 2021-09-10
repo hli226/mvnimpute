@@ -24,5 +24,7 @@ Imports:
     RcppDist
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    clusterGeneration,
+    mice
 VignetteBuilder: knitr
