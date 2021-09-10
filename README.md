@@ -15,7 +15,7 @@ measurement data that are subject to limits of detection (LODs).
 
 ## Installation
 
-For Windows users, the Rtools for building R packages should be
+For Windows users, the Rtools for building R packages have to be
 installed according to your R version from
 <https://cran.r-project.org/bin/windows/Rtools/history.html>.
 
@@ -36,16 +36,6 @@ install.packages("devtools")
 devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
 ```
 
-#### For users who have already installed the package
-
-``` r
-# install the development package devtools for installing packages from GitHub
-install.packages("devtools")
-
-# if this package has been installed previously
-devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE, force = TRUE)
-```
-
 `build_vignettes = TRUE` argument is added for including the vignettes,
 which give the step-by-step instructions on how to use this package
 using an artificial example and a real data example. You have to install
@@ -55,7 +45,7 @@ downloaded and installed.
 
 ## Basic functions
 
-It has 10 functions including
+It has 8 functions including
 
 `data.generation`: generates multivariate normal data with missing and
 censored values.

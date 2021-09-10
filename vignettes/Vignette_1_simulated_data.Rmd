@@ -47,7 +47,7 @@ example.data <- data.generation(num_ind = n,
 names(example.data)
 ```
 
-We generate a dataset with sample size is `r n`,  and specified mean vector consists of six specified values, and an positive definite covariance matrix. The output includes four objects which include, `full.data`, the data matrix that would have been observed without missing and censoring information; `observe.data`, the truly observed data matrix with missing and censoring information; `bounds`, the bounds information of the variables that have missing or or censored values. Specifically, we take missing as a special type of interval censoring with no censoring limits (censoring limits are set as $\pm \infty$); `indicator`, the matrix that indicating the data type: 0 as the missing data, 1 as the observed data, and 2 as the censored data. Now, let us take a look at the dataset
+We generate a dataset with sample size is `r n`, and specified mean vector consists of six specified values, and a random positive definite covariance matrix. The output includes four objects which include, `full.data`, the data matrix that would have been observed without missing and censoring information; `observe.data`, the truly observed data matrix with missing and censoring information; `bounds`, the bounds information of the variables that have missing or or censored values. Specifically, we take missing as a special type of interval censoring with no censoring limits (censoring limits are set as $\pm \infty$); `indicator`, the matrix that indicating the data type: 0 as the missing data, 1 as the observed data, and 2 as the censored data. Now, let us take a look at the dataset
 
 ```{r}
 # data
@@ -108,6 +108,20 @@ acf.calc(sim.res$simulated.sig, title = title)
 
 From the convergence plots and the autocorrelation plots, we see that the posterior distributions of both the mean and variance seem to converge to equilibrium in first few iterations. 
 
+### Marginal plot
+
+We draw and compare the marginal density plots using the full data, the CC data and the imputed data from the last iteration of MCMC.
+
+```{r}
+for (i in c(1, 2, 3, 5)) {
+  plot(density(full[, i]), main = paste("marginal density plot for variable", i))
+  lines(density(observed[!is.na(observed[, i]), i]), col = 6, lty = 2)
+  lines(density(sim.res$imputed.data[[iter]][, i]), col = 4, lty = 3)
+}
+```
+
+The black line is the density plot of the full data, the blue dotted line is the imputed data, the red dashed line is the CC data. We see that the imputed data density align with the full data density quite well.
+
 ### Comparison of data parameters
 
 ```{r}
@@ -141,42 +155,42 @@ compare.v
 
 ### Linear Regression
 ```{r}
-##############################################
-swp.true <- function(
-  aug.mat, # augmented covariance matrix
-  # NOTE: swp = 0 is to sweep the first row
-  outcome, # outcome variable
-  swp.indx # index of variables
-) {
-  
-  aug.mat.dim <- dim(aug.mat)
-  rows <- aug.mat.dim[1]
-  cols <- aug.mat.dim[2]
-  
-  # initiate SWEEP Operator
-  swp.mat <- aug.mat
-  # create a matrix to store the values after SWEEP Operator
-  # this matrix will iterate in the loop
-  
-  h.jj <- NA # the diagonal element
-  h.ij <- numeric(rows - 1) # the margin vectors
-  mat.jk <- matrix(NA, nrow = (rows - 1), ncol = (cols - 1)) # the SS-CP matrix
-  
-  swp.ind <- swp.indx[swp.indx != outcome]
-  
-  for (i in swp.ind) {
-    
-    h.jj <- -1 / swp.mat[(i + 1), (i + 1)]
-    h.ij <- swp.mat[(i + 1),-(i + 1)] / swp.mat[(i + 1), (i + 1)]
-    mat.jk <- swp.mat[-(i + 1), -(i + 1)] - swp.mat[(i + 1),-(i + 1)] %*% t(swp.mat[(i + 1),-(i + 1)]) / swp.mat[(i + 1), (i + 1)]
-    
-    swp.mat[i + 1, i + 1] <- h.jj # the swept element
-    swp.mat[i + 1, -(i + 1)] <- swp.mat[-(i + 1), i + 1] <- h.ij # the swept row and column
-    swp.mat[-(i + 1), - (i+ 1)] <- mat.jk
-    
-  }
-  return(swp.mat)
-}
+# ##############################################
+# swp.true <- function(
+#   aug.mat, # augmented covariance matrix
+#   # NOTE: swp = 0 is to sweep the first row
+#   outcome, # outcome variable
+#   swp.indx # index of variables
+# ) {
+#   
+#   aug.mat.dim <- dim(aug.mat)
+#   rows <- aug.mat.dim[1]
+#   cols <- aug.mat.dim[2]
+#   
+#   # initiate SWEEP Operator
+#   swp.mat <- aug.mat
+#   # create a matrix to store the values after SWEEP Operator
+#   # this matrix will iterate in the loop
+#   
+#   h.jj <- NA # the diagonal element
+#   h.ij <- numeric(rows - 1) # the margin vectors
+#   mat.jk <- matrix(NA, nrow = (rows - 1), ncol = (cols - 1)) # the SS-CP matrix
+#   
+#   swp.ind <- swp.indx[swp.indx != outcome]
+#   
+#   for (i in swp.ind) {
+#     
+#     h.jj <- -1 / swp.mat[(i + 1), (i + 1)]
+#     h.ij <- swp.mat[(i + 1),-(i + 1)] / swp.mat[(i + 1), (i + 1)]
+#     mat.jk <- swp.mat[-(i + 1), -(i + 1)] - swp.mat[(i + 1),-(i + 1)] %*% t(swp.mat[(i + 1),-(i + 1)]) / swp.mat[(i + 1), (i + 1)]
+#     
+#     swp.mat[i + 1, i + 1] <- h.jj # the swept element
+#     swp.mat[i + 1, -(i + 1)] <- swp.mat[-(i + 1), i + 1] <- h.ij # the swept row and column
+#     swp.mat[-(i + 1), - (i+ 1)] <- mat.jk
+#     
+#   }
+#   return(swp.mat)
+# }
 ```
 
 ```{r}
