@@ -1,7 +1,7 @@
 Package: mvnimpute
 Type: Package
 Title: Concurrently impute the missing and censored values
-Version: 0.0.0.9002
+Version: 0.0.0.9003
 Depends: R (>= 3.4.0)
 Author: Hesen Li
 Maintainer: Hesen Li <hli226@uic.edu>
