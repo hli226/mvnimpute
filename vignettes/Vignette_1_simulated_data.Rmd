@@ -155,42 +155,42 @@ compare.v
 
 ### Linear Regression
 ```{r}
-# ##############################################
-# swp.true <- function(
-#   aug.mat, # augmented covariance matrix
-#   # NOTE: swp = 0 is to sweep the first row
-#   outcome, # outcome variable
-#   swp.indx # index of variables
-# ) {
-#   
-#   aug.mat.dim <- dim(aug.mat)
-#   rows <- aug.mat.dim[1]
-#   cols <- aug.mat.dim[2]
-#   
-#   # initiate SWEEP Operator
-#   swp.mat <- aug.mat
-#   # create a matrix to store the values after SWEEP Operator
-#   # this matrix will iterate in the loop
-#   
-#   h.jj <- NA # the diagonal element
-#   h.ij <- numeric(rows - 1) # the margin vectors
-#   mat.jk <- matrix(NA, nrow = (rows - 1), ncol = (cols - 1)) # the SS-CP matrix
-#   
-#   swp.ind <- swp.indx[swp.indx != outcome]
-#   
-#   for (i in swp.ind) {
-#     
-#     h.jj <- -1 / swp.mat[(i + 1), (i + 1)]
-#     h.ij <- swp.mat[(i + 1),-(i + 1)] / swp.mat[(i + 1), (i + 1)]
-#     mat.jk <- swp.mat[-(i + 1), -(i + 1)] - swp.mat[(i + 1),-(i + 1)] %*% t(swp.mat[(i + 1),-(i + 1)]) / swp.mat[(i + 1), (i + 1)]
-#     
-#     swp.mat[i + 1, i + 1] <- h.jj # the swept element
-#     swp.mat[i + 1, -(i + 1)] <- swp.mat[-(i + 1), i + 1] <- h.ij # the swept row and column
-#     swp.mat[-(i + 1), - (i+ 1)] <- mat.jk
-#     
-#   }
-#   return(swp.mat)
-# }
+##############################################
+swp.true <- function(
+  aug.mat, # augmented covariance matrix
+  # NOTE: swp = 0 is to sweep the first row
+  outcome, # outcome variable
+  swp.indx # index of variables
+) {
+
+  aug.mat.dim <- dim(aug.mat)
+  rows <- aug.mat.dim[1]
+  cols <- aug.mat.dim[2]
+
+  # initiate SWEEP Operator
+  swp.mat <- aug.mat
+  # create a matrix to store the values after SWEEP Operator
+  # this matrix will iterate in the loop
+
+  h.jj <- NA # the diagonal element
+  h.ij <- numeric(rows - 1) # the margin vectors
+  mat.jk <- matrix(NA, nrow = (rows - 1), ncol = (cols - 1)) # the SS-CP matrix
+
+  swp.ind <- swp.indx[swp.indx != outcome]
+
+  for (i in swp.ind) {
+
+    h.jj <- -1 / swp.mat[(i + 1), (i + 1)]
+    h.ij <- swp.mat[(i + 1),-(i + 1)] / swp.mat[(i + 1), (i + 1)]
+    mat.jk <- swp.mat[-(i + 1), -(i + 1)] - swp.mat[(i + 1),-(i + 1)] %*% t(swp.mat[(i + 1),-(i + 1)]) / swp.mat[(i + 1), (i + 1)]
+
+    swp.mat[i + 1, i + 1] <- h.jj # the swept element
+    swp.mat[i + 1, -(i + 1)] <- swp.mat[-(i + 1), i + 1] <- h.ij # the swept row and column
+    swp.mat[-(i + 1), - (i+ 1)] <- mat.jk
+
+  }
+  return(swp.mat)
+}
 ```
 
 ```{r}
