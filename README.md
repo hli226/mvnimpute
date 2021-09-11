@@ -12,6 +12,7 @@ counter](https://img.shields.io/github/search/hli226/mvnimpute/search)
 releases](https://img.shields.io/github/downloads/hli226/mvnimpute/total?color=green)
 ![GitHub R package
 version](https://img.shields.io/github/r-package/v/hli226/mvnimpute)
+
 <!-- badges: end -->
 
 The goal of **mvnimpute** package is to implement multiple imputation to

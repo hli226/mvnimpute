@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 ![GitHub search hit counter](https://img.shields.io/github/search/hli226/mvnimpute/search)
 ![GitHub all releases](https://img.shields.io/github/downloads/hli226/mvnimpute/total?color=green)
 ![GitHub R package version](https://img.shields.io/github/r-package/v/hli226/mvnimpute)
+
 <!-- badges: end -->
 
 The goal of **mvnimpute** package is to implement multiple imputation to the data when there are both missing and censored values (a single variable can have both missing and censored values simultaneously; or it can have either only missing or censored values). An example of application of this package is for imputing the NHANES laboratory measurement data that are subject to limits of detection (LODs).
