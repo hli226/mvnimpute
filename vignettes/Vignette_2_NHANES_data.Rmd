@@ -16,19 +16,18 @@ knitr::opts_chunk$set(
 
 ```{r setup, message = FALSE}
 library(mvnimpute) # for imputation
-library(dplyr)     # for subseting
 ```
 
 We select a subset of the NHANES 2011 - 2016 dataset in the `mvnimpute` package. WE take the PCB measurements data to show the necessary steps for doing multiple imputation using the `mvnimpute` package.
 
 ```{r}
 # select subset of the NHANES data: PCB
-analysis.data <- as.matrix(select(nhanes.dat$data, starts_with("LBC") & !ends_with("LA")))                      
-censoring.ind <- as.matrix(select(nhanes.dat$data, starts_with("LBD")))
+analysis.data <- as.matrix(dplyr::select(nhanes.dat$data, starts_with("LBC") & !ends_with("LA")))                      
+censoring.ind <- as.matrix(dplyr::select(nhanes.dat$data, starts_with("LBD")))
 LLODs <- as.matrix(nhanes.dat$PCB.LOD)   # lower limits of detection (LLODs)
 year <- nhanes.dat$data$SDDSRVYR         # survey year indicator
 
-# rename columns to repsective PCB names
+# rename columns to respective PCB names
 colnames(analysis.data) <- colnames(censoring.ind) <- paste0("PCB", substr(colnames(analysis.data), 4, 6))
 
 # remove item nonresponse
