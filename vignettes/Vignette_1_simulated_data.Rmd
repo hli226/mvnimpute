@@ -154,6 +154,9 @@ compare.v
 ```
 
 ### Linear Regression
+
+We use sweep operator to calculate the linear regression paramters.
+
 ```{r}
 ##############################################
 swp.true <- function(
