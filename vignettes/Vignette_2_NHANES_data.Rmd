@@ -150,7 +150,15 @@ sim.dat <- multiple.imputation(
 )
 ```
 
-We compare the marginal distribution of the data between the imputed dataset from the last iteration and the original dataset.
+# Markov chain diagnostic plots
+
+```{r, fig.align = "center", fig.width = 6, fig.height = 6}
+# mean convergence plot
+conv.plot(sim.dat$simulated.mu, iter, title = "mean convergence plot: all PCB")
+conv.plot(sim.dat$simulated.sig, iter, title = "mean convergence plot: all PCB")
+```
+
+The convergence plots show that the algorithm converge very fast. We compare the marginal distribution of the data between the imputed dataset from the last iteration and the original dataset.
 
 ```{r}
 ## compare the marginal density plots of the original data and the imputed data (last iteration)
