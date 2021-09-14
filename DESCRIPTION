@@ -21,7 +21,8 @@ Imports:
     LaplacesDemon,
     rlang,
     Rcpp,
-    RcppDist
+    RcppDist,
+    dplyr
 Suggests:
     knitr,
     rmarkdown,
