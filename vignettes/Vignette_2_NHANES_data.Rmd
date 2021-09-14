@@ -30,19 +30,19 @@ year <- nhanes.dat$data$SDDSRVYR         # survey year indicator
 # rename columns to respective PCB names
 colnames(analysis.data) <- colnames(censoring.ind) <- paste0("PCB", substr(colnames(analysis.data), 4, 6))
 
-# remove item nonresponse
-item.nonresponse <- numeric()
+# remove unit nonresponse
+unit.nonresponse <- numeric()
 count <- 0
 for (i in 1:nrow(analysis.data)) {
   if (sum(is.na(analysis.data[i, ])) == ncol(analysis.data)) {
     count <- count + 1
-    item.nonresponse[count] <- i
+    unit.nonresponse[count] <- i
   }
 }
 
-year <- year[-item.nonresponse]
-analysis.data <- analysis.data[-item.nonresponse, ]
-censoring.ind <- censoring.ind[-item.nonresponse, ]
+year <- year[-unit.nonresponse]
+analysis.data <- analysis.data[-unit.nonresponse, ]
+censoring.ind <- censoring.ind[-unit.nonresponse, ]
 ```
 
 The tables below show some summary statistics of the data we just obtained: 
