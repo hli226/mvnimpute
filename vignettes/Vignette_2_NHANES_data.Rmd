@@ -18,13 +18,13 @@ knitr::opts_chunk$set(
 library(mvnimpute) # for imputation
 ```
 
-We select a subset of the NHANES 2011 - 2016 dataset in the `mvnimpute` package. WE take the PCB measurements data to show the necessary steps for doing multiple imputation using the `mvnimpute` package.
+We select a subset of the NHANES 2011 - 2016 dataset in the `mvnimpute` package. We take the PCB measurements data to show the necessary steps for doing multiple imputation using the `mvnimpute` package.
 
 ```{r}
 # select subset of the NHANES data: PCB
 analysis.data <- as.matrix(dplyr::select(nhanes.dat$data, starts_with("LBC") & !ends_with("LA")))                      
 censoring.ind <- as.matrix(dplyr::select(nhanes.dat$data, starts_with("LBD")))
-LLODs <- as.matrix(nhanes.dat$PCB.LOD)   # lower limits of detection (LLODs)
+MLODs <- as.matrix(nhanes.dat$PCB.LOD)   # maximum limits of detection (LMODs)
 year <- nhanes.dat$data$SDDSRVYR         # survey year indicator
 
 # rename columns to respective PCB names
@@ -41,8 +41,8 @@ for (i in 1:nrow(analysis.data)) {
 }
 
 year <- year[-unit.nonresponse]
-analysis.data <- analysis.data[-unit.nonresponse, ]
-censoring.ind <- censoring.ind[-unit.nonresponse, ]
+analysis.data <- analysis.data[-unit.nonresponse, 1:10]
+censoring.ind <- censoring.ind[-unit.nonresponse, 1:10]
 ```
 
 The tables below show some summary statistics of the data we just obtained: 
@@ -54,20 +54,20 @@ analysis.dim
 summary(analysis.data)
 ```
 
-From the above table, we see that the data has `r analysis.dim[1]` subjects with `r analysis.dim[2]` variables, almost every variable has a few missing values.
+From the table above, we see that the data has `r analysis.dim[1]` subjects with `r analysis.dim[2]` variables, almost every variable has a few missing values.
 
 ```{r}
 # censoring indicator matrix
 table(year)
-LLODs
+MLODs
 head(censoring.ind)
 ```
 
-The first two tables show the survey years and the lower limits of detection (LLODs) information for each variable. The values as shown in LLODs are the original LLODs divied by $\sqrt{2}$. The third table above show the censoring indicator matrix for those PCB measurements data, the values correspond to the values from the original NHANES dataset, where 0 indicates observed values, 1 indicates censored values, and `NA` indicates missing values (not shown here). In order to use our package, we have to re-code the data type indicators as follows:
+The first two tables show the survey years and the maximum limits of detection (MLODs) information for each variable. The values as shown in MLODs are the original MLODs divied by $\sqrt{2}$. The third table above show the censoring indicator matrix for those PCB measurements data, the values correspond to the values from the original NHANES dataset, where 0 indicates observed values, 1 indicates censored values, and `NA` indicates missing values (not shown here). In order to use our package, we have to re-code the data type indicators as follows:
 
 * 0: missing values
 * 1: observed values
-* 2: censoring values
+* 2: censored values
 
 ```{r}
 ### re-code the censoring indicator matrix
@@ -91,7 +91,7 @@ Next, we have to create a list object for including the censoring bounds informa
 
 * For missing values, the corresponding entries in the first matrix are $-10,000$, the corresponding entries in the second matrix are $10,000$
 * For observe values, the corresponding entries in the first matrix are the observed quantities, the corresponding entries in the second matrix are equal to those in the first matrix
-* For the censored values, the corresponding entries in the first matrix are $-10,000$, the corresponding entries in the second matrix are the corresponding lower limits of detection (LLODs). Note that the measurements fall below LLODs can be viewed as left censored values with the LLODs as the upper censoring limits.
+* For the censored values, the corresponding entries in the first matrix are $-10,000$, the corresponding entries in the second matrix are the corresponding maximum limits of detection (MLODs). Note that the measurements fall below MLODs can be viewed as left censored values with the MLODs as the upper censoring limits.
 
 ```{r}
 # create bounds
@@ -110,7 +110,7 @@ for (i in 1:nrow(bounds1)) {
     }
     else {
       bounds1[i, j] <- -10000
-      bounds2[i, j] <- log(analysis.data[i, j] * sqrt(2)) # censored values are LLODs/sqrt(2)
+      bounds2[i, j] <- log(analysis.data[i, j] * sqrt(2)) # censored values are MLODs/sqrt(2)
     }
   }
 }
@@ -169,9 +169,9 @@ for (i in 1:ncol(analysis.data)) {
   plot(density(na.omit(analysis.data[, i])), main = paste0("PCB", substr(colnames(analysis.data)[i], 4, 6)))
   lines(density(imputed.data.ori[, i]), col = 2, lty = 2)
 }
-table(censoring.ind[, "PCB189"])
+table(censoring.ind[, "PCB028"])
 ```
 
-The plots indicate that the imputed data align well with the original data, for variables with many censored values, such as PCB189, the peak which indicates a concentration of LLODs, is expected to be shifted a little bit to the left, since we are imputing values smaller than the censoring values.
+The plots indicate that the imputed data align well with the original data, for variables with many censored values, such as PCB28, the peak which indicates a concentration of MLODs, is expected to be shifted a little bit to the left, since we are imputing values smaller than the MLODs.
 
 
