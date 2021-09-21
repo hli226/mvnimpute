@@ -54,7 +54,7 @@ analysis.dim
 summary(analysis.data)
 ```
 
-From the table above, we see that the data has `r analysis.dim[1]` subjects with `r analysis.dim[2]` variables, almost every variable has a few missing values.
+From the tables above, we see that the data has `r analysis.dim[1]` subjects with `r analysis.dim[2]` variables, almost every variable has a few missing values.
 
 ```{r}
 # censoring indicator matrix
@@ -63,7 +63,7 @@ MLODs
 head(censoring.ind)
 ```
 
-The first two tables show the survey years and the maximum limits of detection (MLODs) information for each variable. The values as shown in MLODs are the original MLODs divied by $\sqrt{2}$. The third table above show the censoring indicator matrix for those PCB measurements data, the values correspond to the values from the original NHANES dataset, where 0 indicates observed values, 1 indicates censored values, and `NA` indicates missing values (not shown here). In order to use our package, we have to re-code the data type indicators as follows:
+The first two tables show the survey years and the maximum limits of detection (MLODs) information for each variable. The values as shown in MLODs are the original MLODs divied by $\sqrt{2}$. The third table above shows the censoring indicator matrix for those PCB measurements data, the values correspond to the values from the original NHANES dataset, where 0 indicates observed values, 1 indicates censored values, and `NA` indicates missing values (not shown here). In order to use our package, we have to re-code the data type indicators as follows:
 
 * 0: missing values
 * 1: observed values
@@ -87,7 +87,7 @@ for (i in 1:nrow(censoring.ind)) {
 head(censoring.ind)
 ```
 
-Next, we have to create a list object for including the censoring bounds information for each of the data point. Specifically, we take missing data as a special type of "censoring" data with two censoring limits corresponding to $-\infty$ and $\infty$, respectively. In this package, we take $-10,000$ and $10,000$ as proxies for $-\infty$ and $\infty$, respectively. We create a list including two matrices, which contain the lower bounds and upper bounds respectively, as follow,
+Next, we have to create a list object for including the censoring bounds information for each of the data point. Specifically, we take missing data as a special type of "censoring" data with two censoring limits corresponding to $-\infty$ and $\infty$, respectively. In this package, we take $-10,000$ and $10,000$ as proxies for $-\infty$ and $\infty$, respectively. We the list as follow,
 
 * For missing values, the corresponding entries in the first matrix are $-10,000$, the corresponding entries in the second matrix are $10,000$
 * For observe values, the corresponding entries in the first matrix are the observed quantities, the corresponding entries in the second matrix are equal to those in the first matrix
@@ -119,7 +119,7 @@ colnames(bounds[[1]]) <- colnames(bounds[[2]]) <- colnames(analysis.data)
 head(bounds[[1]][, 1:5]); head(bounds[[2]][, 1:5])
 ```
 
-The tables show the tow matrices, we note that the PCB028 and PCB066 values for the six row are censored since only the lower limit is infinity, as represented by -10,000. In creating the list, we log-transformed the data to better approach normality, which is th assumption that our package based on, and since the laboratory measurements data can only take positive values. We will transform the imputed dataset back to the original scale after imputation.
+The tables show the tow matrices, we note that the PCB028 and PCB066 values for the six row are censored since only the lower limit is negative infinity, as represented by $-10,000$. In creating the list, we log-transformed the data to better approach normality, which is the assumption that our package base on, and since the laboratory measurements data can only take positive values. We will transform the imputed dataset back to the original scale after imputation.
 
 # Multiple imputation
 
@@ -172,6 +172,6 @@ for (i in 1:ncol(analysis.data)) {
 table(censoring.ind[, "PCB028"])
 ```
 
-The plots indicate that the imputed data align well with the original data, for variables with many censored values, such as PCB28, the peak which indicates a concentration of MLODs, is expected to be shifted a little bit to the left, since we are imputing values smaller than the MLODs.
+The plots indicate that the imputed data align well with the original observed data, for variables with many censored values, such as PCB28, the peak which indicates a concentration of MLODs, is expected to be shifted a little bit to the left, since we are imputing values smaller than the MLODs.
 
 

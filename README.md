@@ -55,10 +55,12 @@ devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
 
 `build_vignettes = TRUE` argument is added for including the vignettes,
 which give the step-by-step instructions on how to use this package
-using an artificial example and a real data example. You have to install
-the development package **devtools** for installing packages from
-GitHub. The packages that **mvnimpute** depends on will be automatically
-downloaded and installed.
+using an artificial example and a real data example. There are two
+vignettes file, one using the simulated data, and the other one using a
+selected subset of the NHANES data. You have to install the development
+package **devtools** for installing packages from GitHub. The packages
+that **mvnimpute** depends on will be automatically downloaded and
+installed.
 
 ## Basic functions
 
@@ -92,8 +94,8 @@ heavy metal pollutants data.
 For detailed instructions on using the package and a walk-through
 example, please refer to the vignette downloaded with the package. Once
 the package is installed, the vignette can be accessed using the
-function `browseVignettes("mvnimpute")`, and it will open in an external
-web browser.
+function `browseVignettes("mvnimpute")`, it will open in an external web
+browser.
 
 ## Acknowlegements
 

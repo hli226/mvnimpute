@@ -47,7 +47,7 @@ example.data <- data.generation(num_ind = n,
 names(example.data)
 ```
 
-We generate a dataset with sample size is `r n`, and specified mean vector consists of six specified values, and a random positive definite covariance matrix. The output includes four objects which include, `full.data`, the data matrix that would have been observed without missing and censoring information; `observe.data`, the truly observed data matrix with missing and censoring information; `bounds`, the bounds information of the variables that have missing or or censored values. Specifically, we take missing as a special type of interval censoring with no censoring limits (censoring limits are set as $\pm \infty$); `indicator`, the matrix that indicating the data type: 0 as the missing data, 1 as the observed data, and 2 as the censored data. Now, let us take a look at the dataset
+We generate a dataset with sample size `r n`, with specified mean vector consists of six specified values, and a random positive definite covariance matrix. The output includes four objects which include, `full.data`, the data matrix that would have been observed without missing and censoring information; `observe.data`, the truly observed data matrix with missing and censoring information; `bounds`, the bounds information of the variables that have missing or censored values. Specifically, we take missing as a special type of interval censoring with no censoring limits (censoring limits are set as $\pm \infty$); `indicator`, the matrix that indicating the data type: 0 as the missing data, 1 as the observed data, and 2 as the censored data. Now, let us take a look at the dataset
 
 ```{r}
 # data
@@ -65,7 +65,7 @@ From the observed data matrix, the missing values are denoted as `NA`, the censo
 
 ## Multiple Imputation
 
-For doing multiple imputation, we take a Normal-Inverse-Wishart conjugate prior distribution of the mean vector and covariance matrix. We run MCMC simulation for 1,000 iterations.
+For doing multiple imputation, we take a Normal-Inverse-Wishart distribution for joint prior distribution of the mean vector and covariance matrix. We run MCMC simulation for 1,000 iterations.
 
 ```{r, message = FALSE}
 ### prior specifications
@@ -114,7 +114,7 @@ We draw and compare the marginal density plots using the full data, the CC data 
 
 ```{r}
 for (i in c(1, 2, 3, 5)) {
-  plot(density(full[, i]), main = paste("marginal density plot for variable", i))
+  plot(density(full[, i]), main = paste("Variable", i))
   lines(density(observed[!is.na(observed[, i]), i]), col = 6, lty = 2)
   lines(density(sim.res$imputed.data[[iter]][, i]), col = 4, lty = 3)
 }
