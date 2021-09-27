@@ -20,7 +20,7 @@
 #' status, and within each sample pool, the pooled lab measurements were replicated for each individual.
 #'
 #' @note The subset provided here was selected to demonstrate the functionality of the mvnimpute package,
-#' no clinical conclusions should be derived from it
+#' no clinical conclusions should be derived from it.
 #'
 #' @source \url{https://www.cdc.gov/nchs/nhanes/index.htm}
 "nhanes.dat"
