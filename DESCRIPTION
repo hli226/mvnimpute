@@ -15,17 +15,17 @@ RoxygenNote: 7.1.2
 LinkingTo: Rcpp, RcppArmadillo, RcppDist
 Imports: 
     ggplot2,
-    truncnorm,
-    MASS,
     reshape2,
     LaplacesDemon,
     rlang,
     Rcpp,
     RcppDist,
-    dplyr
+    dplyr,
+    MASS,
+    truncnorm
 Suggests:
     knitr,
     rmarkdown,
-    clusterGeneration,
-    mice
+    mice,
+    clusterGeneration
 VignetteBuilder: knitr
