@@ -12,7 +12,9 @@ List param_calc(const List data) {
 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < p; j++) {
-      if (lval(i, j) == rval(i, j))
+      if (lval(i, j) == rval(i, j)                      // if the value is observed
+      || (lval(i, j) > -10000 && rval(i, j) == 10000)   // if the value is right censored
+      || (lval(i, j) == -10000 && rval(i, j) < 10000))  // if the values is left censored
         obs_indx(i, j) = 1;
     }
   }
