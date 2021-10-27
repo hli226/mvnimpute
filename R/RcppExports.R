@@ -5,6 +5,18 @@ Gibbs_imp <- function(data, data_indx, mu_vec, cond_param) {
     .Call('_mvnimpute_Gibbs_imp', PACKAGE = 'mvnimpute', data, data_indx, mu_vec, cond_param)
 }
 
+#' Calculate CC parameters
+#'
+#' @param data a list
+#' @export
+param_calc <- function(data) {
+    .Call('_mvnimpute_param_calc', PACKAGE = 'mvnimpute', data)
+}
+
+#' Single imputation
+#'
+#' @param data a list
+#' @export
 single_imputation <- function(data) {
     .Call('_mvnimpute_single_imputation', PACKAGE = 'mvnimpute', data)
 }
