@@ -75,7 +75,7 @@ parameters.
 `visual.plot`: draws plot showing percentages of missing, censored, and
 observed values.
 
-`marg.plot`: draws density plot for each marginal variable.
+`marg.plot`: draws marginal density plot for each variable.
 
 `multiple.imputation`: implements multiple imputation for missing and
 censored data, have to perform on the complete data.
