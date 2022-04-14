@@ -14,12 +14,17 @@
 #'
 #' @export
 multiple.imputation <- function(
-  data,          # the list that contains the censored values
-  prior.params,  # prior specifications
+  data,           # the list that contains the censored values
+  prior.params,   # prior specifications
   starting.values,# starting values
-  iter,          # iterations of Gibbs sampler
-  verbose = TRUE # boolean variable to print out running status
+  iter,           # iterations of Gibbs sampler
+  verbose = TRUE  # boolean variable to print out running status
 ) {
+
+  ### control statements
+  if (!is.list(data)) {
+    stop("Error: the input should be a list of length two that includes the lower and upper bounds of the data!")
+  }
 
   ### single imputation to make up incomplete data
   iter.data <- single_imputation(data)
