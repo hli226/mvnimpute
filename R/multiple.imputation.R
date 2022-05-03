@@ -106,6 +106,7 @@ multiple.imputation <- function(
   ## Gibbs iteration
   for (i in 1:iter) {
 
+
     ##############################################
     ## 1. Use updated parameters to update data ##
     ##############################################
