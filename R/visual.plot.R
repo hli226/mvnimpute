@@ -1,13 +1,17 @@
+#' @import ggplot2
+NULL
 #' Function for missing and censored data visualization
 #'
 #' Draws plot that graphically show the percentages of the missing, censored and observed data
 #'
-#' @param data.indicator matrix that contains the data type indicators of the original data
-#' @param title title of the generated plot, default is set to "Summary plot"
+#' @param data.indicator matrix that contains the data type indicators of the original data:
+#' 0 for missing data; 1 for observed data; 2 for right censored data; 3 for left censored data;
+#' 4 for interval censored data.
+#' @param title title of the generated plot, default is set to "Percentages of different data type".
 #'
 #' @details The function draws the plot that graphically shows the percentages of the missing, censored and observed
 #' data in the dataset. \code{data.indicator} should be a matrix containing the data type indicators as generated in the
-#' data preparation step. 0 for missing values, 1 for obsrved values, and 2 for censored values. \code{title} is the title
+#' data preparation step. 0 for missing values, 1 for observed values, and 2 for censored values. \code{title} is the title
 #' of the generated plot.
 #'
 #' @return The plot that shows the details of the different type of data in the dataset
@@ -15,14 +19,14 @@
 #' @export
 visual.plot <- function(
   data.indicator,
-  title = "Summary plot") {
+  title = "Percentages of different data type") {
 
   c.names <- colnames(data.indicator) # get column names of the data
   n <- nrow(data.indicator)
   p <- ncol(data.indicator)
 
-  data.t <- matrix(NA, nrow = p, ncol = 3)
-  colnames(data.t) <- c("Observed", "Missing", "Censored")
+  data.t <- matrix(NA, nrow = p, ncol = 5)
+  colnames(data.t) <- c("Observed", "Missing", "Left_Censored", "Right_Censored", "Interval_Censored")
 
   for (i in 1:p) {
 
@@ -42,9 +46,21 @@ visual.plot <- function(
     }
 
     if ("2" %in% names.summ) {
-      data.t[i, "Censored"] <- summ[names.summ == 2]
+      data.t[i, "Right_Censored"] <- summ[names.summ == 2]
     } else {
-      data.t[i, "Censored"] <- 0
+      data.t[i, "Right_Censored"] <- 0
+    }
+
+    if ("3" %in% names.summ) {
+      data.t[i, "Left_Censored"] <- summ[names.summ == 3]
+    } else {
+      data.t[i, "Left_Censored"] <- 0
+    }
+
+    if ("4" %in% names.summ) {
+      data.t[i, "Interval_Censored"] <- summ[names.summ == 4]
+    } else {
+      data.t[i, "Interval_Censored"] <- 0
     }
 
   }
@@ -52,14 +68,23 @@ visual.plot <- function(
   new.data <- data.frame(id = c.names, data.t)
   new.data$Observed <- new.data$Observed/n * 100
   new.data$Missing <- new.data$Missing/n * 100
-  new.data$Censored <- new.data$Censored/n * 100
+  new.data$Right_Censored <- new.data$Right_Censored/n * 100
+  new.data$Left_Censored <- new.data$Left_Censored/n * 100
+  new.data$Interval_Censored <- new.data$Interval_Censored/n * 100
 
   percent.mat <- melt(new.data, id.vars = "id")
 
+  ### remove 0 count
+  percent.mat <- subset(percent.mat, percent.mat$value != 0.00)
+  colnames(percent.mat)[2] <- "Variable"
+
   ggplot(percent.mat) +
-    geom_bar(aes(x = factor(.data$id, levels = c.names), y = .data$value, fill = .data$variable),
+    geom_bar(aes(x = factor(.data$id, levels = c.names), y = .data$value, fill = .data$Variable),
              stat = "identity") +
     coord_flip() +
     labs(x = "Variable", y = "Percentage (%)") +
-    ggtitle(title)
+    scale_fill_manual(breaks = c("Missing", "Observed", "Right_Censored", "Left_Censored", "Interval_Censored"),
+                      values = c("#00A9FF", "#00BE67", "#DB72FB", "#FFD64C", "#F8766D")) +
+    ggtitle(title) +
+    theme(plot.title = element_text(hjust = 0.5))
 }

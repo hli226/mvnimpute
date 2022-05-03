@@ -4,7 +4,7 @@
 #'
 #' @param data a list of data containing the information for the missing and censored values
 #' @param prior.params list of prior parameter specifications
-#' @param starting.values list of starting values
+#' @param initial.values list of initial values
 #' @param iter number of rounds for doing multiple imputation
 #' @param verbose boolean variable indicating whether the running status is printed in the console. Default is set to TRUE
 #'
@@ -16,14 +16,23 @@
 multiple.imputation <- function(
   data,           # the list that contains the censored values
   prior.params,   # prior specifications
-  starting.values,# starting values
+  initial.values, # initial values
   iter,           # iterations of Gibbs sampler
   verbose = TRUE  # boolean variable to print out running status
 ) {
 
   ### control statements
+  #### check for input: should be a list
   if (!is.list(data)) {
-    stop("Error: the input should be a list of length two that includes the lower and upper bounds of the data!")
+    stop("The input argument should be a list of length two including the lower and upper bounds of the data!")
+  }
+  #### check for dimension
+  if (sum(dim(data[[1]]) == dim(data[[2]])) != 2) {
+    stop("Dimension of the two matrices should be equal to the dimension of the observed data!")
+  }
+  ### check for element of list: should be a matrix
+  if (!(is.matrix(data[[1]]) & is.matrix(data[[2]]))) {
+    stop("Each element of the input data list should be a matrix!")
   }
 
   ### single imputation to make up incomplete data
@@ -34,14 +43,46 @@ multiple.imputation <- function(
 
   ###########################################
   ### prior specification
+
+  #### check for input: should be a list
+  if (!is.list(prior.params)) {
+    stop("The input argument should be a list of length four including four prior specifications for the NIW prior!")
+  }
+
   mu.0 <- prior.params$mu.0
   Lambda.0 <- prior.params$Lambda.0
   kappa.0 <- prior.params$kappa.0
   nu.0 <- prior.params$nu.0
 
-  # starting values
-  mu.iter <- mu.ini <- starting.values$mu
-  sig.iter <- sig.ini <- starting.values$sigma
+  #### check for prior specifications
+  if(length(mu.0) != p) {
+    stop("The length of the prior mean vector should equal to the nubmer of variables!")
+  }
+  if (sum(dim(Lambda.0) == p) != 2) {
+    stop("The prior scale matrix should be a square matrix!")
+  }
+  if (length(kappa.0) != 1) {
+    stop("The prior number of measurements should be a scaler value!")
+  }
+  if (length(nu.0) != 1) {
+    stop("The degrees of freedom should be a scaler value!")
+  }
+
+  # initial values
+  if (!is.list(initial.values)) {
+    stop("This input argument should be a list of length two including the initial values for the mean vector and covariance matrix!")
+  }
+
+  mu.iter <- mu.ini <- initial.values$mu
+  sig.iter <- sig.ini <- initial.values$sigma
+
+  #### check for initial values
+  if (length(mu.iter) != p) {
+    stop("The length of the mean vector should equal to the nubmer of variables!")
+  }
+  if (sum(dim(sig.iter) == p) != 2) {
+    stop("The covariance matrix should be a square matrix which has a dimension correspond to the number of variables!")
+  }
 
   # vector and list to store results
   impute <- list()
@@ -65,12 +106,16 @@ multiple.imputation <- function(
   ## Gibbs iteration
   for (i in 1:iter) {
 
-    ###########################################
-    ## 1. Use starting values to update data ##
-    ###########################################
+    ##############################################
+    ## 1. Use updated parameters to update data ##
+    ##############################################
 
     # SWP to calculate conditional parameters
     cond.param <- cond_param(iter.data)
+
+    # rename the cond.param
+    colnames(cond.param) <- c(paste0("beta", 0:(p-1)), "sigma^2")
+    rownames(cond.param) <- c("Outcome: y", paste0("Outcome: x", 1:(p-1)))
 
     ##### I-step
     iter.data <- Gibbs_imp(iter.data, data, mu.iter, cond.param)
@@ -107,12 +152,15 @@ multiple.imputation <- function(
     if (verbose) message(paste(i, "-th iteration!", sep = ""))    # print out the running status
   }
 
+  ### rename rows of the matrices for mean and variance
+  rownames(Mu.iter) <- rownames(Sig.iter) <- c("Initial", paste0("Iteration: ", 1:iter))
+
   return(list(
-    simulated.mu = Mu.iter,       # simulated mean vector: a vector
-    simulated.sig = Sig.iter,       # simulated variance vector: a vector
-    simulated.cov = Covmat,         # simulate covariance matrix: a list
+    simulated.mu = Mu.iter,          # simulated mean vector: a vector
+    simulated.sig = Sig.iter,        # simulated variance vector: a vector
+    simulated.cov = Covmat,          # simulate covariance matrix: a list
     imputed.data = impute,           # simulated data: a list
-    conditional.params = cond.      # conditional parameters: a list
+    conditional.params = cond.       # conditional parameters: a list
   ))
 
 }

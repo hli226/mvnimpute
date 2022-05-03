@@ -94,8 +94,8 @@ sim.res <- multiple.imputation(
 ### Convergence plots
 
 ```{r, fig.align = "center", fig.height = 5, fig.width = 5}
-conv.plot(sim.res$simulated.mu, iter, title = "convergence plot of the mean values")
-conv.plot(sim.res$simulated.sig, iter, title = "convergence plot of the variance values")
+conv.plot(sim.res$simulated.mu, 0, iter, title = "convergence plot of the mean values")
+conv.plot(sim.res$simulated.sig, 0, iter, title = "convergence plot of the variance values")
 ```
 
 ### Autocorrelation plots

@@ -4,14 +4,14 @@
 \alias{multiple.imputation}
 \title{Multiple imputation function}
 \usage{
-multiple.imputation(data, prior.params, starting.values, iter, verbose = TRUE)
+multiple.imputation(data, prior.params, initial.values, iter, verbose = TRUE)
 }
 \arguments{
 \item{data}{a list of data containing the information for the missing and censored values}
 
 \item{prior.params}{list of prior parameter specifications}
 
-\item{starting.values}{list of starting values}
+\item{initial.values}{list of initial values}
 
 \item{iter}{number of rounds for doing multiple imputation}
 

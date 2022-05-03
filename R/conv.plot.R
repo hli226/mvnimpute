@@ -1,9 +1,12 @@
+#' @import ggplot2
+NULL
 #' Convergence plot function
 #'
 #' Generates the convergence plots for the parameter values
 #'
 #' @param data dataset containing the simulated values
-#' @param iter number of iterations for running multiple imputation
+#' @param start the number of cycle to start
+#' @param end the number of cycle to end
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number"
 #' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values"
 #' @param title title of the generated plot.
@@ -16,14 +19,22 @@
 #'
 #' @export
 conv.plot <- function(data,
-                      iter,
+                      start,
+                      end,
                       x.lab = "Iteration number",
                       y.lab = "Simulated values",
                       title = NULL) {
 
+  ## ensure start and end to be logical numbers
+  if (end <= start) {stop("end should be bigger than start!")}
+  if (!is.numeric(end) | !is.numeric(start)) {stop("Please enter two scalar values!")}
+  if ((start < 0) | (end < 0)) {
+    stop("Please enter two logical values!")
+  }
+
   # transform data from wide to long
 
-  wide.dat <- as.data.frame(cbind(data, 0:iter))
+  wide.dat <- as.data.frame(cbind(data, start:end))
   colnames(wide.dat) <- c(colnames(data), "iter")
 
   # make sure the id column should be factor variable
@@ -34,7 +45,7 @@ conv.plot <- function(data,
                     value.name = "value")
 
   ggplot(data = long.dat,
-         aes(x = as.numeric(iter),
+         aes(x = as.numeric(.data$iter),
              y = .data$value,
              group = var,
              color = var)) +

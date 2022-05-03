@@ -6,7 +6,8 @@
 \usage{
 conv.plot(
   data,
-  iter,
+  start,
+  end,
   x.lab = "Iteration number",
   y.lab = "Simulated values",
   title = NULL
@@ -15,7 +16,9 @@ conv.plot(
 \arguments{
 \item{data}{dataset containing the simulated values}
 
-\item{iter}{number of iterations for running multiple imputation}
+\item{start}{the number of cycle to start}
+
+\item{end}{the number of cycle to end}
 
 \item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number"}
 
