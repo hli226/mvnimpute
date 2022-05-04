@@ -4,7 +4,7 @@ Title: Concurrently impute the missing and censored values
 Version: 0.0.1
 Depends: R (>= 3.4.0)
 Author: Hesen Li
-Maintainer: Hesen Li <hli226@uic.edu>
+Maintainer: Hesen Li <li.hesen.21@gmail.com>
 URL: https://github.com/hli226/mvnimpute
 BugReports: https://github.com/hli226/mvnimpute/issues
 Description: This package implements multiple imputation for missing and censored data under multivariate normality assumption.
