@@ -7,7 +7,7 @@
 multiple.imputation(data, prior.params, initial.values, iter, verbose = TRUE)
 }
 \arguments{
-\item{data}{a list of data containing the information for the missing and censored values}
+\item{data}{a list of data containing the lower and upper bounds information for the missing and censored values}
 
 \item{prior.params}{list of prior parameter specifications}
 

@@ -5,7 +5,7 @@
 \title{Convergence plot function}
 \usage{
 conv.plot(
-  data,
+  data.mat,
   start,
   end,
   x.lab = "Iteration number",
@@ -14,7 +14,7 @@ conv.plot(
 )
 }
 \arguments{
-\item{data}{dataset containing the simulated values}
+\item{data.mat}{data matrix including the simulated values}
 
 \item{start}{the number of cycle to start}
 

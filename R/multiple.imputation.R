@@ -2,7 +2,7 @@
 #'
 #' Implements the multiple imputation for both missing and censored values
 #'
-#' @param data a list of data containing the information for the missing and censored values
+#' @param data a list of data containing the lower and upper bounds information for the missing and censored values
 #' @param prior.params list of prior parameter specifications
 #' @param initial.values list of initial values
 #' @param iter number of rounds for doing multiple imputation
@@ -14,7 +14,7 @@
 #'
 #' @export
 multiple.imputation <- function(
-  data,           # the list that contains the censored values
+  data,           # the list that contains the cnesoring bounds: LL and UL
   prior.params,   # prior specifications
   initial.values, # initial values
   iter,           # iterations of Gibbs sampler

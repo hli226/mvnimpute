@@ -5,8 +5,9 @@
 \title{Averaged simulated values plot function}
 \usage{
 avg.plot(
-  data,
-  iter,
+  data.mat,
+  start,
+  end,
   x.lab = "Iteration number",
   y.lab = "Average of simulated values",
   title = NULL,
@@ -14,9 +15,11 @@ avg.plot(
 )
 }
 \arguments{
-\item{data}{dataset containing the simulated values.}
+\item{data.mat}{data matrix including the simulated values for plot.}
 
-\item{iter}{number of iterations for running multiple imputation.}
+\item{start}{the number of cycle to start}
+
+\item{end}{the number of cycle to end}
 
 \item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
 

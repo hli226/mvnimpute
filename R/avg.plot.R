@@ -2,8 +2,9 @@
 #'
 #' Generates average simulated values of the parameter values
 #'
-#' @param data dataset containing the simulated values.
-#' @param iter number of iterations for running multiple imputation.
+#' @param data.mat data matrix including the simulated values for plot.
+#' @param start the number of cycle to start
+#' @param end the number of cycle to end
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
 #' @param y.lab label of the y axis in the generated plot, default is set to "Average of simulated values".
 #' @param title title of the generated plot.
@@ -17,27 +18,29 @@
 #' a matrix containing the averaged values of all the variables across iterations will be returned.
 #'
 #' @export
-avg.plot <- function(data,
-                     iter,
-                     x.lab = "Iteration number",
-                     y.lab = "Average of simulated values",
+avg.plot <- function(data.mat,  ### matrix that includes values for plot
+                     start,     ### the index of the first iteration for drawing
+                     end,       ### the index of the last iteration for drawing
+                     x.lab = "Iteration number",              ### label of x axis
+                     y.lab = "Average of simulated values",   ### label of y axis
                      title = NULL,
-                     details = FALSE) {
+                     details = FALSE) {  ### print the averages of simulated values in the console
 
   # compute the cumulative averages of the parameter values to the current simulation
-  avg.param <- matrix(nrow = iter + 1, ncol = ncol(data))
-  avg.param[1, ] <- data[1, ]
+  iter <- end - start
+  avg.param <- matrix(nrow = iter  + 1, ncol = ncol(data.mat))
+  avg.param[1, ] <- data.mat[1, ]
 
   for (i in 2:nrow(avg.param)) {
 
-    avg.param[i, ] <- apply(data[1:i, ], 2, mean)
+    avg.param[i, ] <- apply(data.mat[1:i, ], 2, mean)
 
   }
 
   # transform data from wide to long
 
-  wide.dat <- as.data.frame(cbind(avg.param, 0:iter))
-  colnames(wide.dat) <- c(colnames(data), "iter")
+  wide.dat <- as.data.frame(cbind(avg.param, start:end))
+  colnames(wide.dat) <- c(colnames(data.mat), "iter")
 
   # make sure the id column should be factor variable
   # wide.mean$iter <- as.factor(wide.mean$iter)

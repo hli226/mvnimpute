@@ -7,7 +7,7 @@
 acf.calc(data, lag = 50, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
-\item{data}{dataset containing the variables of which autocorrelations are calculated}
+\item{data}{dataset including the variables of which autocorrelations are calculated}
 
 \item{lag}{lag at which the autocorrelation is calculated, default is set as 50}
 

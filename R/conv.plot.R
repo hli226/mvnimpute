@@ -4,7 +4,7 @@ NULL
 #'
 #' Generates the convergence plots for the parameter values
 #'
-#' @param data dataset containing the simulated values
+#' @param data.mat data matrix including the simulated values
 #' @param start the number of cycle to start
 #' @param end the number of cycle to end
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number"
@@ -18,11 +18,11 @@ NULL
 #' @return The plot of simulated values across iterations.
 #'
 #' @export
-conv.plot <- function(data,
-                      start,
-                      end,
-                      x.lab = "Iteration number",
-                      y.lab = "Simulated values",
+conv.plot <- function(data.mat, ### matrix that includes values for plot
+                      start,    ### the index of the first iteration for drawing
+                      end,      ### the index of the last iteration for drawing
+                      x.lab = "Iteration number",  ### label of x axis
+                      y.lab = "Simulated values",  ### label of y axis
                       title = NULL) {
 
   ## ensure start and end to be logical numbers
@@ -34,8 +34,8 @@ conv.plot <- function(data,
 
   # transform data from wide to long
 
-  wide.dat <- as.data.frame(cbind(data, start:end))
-  colnames(wide.dat) <- c(colnames(data), "iter")
+  wide.dat <- as.data.frame(cbind(data.mat, start:end))
+  colnames(wide.dat) <- c(colnames(data.mat), "iter")
 
   # make sure the id column should be factor variable
 
