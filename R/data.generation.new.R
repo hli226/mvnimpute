@@ -5,7 +5,7 @@
 
 #' New data generation function
 #'
-#' Generate multivariate normal data with missing and censored values
+#' Simulate multivariate normal data with missing and censored values
 #'
 #' @param num_ind number of subjects
 #' @param mean_vec mean vectors

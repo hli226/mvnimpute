@@ -4,10 +4,10 @@
 \alias{acf.calc}
 \title{Autocorrelation function}
 \usage{
-acf.calc(data, lag = 50, plot = TRUE, title = NULL, details = FALSE)
+acf.calc(data.mat, lag = 50, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
-\item{data}{dataset including the variables of which autocorrelations are calculated}
+\item{data.mat}{matrix including the variables of which autocorrelations are calculated}
 
 \item{lag}{lag at which the autocorrelation is calculated, default is set as 50}
 

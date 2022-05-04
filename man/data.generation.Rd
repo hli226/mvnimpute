@@ -40,5 +40,5 @@ A list containing the fully observed data, the observed data,
 the bounds information of the observed data and the data type indicator matrix
 }
 \description{
-Generate multivariate normal data with missing and censored values
+Simulate multivariate normal data with missing and censored values
 }

@@ -4,10 +4,10 @@
 \alias{marg.plot}
 \title{Marginal density plots function}
 \usage{
-marg.plot(data, title = NULL)
+marg.plot(data.mat, title = NULL)
 }
 \arguments{
-\item{data}{dataset containing all the variables}
+\item{data.mat}{data matrix including all the variables}
 
 \item{title}{title of the generated plots}
 }
