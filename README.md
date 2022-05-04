@@ -32,7 +32,7 @@ measurement data that are subject to limits of detection (LODs).
 
 ## Installation
 
-For Windows users, the Rtools for building R packages have to be
+For Windows users, the Rtools for building R packages has to be
 installed according to your R version from
 <https://cran.r-project.org/bin/windows/Rtools/history.html>.
 
@@ -100,4 +100,4 @@ browser.
 ## Acknowlegements
 
 This package is based on the work supported by the National Institute of
-Environmental Health Sciences under grant 1R01ES028790-01.
+Environmental Health Sciences (NIEHS) under grant 1R01ES028790-01.

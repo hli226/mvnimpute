@@ -32,7 +32,7 @@ The goal of **mvnimpute** package is to implement multiple imputation to the dat
 
 ## Installation
 
-For Windows users, the Rtools for building R packages have to be installed according to your R version from https://cran.r-project.org/bin/windows/Rtools/history.html.
+For Windows users, the Rtools for building R packages has to be installed according to your R version from https://cran.r-project.org/bin/windows/Rtools/history.html.
 
 ### From GitHub
 
