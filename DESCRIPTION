@@ -1,13 +1,13 @@
 Package: mvnimpute
 Type: Package
-Title: Simultaneously impute the missing and censored values
+Title: Simultaneously Impute the Missing and Censored Values
 Version: 1.0.0
 Depends: R (>= 3.4.0)
 Author: Hesen Li
 Maintainer: Hesen Li <li.hesen.21@gmail.com>
 URL: https://github.com/hli226/mvnimpute
 BugReports: https://github.com/hli226/mvnimpute/issues
-Description: This package implements multiple imputation for multivariate data with missing and censored values under a coarsening at random assumption (Heitjan and Rubin, 1991). The multiple imputatin algorithm is based on the data augmentation algorithm proposed by Tanner and Wong (1987). The Gibbs sampling algorithm is adopted to to update the model parameters and draw imputations of the coarse data.
+Description: Implementing a multiple imputation algorithm for multivariate data with missing and censored values under a coarsening at random assumption (Heitjan and Rubin, 1991). The multiple imputatin algorithm is based on the data augmentation algorithm proposed by Tanner and Wong (1987). The Gibbs sampling algorithm is adopted to to update the model parameters and draw imputations of the coarse data.
 License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
