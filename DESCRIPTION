@@ -1,6 +1,6 @@
 Package: mvnimpute
 Type: Package
-Title: Concurrently impute the missing and censored values
+Title: Simultaneously impute the missing and censored values
 Version: 1.0.0
 Depends: R (>= 3.4.0)
 Author: Hesen Li
