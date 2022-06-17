@@ -3,12 +3,13 @@
 
 # mvnimpute
 
-The goal of **mvnimpute** package is to implement multiple imputation to
-the data when there are both missing and censored values (a single
-variable can have both missing and censored values simultaneously; or it
-can have either only missing or censored values). An example of
-application of this package is for imputing the NHANES laboratory
-measurement data that are subject to limits of detection (LODs).
+The goal of **mvnimpute** package is to implement multiple imputation
+for the multivariate data with both missing and censored values (a
+single variable can have both missing and censored values
+simultaneously; or it can have either only missing or censored values).
+An example of application of this package is for imputing the NHANES
+laboratory measurement data that are subject to both missing values and
+limits of detection (LODs).
 
 ## Installation
 
@@ -18,10 +19,10 @@ installed according to your R version from
 
 ### From GitHub
 
-**NOTE: Some of the packages this package depends on may require the
-latest version of R, it is recommended to update your R software to the
-latest version**. You can install **mvnimpute** package in its
-development version from [GitHub](https://github.com) with:
+**NOTE: Some of the packages that this package depends on may require
+the latest version of R, it is recommended to update your R software to
+the latest version**. The development version of the **mvnimpute**
+package can be installed from [GitHub](https://github.com) with:
 
 #### For first-time users
 
@@ -35,12 +36,9 @@ devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
 
 `build_vignettes = TRUE` argument is added for including the vignettes,
 which give the step-by-step instructions on how to use this package
-using an artificial example and a real data example. There are two
-vignettes file, one using the simulated data, and the other one using a
-selected subset of the NHANES data. You have to install the development
-package **devtools** for installing packages from GitHub. The packages
-that **mvnimpute** depends on will be automatically downloaded and
-installed.
+using an artificial example. You have to install the development package
+**devtools** for installing packages from GitHub. The packages that
+**mvnimpute** depends on will be automatically downloaded and installed.
 
 ## Basic functions
 
@@ -49,7 +47,7 @@ It has 8 functions including
 `data.generation`: generates multivariate normal data with missing and
 censored values.
 
-`param.calc`: calculates the complete-case and available-case
+`param_calc`: calculates the complete-case and available-case
 parameters.
 
 `visual.plot`: draws plot showing percentages of missing, censored, and
@@ -57,19 +55,22 @@ observed values.
 
 `marg.plot`: draws marginal density plot for each variable.
 
-`multiple.imputation`: implements multiple imputation for missing and
-censored data, have to perform on the complete data.
+`multiple.imputation`: multiply imputes data with missing and censored
+values.
 
-`conv.plot`: draws trace plot of the parameters from the multiple
+`single_imputation`: singly imputes missing data.
+
+`conv.plot`: draws convergence plot of the parameters from the multiple
 imputation.
 
-`avg.plot`: draws trace plot of the averaged values of the parameters
-from the multiple imputation.
+`avg.plot`: draws convergence plot of the averaged values of the
+parameters from the multiple imputation.
 
 `acf.calc`: calculates the autocorrelation values and draws ACF plots.
 
-`nhanes.dat`: 2011 - 2016 NHANES demographics, PCB measurements, and
-heavy metal pollutants data.
+`nhanes.dat`: A subset of the 1999-2004 NHANES data with selected
+variables including diastolic blood pressure, gender, age and body mass
+index.
 
 For detailed instructions on using the package and a walk-through
 example, please refer to the vignette downloaded with the package. Once
