@@ -1,12 +1,14 @@
 #' Multiple imputation function
 #'
-#' Implements the multiple imputation for both missing and censored values
+#' This function implements the multiple imputation for multivariate data including both the missing and censored values.
+#' The implemented multiple imputation algorithm is based on the data augmentation algorithm proposed by Tanner and Wong (1987).
+#' The Gibbs sampling algorithm is adopted to update the model parameters and draw imputations of the coarse data.
 #'
-#' @param data a list of data containing the lower and upper bounds information for the missing and censored values
-#' @param prior.params list of prior parameter specifications
-#' @param initial.values list of initial values
-#' @param iter number of rounds for doing multiple imputation
-#' @param verbose boolean variable indicating whether the running status is printed in the console. Default is set to TRUE
+#' @param data a list of data containing the lower and upper bounds information for the missing and censored values.
+#' @param prior.params list of prior parameter specifications.
+#' @param initial.values list of initial values.
+#' @param iter number of rounds for doing multiple imputation.
+#' @param verbose boolean variable indicating whether the running status is printed in the console. Default is set to TRUE.
 #'
 #' @references
 #' Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.

@@ -41,11 +41,23 @@ NumericMatrix Gibbs_imp(const NumericMatrix data, const List data_indx, const Nu
       }
 
       // (1) missing values
-      if (ll(i, j) != ul(i, j) && (abs(ll(i, j)) == abs(ul(i, j))))
+      // if (ll(i, j) != ul(i, j) && (abs(ll(i, j)) == abs(ul(i, j))))
+      // change finite censoring limits to NA values -- 6.9.2022
+      if (LogicalVector::is_na(ll(i, j)) && LogicalVector::is_na(ul(i, j)))
         iter_data(i, j) = R::rnorm(mu_vec(j) + mean_i, sqrt(cond_j(p)));
       // (2) censored values
-      else if (ll(i, j) != ul(i, j) && (abs(ll(i, j)) != abs(ul(i, j))))
-        iter_data(i, j) = r_truncnorm(mu_vec(j) + mean_i, sqrt(cond_j(p)), ll(i, j), ul(i, j));
+      // else if (ll(i, j) != ul(i, j) && (abs(ll(i, j)) != abs(ul(i, j))))
+      // change finite censoring limits to NA values -- 6.9.2022
+      else if ((!LogicalVector::is_na(ll(i, j)) || !LogicalVector::is_na(ul(i, j))) &&
+        (ll(i, j) != ul(i, j))) {
+        double lower_val = ll(i, j);
+        double upper_val = ul(i, j);
+        if (LogicalVector::is_na(ll(i, j)))
+          lower_val = -1000000;  // pick very small number for the lower limit
+        if (LogicalVector::is_na(ul(i, j)))
+          upper_val = 1000000;   // pick very large number for the upper limit
+        iter_data(i, j) = r_truncnorm(mu_vec(j) + mean_i, sqrt(cond_j(p)), lower_val, upper_val);
+      }
     }
   }
 

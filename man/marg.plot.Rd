@@ -7,13 +7,13 @@
 marg.plot(data.mat, title = NULL)
 }
 \arguments{
-\item{data.mat}{data matrix including all the variables}
+\item{data.mat}{data matrix including all the variables.}
 
-\item{title}{title of the generated plots}
+\item{title}{title of the generated plots.}
 }
 \value{
-Marginal density plot for each variable in the dataset
+Marginal density plot for each variable in the dataset.
 }
 \description{
-Draws the marginal density plots for each variable
+This function draws the marginal density plots for all variables.
 }

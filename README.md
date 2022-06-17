@@ -3,26 +3,6 @@
 
 # mvnimpute
 
-<!-- badges: start -->
-
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhli226%2Fmvnimpute&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visits&edge_flat=false)](https://hits.seeyoufarm.com)
-![Visitor
-count](https://shields-io-visitor-counter.herokuapp.com/badge?page=https://github.com/hli226/mvnimpute&color=pink&label=visits)
-![GitHub release (latest by
-date)](https://img.shields.io/github/v/release/hli226/mvnimpute)
-![GitHub all
-releases](https://img.shields.io/github/downloads/hli226/mvnimpute/total?color=green)
-![GitHub release (by
-tag)](https://img.shields.io/github/downloads/hli226/mvnimpute/latest/total)
-![GitHub top
-language](https://img.shields.io/github/languages/top/hli226/mvnimpute?color=red)
-![GitHub language
-count](https://img.shields.io/github/languages/count/hli226/mvnimpute?color=purple)
-![GitHub R package
-version](https://img.shields.io/github/r-package/v/hli226/mvnimpute)
-
-<!-- badges: end -->
-
 The goal of **mvnimpute** package is to implement multiple imputation to
 the data when there are both missing and censored values (a single
 variable can have both missing and censored values simultaneously; or it
@@ -100,4 +80,4 @@ browser.
 ## Acknowlegements
 
 This package is based on the work supported by the National Institute of
-Environmental Health Sciences (NIEHS) under grant 1R01ES028790-01.
+Environmental Health Sciences (NIEHS) under grant 1R01ES028790.

@@ -14,15 +14,15 @@ conv.plot(
 )
 }
 \arguments{
-\item{data.mat}{data matrix including the simulated values}
+\item{data.mat}{data matrix including the simulated values.}
 
-\item{start}{the number of cycle to start}
+\item{start}{the number of cycle to start.}
 
-\item{end}{the number of cycle to end}
+\item{end}{the number of cycle to end.}
 
-\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number"}
+\item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
 
-\item{y.lab}{label of the y axis in the generated plot, default is set to "Simulated values"}
+\item{y.lab}{label of the y axis in the generated plot, default is set to "Simulated values".}
 
 \item{title}{title of the generated plot.}
 }
@@ -30,7 +30,7 @@ conv.plot(
 The plot of simulated values across iterations.
 }
 \description{
-Generates the convergence plots for the parameter values
+This function draws the convergence plots for the simulated parameter values of all variables.
 }
 \details{
 The function generates the trace plot of simulated values across iterations.

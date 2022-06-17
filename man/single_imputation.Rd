@@ -2,13 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_imputation}
 \alias{single_imputation}
-\title{Single imputation}
+\title{Single imputation function}
 \usage{
 single_imputation(data)
 }
 \arguments{
-\item{data}{a list}
+\item{data}{a list including the matrices for the lower and upper bounds of the data.}
 }
 \description{
-Single imputation
+This function performs single imputation of the data using the available cases mean and variance values
+excluding the missing and censored values.
 }

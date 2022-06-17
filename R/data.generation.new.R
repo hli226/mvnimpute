@@ -5,20 +5,21 @@
 
 #' New data generation function
 #'
-#' Simulate multivariate normal data with missing and censored values
+#' Simulate multivariate normal data with missing and censored values. In this function, missing values will be
+#' generated first in the multivariate data, then censored values will be generated for the non-missing data.
 #'
-#' @param num_ind number of subjects
-#' @param mean_vec mean vectors
-#' @param cov_mat covariance matrix
-#' @param miss_var variables that have missing values
-#' @param miss_mech missing mechanism. "MCAR" or "MAR". Default "MCAR"
-#' @param miss_prob missing data probability when missing data is MCAR
-#' @param censor_var variables that have censored values
-#' @param censor_type type of censoring. "interval", "right" or "left. Default "interval"
-#' @param censor_param rate parameter of the exponential distribution that the censoring times come from
+#' @param num_ind number of subjects.
+#' @param mean_vec mean vectors.
+#' @param cov_mat covariance matrix.
+#' @param miss_var variables that have missing values.
+#' @param miss_mech missing mechanism. "MCAR" or "MAR". Default "MCAR".
+#' @param miss_prob missing data probability when missing data is MCAR.
+#' @param censor_var variables that have censored values.
+#' @param censor_type type of censoring. "interval", "right" or "left. Default "interval".
+#' @param censor_param rate parameter of the exponential distribution that the censoring times come from.
 #'
 #' @return A list containing the fully observed data, the observed data,
-#' the bounds information of the observed data and the data type indicator matrix
+#' the bounds information of the observed data and the data type indicator matrix.
 #'
 #' @export
 data.generation <- function(
@@ -50,6 +51,9 @@ data.generation <- function(
   ## variables that are fully observed
   obs_var <- var_indx[!var_indx %in% miss_var & !var_indx %in% censor_var]
 
+  ###############################################################
+  ## UPDATE 6.9.2022: change finite censoring limits to NA values
+  ###############################################################
   # 1. handle missing values
   if (miss_mech == "MCAR") {
     for (i in 1:length(miss_var)) {
@@ -59,8 +63,8 @@ data.generation <- function(
       for (j in 1:num_ind) {
         incomplete[j, miss_v] <- ifelse(runif(1) <= miss_p, NA, incomplete[j, miss_v])
         ### data index matrix
-        data.indx[[1]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), -10000, incomplete[j, miss_v])
-        data.indx[[2]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), 10000, incomplete[j, miss_v])
+        data.indx[[1]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), NA, incomplete[j, miss_v])
+        data.indx[[2]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), NA, incomplete[j, miss_v])
         ### data type indicator matrix
         if (is.na(incomplete[j, miss_v])) {indicator[j, miss_v] <- 0}
       }
@@ -76,8 +80,8 @@ data.generation <- function(
       for (j in 1:num_ind) {
         incomplete[j, miss_v] <- ifelse(runif(1) >= miss_mar[j], NA, incomplete[j, miss_v])
         ### data index matrix
-        data.indx[[1]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), -10000, incomplete[j, miss_v])
-        data.indx[[2]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), 10000, incomplete[j, miss_v])
+        data.indx[[1]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), NA, incomplete[j, miss_v])
+        data.indx[[2]][j, miss_v] <- ifelse(is.na(incomplete[j, miss_v]), NA, incomplete[j, miss_v])
         ### data type indicator matrix
         if (is.na(incomplete[j, miss_v])) {indicator[j, miss_v] <- 0}
       }
@@ -103,7 +107,7 @@ data.generation <- function(
         data.indx[[2]][j, censor_v] <- ifelse(is.nan(incomplete[j, censor_v]),
                                             max.val, incomplete[j, censor_v])
         ### data type indicator matrix
-        if (is.nan(incomplete[j, censor_v])) {indicator[j, censor_v] <- 2}
+        if (is.nan(incomplete[j, censor_v])) {indicator[j, censor_v] <- 4}
       }
     }
   }
@@ -122,7 +126,7 @@ data.generation <- function(
         data.indx[[1]][j, censor_v] <- ifelse(incomplete[j, censor_v] == censor_time,
                                               censor_time, incomplete[j, censor_v])
         data.indx[[2]][j, censor_v] <- ifelse(incomplete[j, censor_v] == censor_time,
-                                            10000, incomplete[j, censor_v])
+                                            NA, incomplete[j, censor_v])
         ### data type indicator matrix
         if (incomplete[j, censor_v] >= censor_time) {indicator[j, censor_v] <- 2}
       }
@@ -141,11 +145,11 @@ data.generation <- function(
                                           censor_time, incomplete[j, censor_v])
         ### data index matrix
         data.indx[[1]][j, censor_v] <- ifelse(incomplete[j, censor_v] == censor_time,
-                                            -10000, incomplete[j, censor_v])
+                                            NA, incomplete[j, censor_v])
         data.indx[[2]][j, censor_v] <- ifelse(incomplete[j, censor_v] == censor_time,
                                               censor_time, incomplete[j, censor_v])
         ### data type indicator matrix
-        if (incomplete[j, censor_v] <= censor_time) {indicator[j, censor_v] <- 2}
+        if (incomplete[j, censor_v] <= censor_time) {indicator[j, censor_v] <- 3}
       }
     }
   }

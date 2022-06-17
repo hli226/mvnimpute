@@ -17,9 +17,9 @@ avg.plot(
 \arguments{
 \item{data.mat}{data matrix including the simulated values for plot.}
 
-\item{start}{the number of cycle to start}
+\item{start}{the number of cycle to start.}
 
-\item{end}{the number of cycle to end}
+\item{end}{the number of cycle to end.}
 
 \item{x.lab}{label of the x axis in the generated plot, default is set to "Iteration number".}
 
@@ -34,7 +34,7 @@ The plot of averaged values across iterations. If \code{details} = TRUE,
 a matrix containing the averaged values of all the variables across iterations will be returned.
 }
 \description{
-Generates average simulated values of the parameter values
+This function calculate and the average simulated values of all parameters and generates plots.
 }
 \details{
 This function calculates the average simulated values across simulations.

@@ -1,10 +1,10 @@
 #' Averaged simulated values plot function
 #'
-#' Generates average simulated values of the parameter values
+#' This function calculate and the average simulated values of all parameters and generates plots.
 #'
 #' @param data.mat data matrix including the simulated values for plot.
-#' @param start the number of cycle to start
-#' @param end the number of cycle to end
+#' @param start the number of cycle to start.
+#' @param end the number of cycle to end.
 #' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
 #' @param y.lab label of the y axis in the generated plot, default is set to "Average of simulated values".
 #' @param title title of the generated plot.

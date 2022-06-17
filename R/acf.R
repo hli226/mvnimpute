@@ -1,12 +1,12 @@
 #' Autocorrelation function
 #'
-#' Calculates the autocorrelations
+#' This function calculates the autocorrelation function and draws the plots.
 #'
-#' @param data.mat matrix including the variables of which autocorrelations are calculated
-#' @param lag lag at which the autocorrelation is calculated, default is set as 50
-#' @param plot  logical variable to specify whether the plot is generated, default is set to TRUE
-#' @param title title of the generated autocorrelation plots
-#' @param details boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE
+#' @param data.mat matrix including the variables of which autocorrelations are calculated.
+#' @param lag lag at which the autocorrelation is calculated, default is set as 50.
+#' @param plot  logical variable to specify whether the plot is generated, default is set to TRUE.
+#' @param title title of the generated autocorrelation plots.
+#' @param details boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE.
 #'
 #' @details This function calculates the autocorrelations of all the variables on a column by column base.
 #' The default value of \code{lag} is set as 50, the maximum number of lag should not exceed the number of rows of the dataset,

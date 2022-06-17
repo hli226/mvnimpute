@@ -17,28 +17,29 @@ data.generation(
 )
 }
 \arguments{
-\item{num_ind}{number of subjects}
+\item{num_ind}{number of subjects.}
 
-\item{mean_vec}{mean vectors}
+\item{mean_vec}{mean vectors.}
 
-\item{cov_mat}{covariance matrix}
+\item{cov_mat}{covariance matrix.}
 
-\item{miss_var}{variables that have missing values}
+\item{miss_var}{variables that have missing values.}
 
-\item{miss_mech}{missing mechanism. "MCAR" or "MAR". Default "MCAR"}
+\item{miss_mech}{missing mechanism. "MCAR" or "MAR". Default "MCAR".}
 
-\item{miss_prob}{missing data probability when missing data is MCAR}
+\item{miss_prob}{missing data probability when missing data is MCAR.}
 
-\item{censor_var}{variables that have censored values}
+\item{censor_var}{variables that have censored values.}
 
-\item{censor_type}{type of censoring. "interval", "right" or "left. Default "interval"}
+\item{censor_type}{type of censoring. "interval", "right" or "left. Default "interval".}
 
-\item{censor_param}{rate parameter of the exponential distribution that the censoring times come from}
+\item{censor_param}{rate parameter of the exponential distribution that the censoring times come from.}
 }
 \value{
 A list containing the fully observed data, the observed data,
-the bounds information of the observed data and the data type indicator matrix
+the bounds information of the observed data and the data type indicator matrix.
 }
 \description{
-Simulate multivariate normal data with missing and censored values
+Simulate multivariate normal data with missing and censored values. In this function, missing values will be
+generated first in the multivariate data, then censored values will be generated for the non-missing data.
 }

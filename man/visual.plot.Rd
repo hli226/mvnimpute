@@ -7,21 +7,21 @@
 visual.plot(data.indicator, title = "Percentages of different data type")
 }
 \arguments{
-\item{data.indicator}{matrix that contains the data type indicators of the original data:
-0 for missing data; 1 for observed data; 2 for right censored data; 3 for left censored data;
-4 for interval censored data.}
+\item{data.indicator}{matrix including the data type indicators of the original data.}
 
 \item{title}{title of the generated plot, default is set to "Percentages of different data type".}
 }
 \value{
-The plot that shows the details of the different type of data in the dataset
+The plot that shows the details of the different type of data in the dataset.
 }
 \description{
-Draws plot that graphically show the percentages of the missing, censored and observed data
+This function draws plot that graphically shows the percentages of the missing, censored and observed data. It supports
+generating plots for all major types of censoring including left, right and interval censoring.
 }
 \details{
 The function draws the plot that graphically shows the percentages of the missing, censored and observed
 data in the dataset. \code{data.indicator} should be a matrix containing the data type indicators as generated in the
-data preparation step. 0 for missing values, 1 for observed values, and 2 for censored values. \code{title} is the title
+data preparation step. 0 for missing values, 1 for observed values, and 2 for right censored values, 3 for left censored values,
+and 4 for interval censored values. \code{title} is the title
 of the generated plot.
 }

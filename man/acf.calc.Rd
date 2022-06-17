@@ -7,22 +7,22 @@
 acf.calc(data.mat, lag = 50, plot = TRUE, title = NULL, details = FALSE)
 }
 \arguments{
-\item{data.mat}{matrix including the variables of which autocorrelations are calculated}
+\item{data.mat}{matrix including the variables of which autocorrelations are calculated.}
 
-\item{lag}{lag at which the autocorrelation is calculated, default is set as 50}
+\item{lag}{lag at which the autocorrelation is calculated, default is set as 50.}
 
-\item{plot}{logical variable to specify whether the plot is generated, default is set to TRUE}
+\item{plot}{logical variable to specify whether the plot is generated, default is set to TRUE.}
 
-\item{title}{title of the generated autocorrelation plots}
+\item{title}{title of the generated autocorrelation plots.}
 
-\item{details}{boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE}
+\item{details}{boolean variable to specify whether the autocorrelation values are returned, default is set to FALSE.}
 }
 \value{
 If \code{details} = TRUE, a matrix containing the calculated autocorrelations of all the variables in the dataset will be returned.
 If \code{plot} = TRUE, the autocorrelation plots of all the variables will be drawn.
 }
 \description{
-Calculates the autocorrelations
+This function calculates the autocorrelation function and draws the plots.
 }
 \details{
 This function calculates the autocorrelations of all the variables on a column by column base.

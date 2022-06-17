@@ -7,18 +7,20 @@
 multiple.imputation(data, prior.params, initial.values, iter, verbose = TRUE)
 }
 \arguments{
-\item{data}{a list of data containing the lower and upper bounds information for the missing and censored values}
+\item{data}{a list of data containing the lower and upper bounds information for the missing and censored values.}
 
-\item{prior.params}{list of prior parameter specifications}
+\item{prior.params}{list of prior parameter specifications.}
 
-\item{initial.values}{list of initial values}
+\item{initial.values}{list of initial values.}
 
-\item{iter}{number of rounds for doing multiple imputation}
+\item{iter}{number of rounds for doing multiple imputation.}
 
-\item{verbose}{boolean variable indicating whether the running status is printed in the console. Default is set to TRUE}
+\item{verbose}{boolean variable indicating whether the running status is printed in the console. Default is set to TRUE.}
 }
 \description{
-Implements the multiple imputation for both missing and censored values
+This function implements the multiple imputation for multivariate data including both the missing and censored values.
+The implemented multiple imputation algorithm is based on the data augmentation algorithm proposed by Tanner and Wong (1987).
+The Gibbs sampling algorithm is adopted to update the model parameters and draw imputations of the coarse data.
 }
 \references{
 Tanner, M., & Wong, W. (1987). The Calculation of Posterior Distributions by Data Augmentation.

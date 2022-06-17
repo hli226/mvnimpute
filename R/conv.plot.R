@@ -2,13 +2,13 @@
 NULL
 #' Convergence plot function
 #'
-#' Generates the convergence plots for the parameter values
+#' This function draws the convergence plots for the simulated parameter values of all variables.
 #'
-#' @param data.mat data matrix including the simulated values
-#' @param start the number of cycle to start
-#' @param end the number of cycle to end
-#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number"
-#' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values"
+#' @param data.mat data matrix including the simulated values.
+#' @param start the number of cycle to start.
+#' @param end the number of cycle to end.
+#' @param x.lab label of the x axis in the generated plot, default is set to "Iteration number".
+#' @param y.lab label of the y axis in the generated plot, default is set to "Simulated values".
 #' @param title title of the generated plot.
 #'
 #' @details The function generates the trace plot of simulated values across iterations.
