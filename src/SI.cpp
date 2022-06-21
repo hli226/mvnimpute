@@ -2,13 +2,6 @@
 #include <RcppDist.h>
 using namespace Rcpp;
 
-//' Calculate the CC and AC parameters
-//'
-//' This function calculates the complete cases (CC) and available cases (AC) mean and variance values,
-//' excluding the missing and censored values.
-//'
-//' @param data a list object including the two matrices for the lower and upper bounds of the data.
-//' @export
 // [[Rcpp::export]]
 List param_calc(const List data) {
 
@@ -100,13 +93,6 @@ List param_calc(const List data) {
 
 }
 
-//' Single imputation function
-//'
-//' This function performs single imputation of the data using the available cases mean and variance values
-//' excluding the missing and censored values.
-//'
-//' @param data a list including the matrices for the lower and upper bounds of the data.
-//' @export
 // [[Rcpp::export]]
 NumericMatrix single_imputation(List data) {
 

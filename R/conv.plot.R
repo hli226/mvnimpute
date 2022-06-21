@@ -2,7 +2,7 @@
 NULL
 #' Convergence plot function
 #'
-#' This function draws the convergence plots for the simulated parameter values of all variables.
+#' Draws the convergence plots for the simulated parameter values of all variables.
 #'
 #' @param data.mat data matrix including the simulated values.
 #' @param start the number of cycle to start.

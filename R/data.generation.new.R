@@ -5,7 +5,7 @@
 
 #' New data generation function
 #'
-#' Simulate multivariate normal data with missing and censored values. In this function, missing values will be
+#' Simulates multivariate normal data with missing and censored values. In this function, missing values will be
 #' generated first in the multivariate data, then censored values will be generated for the non-missing data.
 #'
 #' @param num_ind number of subjects.
@@ -17,6 +17,11 @@
 #' @param censor_var variables that have censored values.
 #' @param censor_type type of censoring. "interval", "right" or "left. Default "interval".
 #' @param censor_param rate parameter of the exponential distribution that the censoring times come from.
+#'
+#' @examples
+#' ### generate a multivariate normal dataset of 2000 sample size
+#' ### using the default arguments
+#' data.generation()
 #'
 #' @return A list containing the fully observed data, the observed data,
 #' the bounds information of the observed data and the data type indicator matrix.

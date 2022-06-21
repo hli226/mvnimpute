@@ -15,7 +15,7 @@ visual.plot(data.indicator, title = "Percentages of different data type")
 The plot that shows the details of the different type of data in the dataset.
 }
 \description{
-This function draws plot that graphically shows the percentages of the missing, censored and observed data. It supports
+Draws plot that graphically shows the percentages of the missing, censored and observed data. It supports
 generating plots for all major types of censoring including left, right and interval censoring.
 }
 \details{
@@ -24,4 +24,9 @@ data in the dataset. \code{data.indicator} should be a matrix containing the dat
 data preparation step. 0 for missing values, 1 for observed values, and 2 for right censored values, 3 for left censored values,
 and 4 for interval censored values. \code{title} is the title
 of the generated plot.
+}
+\examples{
+data.ind <- simulated.dat[[2]]
+visual.plot(data.ind)
+
 }

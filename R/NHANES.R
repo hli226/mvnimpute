@@ -3,7 +3,7 @@
 #' A dataset including the age, gender and diastolic blood pressure, body mass index and 24 PCB
 #' measurements.
 #'
-#' @format A data frame with 5874 rows and 24 variables:
+#' @format A list including data frame with 5874 rows and 24 variables and associated indicator matrix:
 #' \describe{
 #'   \item{BPXDAR}{Diastolic blood pressure}
 #'   \item{RIAGENDR}{Gender, 1 = male, 2 = female}

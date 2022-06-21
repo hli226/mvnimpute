@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(scipen = 999)
+old <- options(scipen = 999)
 set.seed(115)
 ```
 
@@ -202,4 +202,6 @@ reg.compare <- data.frame(
   cc = cc.reg
 )
 reg.compare
+
+options(old)
 ```

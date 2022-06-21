@@ -40,6 +40,12 @@ A list containing the fully observed data, the observed data,
 the bounds information of the observed data and the data type indicator matrix.
 }
 \description{
-Simulate multivariate normal data with missing and censored values. In this function, missing values will be
+Simulates multivariate normal data with missing and censored values. In this function, missing values will be
 generated first in the multivariate data, then censored values will be generated for the non-missing data.
+}
+\examples{
+### generate a multivariate normal dataset of 2000 sample size
+### using the default arguments
+data.generation()
+
 }

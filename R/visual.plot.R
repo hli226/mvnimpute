@@ -2,7 +2,7 @@
 NULL
 #' Function for missing and censored data visualization
 #'
-#' This function draws plot that graphically shows the percentages of the missing, censored and observed data. It supports
+#' Draws plot that graphically shows the percentages of the missing, censored and observed data. It supports
 #' generating plots for all major types of censoring including left, right and interval censoring.
 #'
 #' @param data.indicator matrix including the data type indicators of the original data.
@@ -13,6 +13,10 @@ NULL
 #' data preparation step. 0 for missing values, 1 for observed values, and 2 for right censored values, 3 for left censored values,
 #' and 4 for interval censored values. \code{title} is the title
 #' of the generated plot.
+#'
+#' @examples
+#' data.ind <- simulated.dat[[2]]
+#' visual.plot(data.ind)
 #'
 #' @return The plot that shows the details of the different type of data in the dataset.
 #'

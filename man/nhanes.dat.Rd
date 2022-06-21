@@ -5,7 +5,7 @@
 \alias{NHANES.dat}
 \title{Combined NHANES dataset from 1999-2004 NHANES study}
 \format{
-A data frame with 5874 rows and 24 variables:
+A list including data frame with 5874 rows and 24 variables and associated indicator matrix:
 \describe{
   \item{BPXDAR}{Diastolic blood pressure}
   \item{RIAGENDR}{Gender, 1 = male, 2 = female}
