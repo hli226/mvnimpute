@@ -3,9 +3,9 @@
 \docType{package}
 \name{mvnimpute-package}
 \alias{mvnimpute-package}
-\title{mvnimpute: Implementation of multiple imputation involving the missing and censored values}
+\title{mvnimpute: Multiple imputation for multivariate data with missing and censored values}
 \description{
-The mvnimpute package implements multiple imputation for concurrently handling missing and censored values based on the joint normal
+The mvnimpute package implements multiple imputation for simultaneously imputing missing and censored values based on the joint normal
 model assumption.
 }
 \author{

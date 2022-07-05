@@ -1,6 +1,6 @@
-#' mvnimpute: Implementation of multiple imputation involving the missing and censored values
+#' mvnimpute: Multiple imputation for multivariate data with missing and censored values
 #'
-#' The mvnimpute package implements multiple imputation for concurrently handling missing and censored values based on the joint normal
+#' The mvnimpute package implements multiple imputation for simultaneously imputing missing and censored values based on the joint normal
 #' model assumption.
 #'
 #' @docType package
