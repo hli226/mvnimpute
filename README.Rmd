@@ -31,15 +31,15 @@ For Windows users, the Rtools for building R packages has to be installed accord
 # install the development package devtools for installing packages from GitHub
 install.packages("devtools")
 
-# install mvnimpute package with vignette from GitHub
-devtools::install_github("hli226/mvnimpute", build_vignettes = TRUE)
+# install mvnimpute package from GitHub
+devtools::install_github("hli226/mvnimpute")
 ```
 
-`build_vignettes = TRUE` argument is added for including the vignettes, which give the step-by-step instructions on how to use this package using an artificial example. You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.   
+You have to install the development package **devtools** for installing packages from GitHub. The packages that **mvnimpute** depends on will be automatically downloaded and installed.   
 
 ## Basic functions
 
-It has 8 functions including 
+It has 9 functions including 
 
 `data.generation`: generates multivariate normal data with missing and censored values.
 
