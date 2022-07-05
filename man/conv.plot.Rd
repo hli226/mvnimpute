@@ -30,7 +30,7 @@ conv.plot(
 The plot of simulated values across iterations.
 }
 \description{
-Draws the convergence plots for the simulated parameter values of all variables.
+Draws convergence plot for the simulated parameter values of all variables.
 }
 \details{
 The function generates the trace plot of simulated values across iterations.

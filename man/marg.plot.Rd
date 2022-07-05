@@ -15,7 +15,7 @@ marg.plot(data.mat, title = NULL)
 Marginal density plot for each variable in the dataset.
 }
 \description{
-Draws the marginal density plots for all variables.
+Draws marginal density plots for all variables
 }
 \examples{
 ### generate some data

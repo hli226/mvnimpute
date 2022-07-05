@@ -1,6 +1,6 @@
 #' Marginal density plots function
 #'
-#' Draws the marginal density plots for all variables.
+#' Draws marginal density plots for all variables
 #'
 #' @param data.mat data matrix including all the variables.
 #' @param title title of each generated plot.

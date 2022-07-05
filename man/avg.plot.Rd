@@ -34,7 +34,7 @@ The plot of averaged values across iterations. If \code{details} = TRUE,
 a matrix containing the averaged values of all the variables across iterations will be returned.
 }
 \description{
-Calculates and the average simulated values of all parameters and generates plots.
+Calculates the average simulated values of all parameters and generates plots.
 }
 \details{
 This function calculates the average simulated values across simulations.
